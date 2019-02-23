@@ -1,172 +1,159 @@
 @extends('admin.app')
 @section('extra-css')
+<link rel="stylesheet" type="text/css" href="../../../app-assets/css/vendors.css">
+  <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/tables/datatable/datatables.min.css">
  
- 
-  <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/extensions/bootstrap-treeview.min.css">
-  <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/forms/selects/select2.min.css">
+  
 @endsection
 @section('section')
 <div class="content-wrapper">
 
     <div class="content-body">
-        <!--  Tree example section start -->
-        <section id="tree-examples">
-         
-          <div class="row">
-            <!-- Searchable Tree -->
-            <div class="col-md-6 col-sm-12">
-              <div class="card">
-                <div class="card-header">
-                  <h4 class="card-title">Create Category</h4>
-                </div>
-                <div class="card-body">
-                  <div class="card-body">
-                    <div class="form-group">
-                      <div class="seachbox mb-2">
-                        <input type="text" class="form-control round" placeholder="Search" id="input-search"
-                        name="input-search">
-                      </div>
-                    </div>
-                 
-                    <div class="form-group">
-                        <label class="label-control text-bold-600 font-medium-2" for="projectinput6">Category Type</label>
-                    
-                            <select class="form-control block" id="group-product">
-                                <option value="1">Main Category</option>
-                                <option value="2">Sub Category</option>             
-                                         
-                            </select>
-                     
-                      </div>
-                      <div class="form-group">
-                        <div class="text-bold-600 font-medium-2">
-                          Basic Select
-                        </div>
-                     
-                        <select class="select2 form-control">
-                          <optgroup label="Alaskan/Hawaiian Time Zone">
-                            <option value="AK">Alaska</option>
-                            <option value="HI">Hawaii</option>
-                          </optgroup>
-                          <optgroup label="Pacific Time Zone">
-                            <option value="CA">California</option>
-                            <option value="NV">Nevada</option>
-                            <option value="OR">Oregon</option>
-                            <option value="WA">Washington</option>
-                          </optgroup>
-                          <optgroup label="Mountain Time Zone">
-                            <option value="AZ">Arizona</option>
-                            <option value="CO">Colorado</option>
-                            <option value="ID">Idaho</option>
-                            <option value="MT">Montana</option>
-                            <option value="NE">Nebraska</option>
-                            <option value="NM">New Mexico</option>
-                            <option value="ND">North Dakota</option>
-                            <option value="UT">Utah</option>
-                            <option value="WY">Wyoming</option>
-                          </optgroup>
-                          <optgroup label="Central Time Zone">
-                            <option value="AL">Alabama</option>
-                            <option value="AR">Arkansas</option>
-                            <option value="IL">Illinois</option>
-                            <option value="IA">Iowa</option>
-                            <option value="KS">Kansas</option>
-                            <option value="KY">Kentucky</option>
-                            <option value="LA">Louisiana</option>
-                            <option value="MN">Minnesota</option>
-                            <option value="MS">Mississippi</option>
-                            <option value="MO">Missouri</option>
-                            <option value="OK">Oklahoma</option>
-                            <option value="SD">South Dakota</option>
-                            <option value="TX">Texas</option>
-                            <option value="TN">Tennessee</option>
-                            <option value="WI">Wisconsin</option>
-                          </optgroup>
-                          <optgroup label="Eastern Time Zone">
-                            <option value="CT">Connecticut</option>
-                            <option value="DE">Delaware</option>
-                            <option value="FL">Florida</option>
-                            <option value="GA">Georgia</option>
-                            <option value="IN">Indiana</option>
-                            <option value="ME">Maine</option>
-                            <option value="MD">Maryland</option>
-                            <option value="MA">Massachusetts</option>
-                            <option value="MI">Michigan</option>
-                            <option value="NH">New Hampshire</option>
-                            <option value="NJ">New Jersey</option>
-                            <option value="NY">New York</option>
-                            <option value="NC">North Carolina</option>
-                            <option value="OH">Ohio</option>
-                            <option value="PA">Pennsylvania</option>
-                            <option value="RI">Rhode Island</option>
-                            <option value="SC">South Carolina</option>
-                            <option value="VT">Vermont</option>
-                            <option value="VA">Virginia</option>
-                            <option value="WV">West Virginia</option>
-                            <optgroup label="Eastern Time Zone">
-                                    <option value="VT">Vermont</option>
-                                    <option value="VA">Virginia</option>
-                                    <option value="WV">West Virginia</option>
-                                </optgroup>
-                          </optgroup>
-                        </select>
-                      </div>
-                    <div class="row mb-1">
-                   
+     
+   
+<section id="column-selectors">
+    <div class="row">
+      <div class="col-12">
+        
+        <div class="card">
+          <div class="card-header">
+            
+                <button id="open_model" data-backdrop="false" class="btn btn-success round btn-glow px-2" data-toggle="modal">Create Category</button>
+            
+            <div class="heading-elements">
+               
+              <ul class="list-inline mb-0">
                 
-                      <div class="col-md-12 col-sm-12">
-                        <button type="button" class="btn btn-primary mr-2 mb-1 float-right" id="btn-search">Submit</button>
-                       
-                      </div>
-                    
-                    </div>
-                  </div>
-                </div>
-              </div>
+                <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                
+              </ul>
             </div>
-            <!-- Selectable Tree -->
-            <div class="col-md-6 col-sm-12">
-                <div class="card">
-                  <div class="card-header">
-                    <h4 class="card-title">Category / Sub Category List</h4>
-                  </div>
-                  <div class="card-body">
-                    <div class="card-body">
-                     
-                      <div id="expandible-tree"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
           </div>
-       
-        </section>
-        <!-- // Tree example section end -->
+          <div class="card-content collapse show">
+            <div class="card-body card-dashboard">
+             
+              <table class="table table-striped table-bordered zero-configuration">
+                <thead>
+                  <tr>
+                    <th>S No</th>
+                    <th>Category Name</th>
+                    <th>Category Image</th>
+                    <th>SubCategory</th>
+                    <th>Action</th>
+                  
+                  </tr>
+                </thead>
+                <tbody>
+                 <?php $x=1?>
+                @foreach($category as $row)
+                <tr>
+                <td>{{$x}}</td>
+                <td>{{$row->category_name}}</td>
+                <td><img src="{{ asset("category_image/$row->category_image")}}" alt="" style="width:80px"></td>
+                <td><a href="/admin/category/{{$row->id}}">Create SubCategory</a></td>
+                <td class="text-center">
+                    <span class="dropdown">
+          <button id="btnSearchDrop2" type="button" data-toggle="dropdown" aria-haspopup="true"
+          aria-expanded="true" class="btn btn-primary dropdown-toggle dropdown-menu-right"><i class="ft-settings"></i></button>
+          <span aria-labelledby="btnSearchDrop2" class="dropdown-menu mt-1 dropdown-menu-right">
+                
+            <a href="javascript:void(null)" onclick="Edit({{$row->id}})" class="dropdown-item"><i class="ft-edit"></i> Edit</a>
+            <a href="#" onclick="Delete({{$row->id}})" class="dropdown-item"><i class="la la-trash"></i> Delete</a>
+           
+          </span>
+        </span>
+                    </td>
+               
+                </tr>
+                <?php $x++?>
+                  @endforeach
+                </tbody>
+                <tfoot>
+                  <tr>
+                      <th>S No</th>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Terms</th>
+                      <th>Action</th>
+                      
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
+    </div>
+  </section> 
+</div>
     </div>
   </div>
 
+  <div class="modal fade text-left" id="attribute_model" tabindex="-1" role="dialog" aria-labelledby="myModalLabel8"
+  aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header bg-primary white">
+          <h4 class="modal-title white" id="myModalLabel8">Create Category</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="Category_form" method="post">
+            {{ csrf_field() }}
+            <input type="hidden" name="id">
+            <input type="hidden" name="parent_id" value="{{ Request::segment(3) }}">
+        <div class="modal-body">
+          <div class="form-group row">
+            <label class="col-md-3 label-control" for="projectinput1">Category Name</label>
+            <div class="col-md-9">
+              <input type="text" id="category_name" class="form-control" placeholder="Enter your Category Name"
+              name="category_name">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-3 label-control" for="projectinput1">Category Image</label>
+            <div class="col-md-9">
+                <input id="category_image" type="file" class="form-control" accept="image/*" name="category_image" />
+              <div id="preview"><img id="prevImage" style="width: 240px;
+                padding-top: 20px;" src="" /></div><br>
+            </div>
+          </div>
+          
+        </div>
+        </form>
+        <div class="modal-footer">
+          <button type="button" class="btn grey btn-outline-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-outline-primary" onclick="saveAttr()" id="saveCat">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
 @endsection
 @section('extra-js')
-<script src="../../../app-assets/vendors/js/extensions/bootstrap-treeview.min.js"
-type="text/javascript"></script>
-<script src="../../../app-assets/js/scripts/extensions/tree-view.js" type="text/javascript"></script>
-<script src="../../../app-assets/vendors/js/forms/select/select2.full.min.js" type="text/javascript"></script>
-<script src="../../../app-assets/js/scripts/forms/select/form-select2.js" type="text/javascript"></script>
+
+<script src="../../../app-assets/vendors/js/tables/datatable/datatables.min.js" type="text/javascript"></script>
+
+ 
+  <script src="../../../app-assets/js/scripts/tables/datatables/datatable-basic.js"
+  type="text/javascript"></script>
 <script>
   var action_type;
   $('#open_model').click(function(){
-    $('#category_model').modal('show');
+    $('#attribute_model').modal('show');
     action_type = 1;
     $('#saveCat').text('Save');
     $('#myModalLabel8').text('Create Category');
   })
-    function saveCategory(){
-      var formData = new FormData($('#category_form')[0]);
+    function saveAttr(){
+      $('#saveCat').attr('disabled',true);
+      var formData = new FormData($('#Category_form')[0]);
       if(action_type == 1){
-
+      
         $.ajax({
-                url : '/category_data',
+                url : '/admin/category-save',
                 type: "POST",
                 data: formData,
                 contentType: false,
@@ -174,19 +161,21 @@ type="text/javascript"></script>
                 dataType: "JSON",
                 success: function(data)
                 {                
-                 
-                    $("#category_form")[0].reset();
-                     $('#category_model').modal('hide');
+                  $('#saveCat').attr('disabled',false);
+                    $("#Category_form")[0].reset();
+                     $('#attribute_model').modal('hide');
                      $('.zero-configuration').load(location.href+' .zero-configuration');
-                     toastr.success('Category Store Successfully', 'Successfully Save');
-                },error: function (data) {
-                toastr.error('Category Name Required', 'Required!');
-                //toastr.error(data.responseJSON.errors.cat_name);
-              }
+                     toastr.success('Attribute Store Successfully', 'Successfully Save');
+                },error: function (data, errorThrown) {
+                var errorData = data.responseJSON.errors;
+                  $.each(errorData, function(i, obj) {
+                    toastr.error(obj[0]);
+                  });
+                }
             });
       }else{
         $.ajax({
-          url : '/update_cat',
+          url : '/admin/category-update',
           type: "POST",
           data: formData,
           contentType: false,
@@ -195,51 +184,72 @@ type="text/javascript"></script>
           success: function(data)
           {
             console.log(data);
-              $("#category_form")[0].reset();
-               $('#category_model').modal('hide');
+            $('#saveCat').attr('disabled',false);
+              $("#Category_form")[0].reset();
+               $('#attribute_model').modal('hide');
                $('.zero-configuration').load(location.href+' .zero-configuration');
-               toastr.success('Category Update Successfully', 'Successfully Update');
-          },error: function (data) {
-            toastr.error('Category Name Required', 'Required!');
-        }
+               toastr.success('Attribute Update Successfully', 'Successfully Update');
+          },error: function (data, errorThrown) {
+            var errorData = data.responseJSON.errors;
+            $.each(errorData, function(i, obj) {
+              toastr.error(obj[0]);
+            });
+          }
       });
       }
       
     }
 
-    function editCat(id){
+    function Edit(id){
       
       $.ajax({
-        url : '/edit_cat/'+id,
+        url : '/admin/edit-category/'+id,
         type: "GET",
         dataType: "JSON",
         success: function(data)
         {
-          $('#myModalLabel8').text('Update Category');
+          $('#myModalLabel8').text('Update Attribute');
           $('#saveCat').text('Save Change');
-          $('input[name=cat_name]').val(data.cat_name);
+          $('input[name=category_name]').val(data.category_name);
+          $('#prevImage').attr('src', '/category_image/'+data.category_image);
           $('input[name=id]').val(id);
-          $('select[name=status]').val(data.status);
-          $('#category_model').modal('show');
+      
+          $('#attribute_model').modal('show');
           action_type = 2;
         }
       });
     }
-     function deleteCat(id){
+     function Delete(id){
       var r = confirm("Are you sure");
       if (r == true) {
       $.ajax({
-        url : '/delete_cat/'+id,
+        url : '/admin/delete-category/'+id,
         type: "GET",
         dataType: "JSON",
         success: function(data)
         {
-          toastr.success('Category Delete Successfully', 'Successfully Delete');
+          toastr.success('Attribute Delete Successfully', 'Successfully Delete');
           $('.zero-configuration').load(location.href+' .zero-configuration');
         }
       });
     } 
      }
+     $('#category_image').change(function(){
+      readURL(this);
+     });
+
+     function readURL(input) {
+
+if (input.files && input.files[0]) {
+  var reader = new FileReader();
+
+  reader.onload = function(e) {
+    $('#prevImage').attr('src', e.target.result);
+  }
+
+  reader.readAsDataURL(input.files[0]);
+}
+}
     
 </script>
 @endsection

@@ -49,6 +49,22 @@ Route::get('/editGroup/{id}','productController@editGroup');
 Route::get('/deleteGroup/{id}','productController@deleteGroup');
 
 // Category Management
-Route::get('/category','productController@viewCategory'); 
+//Route::get('/category','productController@viewCategory'); 
 Route::get('/category/{id}','productController@viewCategoryId'); 
+Route::get('/edit-category/{id}','productController@EditCategory'); 
+Route::get('/delete-category/{id}','productController@DeleteCategory'); 
+Route::post('/category-save','productController@CategorySave'); 
+Route::post('/category-update','productController@CategoryUpdate'); 
+
+//Product Management
+Route::get('/create-product','productController@createProduct'); 
+Route::get('/get-category-tree','productController@categoryTree'); 
+Route::get('/get_terms/{id}','productController@get_terms'); 
+Route::post('/productSave','productController@productSave');
+Route::post('/images-save', 'UploadImagesController@store');
+Route::post('/images-delete', 'UploadImagesController@destroy');
+Route::get('/viewProduct','productController@viewProduct'); 
+Route::get('/productDelete/{id}','productController@productDelete'); 
+Route::get('/editProduct/{id}','productController@editProduct'); 
+Route::get('/get_edit_attribute/{id}','productController@getEditAttribute'); 
 });
