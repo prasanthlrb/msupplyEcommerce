@@ -263,9 +263,9 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
 
         <li class=" nav-item"><a href="#"><i class="icon-handbag"></i><span class="menu-title">Products</span></a>
           <ul class="menu-content">
-            <li><a class="menu-item" href="/admin/category/" data-i18n="nav.dash.ecommerce">Category</a>
+            <li><a class="menu-item" href="/admin/category/0" data-i18n="nav.dash.ecommerce">Category</a>
             </li>
-            <li><a class="menu-item" href="/admin/add-product/">Add Product</a></li>
+            <li><a class="menu-item" href="/admin/create-product/">Add Product</a></li>
             <li><a class="menu-item" href="/admin/viewProduct/">Product List</a></li>  
             <li><a class="menu-item" href="/admin/product-group/">Product Group</a></li>  
             <li><a class="menu-item" href="/admin/tag/">Tags</a>
@@ -290,8 +290,7 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
               <ul>
                 <li><a class="menu-item" href="/admin/homeSlider">  Sliders</a></li>
                 <li><a class="menu-item" href="/admin/todayDeal">Today Deals</a></li>
-                <li><a class="menu-item" href="/admin/homepageCategory"> top 5 category</a></li>
-                <li><a class="menu-item" href="/admin/recommendedCategory">top 5 Recommended</a></li>
+                <li><a class="menu-item" href="/admin/homepageCategory"> Create Product Slider</a></li>
                 <li><a class="menu-item" href="/admin/homeAds">Ads</a></li>
               </ul>
             </li>
