@@ -268,8 +268,7 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
             <li><a class="menu-item" href="/admin/create-product/">Add Product</a></li>
             <li><a class="menu-item" href="/admin/viewProduct/">Product List</a></li>  
             <li><a class="menu-item" href="/admin/product-group/">Product Group</a></li>  
-            <li><a class="menu-item" href="/admin/tag/">Tags</a>
-            </li>
+           
             <li><a class="menu-item" href="/admin/attribute/">Attributes</a>
             </li>
           </ul>
@@ -296,7 +295,7 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
             </li>
             <li><a class="menu-item" href="/admin/terms_condition"><i class="la la-hdd-o"></i> Terms & Conditions</a></li>
             <li><a class="menu-item" href="/admin/shipping_detail"><i class="la la-floppy-o"></i> Shipping Details</a></li>
-            <li><a class="menu-item" href="/admin/payment_terms"><i class="la la-floppy-o"></i> Privacy Policy</a></li>
+            <li><a class="menu-item" href="/admin/privacy-policy"><i class="la la-floppy-o"></i> Privacy Policy</a></li>
             <li><a class="menu-item" href="/admin/about"><i class="la la-floppy-o"></i> About Us</a></li>
           </ul>
         </li>
@@ -306,9 +305,7 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
             <li>
               <a class="menu-item" href="/admin/contact-details/">User Contact Info</a>
             </li>
-            <li>
-              <a class="menu-item" href="/admin/category/">Category Management</a>
-            </li>
+           
             <li>
               <a class="menu-item" href="/admin/faq/">FAQ</a>
             </li>

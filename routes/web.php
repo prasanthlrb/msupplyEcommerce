@@ -14,10 +14,21 @@
 Route::get('/', function () {
     return view('home');
 });
+
+//pages route
+Route::get('/about','pageController@about');
+Route::get('/terms','pageController@terms');
+Route::get('/privacy','pageController@privacy');
+Route::get('/shipping_details','pageController@shipping_details');
+Route::get('/faq','pageController@faq');
+Route::get('/contact','pageController@contact');
+
 Route::group(['prefix' => 'admin'],function(){
 Route::get('/login', function () {
     return view('admin/app');
 });
+
+
 
 //brands
 Route::get('/brand','productController@viewBrand');
@@ -67,4 +78,28 @@ Route::get('/viewProduct','productController@viewProduct');
 Route::get('/productDelete/{id}','productController@productDelete'); 
 Route::get('/editProduct/{id}','productController@editProduct'); 
 Route::get('/get_edit_attribute/{id}','productController@getEditAttribute'); 
+
+//page Management
+Route::get('/about','settingController@about');
+Route::get('/privacy-policy','settingController@privacyPolicy');
+Route::get('/terms_condition','settingController@terms_condition');
+Route::get('/shipping_detail','settingController@shipping_detail');
+
+Route::post('/homeSettingabout','settingController@homeSettingabout');
+Route::post('/homeSettingshipping','settingController@homeSettingshipping');
+Route::post('/homeSettingterms','settingController@homeSettingterms');
+Route::post('/homeSetting-Privacy','settingController@homeSettingPrivacyPolice');
+
+   
+Route::get('/social-details','settingController@socialMedia');
+Route::post('/add-social','settingController@updatesocialMedia');
+
+Route::get('/contact-details','settingController@contactView');
+Route::post('/setting-contact','settingController@contactUpdate');
+Route::get('/faq','settingController@faq');
+Route::get('/edit_faq/{id}','settingController@editFaq');
+Route::get('/delete_faq/{id}','settingController@deleteFaq');
+Route::post('/faq_data','settingController@faqStore');
+Route::post('/update_faq','settingController@faqUpdate');
+
 });

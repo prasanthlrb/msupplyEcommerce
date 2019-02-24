@@ -234,36 +234,32 @@
 
 									<!-- - - - - - - - - - - - - - Search form - - - - - - - - - - - - - - - - -->
 
-									<form class="clearfix search">
-
-										<input type="text" name="" tabindex="1" placeholder="Search..." class="alignleft">
-										
+									
+									<form action="/filter" method="post" class="clearfix search type_2">
+									
+										<input value="{{old('search')}}" type="text" name="search" tabindex="1" placeholder="Search..." class="alignleft">
+										{{ csrf_field() }}
 										<!-- - - - - - - - - - - - - - Categories - - - - - - - - - - - - - - - - -->
+										
+											<div class="custom_select search_category alignleft ">
+										<style>
+										
+										</style>
+												<select class="manual" style="height: 40px !important;" name="website_main_category">
+													<option>All Categories</option>
+													@foreach($category as $cats)
+													<option value="{{$cats->category_name}}">{{$cats->category_name}}</option>
+													@endforeach
+												</select>
 
-										<div class="search_category alignleft">
+											</div>
 
-											<div class="open_categories">All Categories</div>
-
-											<ul class="categories_list dropdown">
-
-												<li class="animated_item"><a href="#">Cement</a></li>
-												<li class="animated_item"><a href="#">Tiles</a></li>
-												<li class="animated_item"><a href="#">Bricks</a></li>
-												<li class="animated_item"><a href="#">Paints</a></li>
-												<li class="animated_item"><a href="#">Bathrooms</a></li>
-												<li class="animated_item"><a href="#">Steels</a></li>
-												<li class="animated_item"><a href="#">Sand</a></li>
-
-											</ul>
-
-										</div><!--/ .search_category.alignleft-->
 
 										<!-- - - - - - - - - - - - - - End of categories - - - - - - - - - - - - - - - - -->
 
-										<button class="button_blue def_icon_btn alignleft"></button>
+										<button type="submit" class="button_blue def_icon_btn alignleft"></button>
 
 									</form><!--/ #search-->
-									
 									<!-- - - - - - - - - - - - - - End search form - - - - - - - - - - - - - - - - -->
 
 								</div><!--/ [col]-->
@@ -574,7 +570,7 @@
 												<li><a href="shop_my_account.html">My Account</a></li>
 												<li><a href="shop_shopping_cart.html">Shopping Cart</a></li>
 												<li><a href="shop_checkout.html">Checkout</a></li>
-												<li><a href="additional_page_contact.html">Contact Us</a></li>
+												<li><a href="/contact">Contact Us</a></li>
 											
 
 											</ul>
@@ -789,7 +785,7 @@
 
 						<div class="row">
 
-							<div class="col-md-3 col-sm-6">
+							<div class="col-md-5 col-sm-6">
 
 								<!-- - - - - - - - - - - - - - About us widget- - - - - - - - - - - - - - - - -->
 
@@ -797,50 +793,58 @@
 
 									<h4>About Us</h4>
 
-									<p class="about_us">M-Supply is a part of K.A.S Housing Pvt Ltd, It is One of Best Material supply and Construction Company in Madurai .</p>
+								<p class="about_us">{{$setting->described}}</p>
 
 									<!-- - - - - - - - - - - - - - Social icons list - - - - - - - - - - - - - - - - -->
 
 									<ul class="social_btns">
-
+										@if($social->facebook !=null)
 										<li>
-											<a href="#" class="icon_btn middle_btn social_facebook tooltip_container"><i class="icon-facebook-1"></i><span class="tooltip top">Facebook</span></a>
+											<a href="{{$social->facebook}}" class="icon_btn middle_btn social_facebook tooltip_container"><i class="icon-facebook-1"></i><span class="tooltip top">Facebook</span></a>
 										</li>
+										@endif
 
+										@if($social->twitter !=null)
 										<li>
-											<a href="#" class="icon_btn middle_btn  social_twitter tooltip_container"><i class="icon-twitter"></i><span class="tooltip top">Twitter</span></a>
+											<a href="{{$social->twitter}}" class="icon_btn middle_btn social_twitter tooltip_container"><i class="icon-twitter"></i><span class="tooltip top">Twitter</span></a>
 										</li>
-
+										@endif
+										@if($social->google !=null)
 										<li>
-											<a href="#" class="icon_btn middle_btn social_googleplus tooltip_container"><i class="icon-gplus-2"></i><span class="tooltip top">GooglePlus</span></a>
+											<a href="{{$social->google}}" class="icon_btn middle_btn social_googleplus tooltip_container"><i class="icon-gplus-2"></i><span class="tooltip top">GooglePlus</span></a>
 										</li>
-
+										@endif
+										@if($social->pinterest !=null)
 										<li>
-											<a href="#" class="icon_btn middle_btn social_pinterest tooltip_container"><i class="icon-pinterest-3"></i><span class="tooltip top">Pinterest</span></a>
+											<a href="{{$social->pinterest}}" class="icon_btn middle_btn social_pinterest tooltip_container"><i class="icon-pinterest-3"></i><span class="tooltip top">Pinterest</span></a>
 										</li>
-
+										@endif
+										@if($social->flickr !=null)
 										<li>
-											<a href="#" class="icon_btn middle_btn social_flickr tooltip_container"><i class="icon-flickr-1"></i><span class="tooltip top">Flickr</span></a>
+											<a href="{{$social->flickr}}" class="icon_btn middle_btn social_flickr tooltip_container"><i class="icon-flickr-1"></i><span class="tooltip top">Flickr</span></a>
 										</li>
-
+										@endif
+										@if($social->youtube !=null)
 										<li>
-											<a href="#" class="icon_btn middle_btn social_youtube tooltip_container"><i class="icon-youtube"></i><span class="tooltip top">Youtube</span></a>
+											<a href="{{$social->youtube}}" class="icon_btn middle_btn social_youtube tooltip_container"><i class="icon-youtube"></i><span class="tooltip top">Youtube</span></a>
 										</li>
-
+										@endif
+										@if($social->vimeo !=null)
 										<li>
-											<a href="#" class="icon_btn middle_btn social_vimeo tooltip_container"><i class="icon-vimeo-2"></i><span class="tooltip top">Vimeo</span></a>
+											<a href="{{$social->vimeo}}" class="icon_btn middle_btn social_vimeo tooltip_container"><i class="icon-vimeo-2"></i><span class="tooltip top">Vimeo</span></a>
 										</li>
-
+										@endif
+										@if($social->instagram !=null)
 										<li>
-											<a href="#" class="icon_btn middle_btn social_instagram tooltip_container"><i class="icon-instagram-4"></i><span class="tooltip top">Instagram</span></a>
+											<a href="{{$social->instagram}}" class="icon_btn middle_btn social_instagram tooltip_container"><i class="icon-instagram-4"></i><span class="tooltip top">Instagram</span></a>
 										</li>
-
+										@endif
+										@if($social->linkedin !=null)
 										<li>
-											<a href="#" class="icon_btn middle_btn social_linkedin tooltip_container"><i class="icon-linkedin-5"></i><span class="tooltip top">LinkedIn</span></a>
+											<a href="{{$social->linkedin}}" class="icon_btn middle_btn social_linkedin tooltip_container"><i class="icon-linkedin-5"></i><span class="tooltip top">LinkedIn</span></a>
 										</li>
-
+										@endif
 									</ul>
-									
 									<!-- - - - - - - - - - - - - - End social icons list - - - - - - - - - - - - - - - - -->
 
 								</section>
@@ -859,12 +863,12 @@
 
 									<ul class="list_of_links">
 
-										<li><a href="#">About Us</a></li>
-										<li><a href="#">Delivery Information</a></li>
-										<li><a href="#">Privacy Policy</a></li>
-										<li><a href="#">Terms &amp; Conditions</a></li>
-										<li><a href="#">Contact Us</a></li>
-										<li><a href="#">FAQ</a></li>
+										<li class="aboutus"><a href="/about">About Us</a></li>
+										<li class="ppolicy"><a href="/privacy">Privacy Policy</a></li>
+										<li class="tconditions"><a href="/terms">Terms &amp; Conditions</a></li>
+										<li class="contactus"><a href="/contact">Contact Us</a></li>
+										<li class="faq"><a href="/faq">FAQ</a></li>
+										<li class="sdetails"><a href="/shipping_details">Shipping Details</a></li>
 
 									</ul>
 
@@ -883,14 +887,9 @@
 									<h4>Category</h4>
 
 									<ul class="list_of_links">
-
-								<li><a href="#">Cement</a></li>
-								<li><a href="#">Tiles</a></li>
-								<li><a href="#">Bricks</a></li>
-								<li><a href="#">Paints</a></li>
-								<li><a href="#">Bathrooms</a></li>
-								<li><a href="#">Steels</a></li>
-								<li><a href="#">Sand</a></li>
+										@foreach($category as $row)
+								<li><a href="#">{{$row->category_name}}</a></li>
+										@endforeach
 
 									</ul>
 
@@ -928,129 +927,7 @@
 
 								<!-- - - - - - - - - - - - - - Blog widget - - - - - - - - - - - - - - - - -->
 
-								<section class="widget">
-
-									<h4>Material Guide</h4>
-
-									<ul class="list_of_entries">
-
-										<!-- - - - - - - - - - - - - - Entry - - - - - - - - - - - - - - - - -->
-
-										<li>
-												
-											<article class="entry">
-												
-												<!-- - - - - - - - - - - - - - Thumbnail - - - - - - - - - - - - - - - - -->
-
-												<a href="#" class="entry_thumb">
-
-													<img src="images/latest_news_thumb_1.jpg" alt="">
-
-												</a>
-
-												<!-- - - - - - - - - - - - - - End of thumbnail - - - - - - - - - - - - - - - - -->
-
-												<div class="wrapper">
-
-													<h6 class="entry_title"><a href="#">Vestibulum sed ante</a></h6>
-
-													<!-- - - - - - - - - - - - - - Byline - - - - - - - - - - - - - - - - -->
-
-													<div class="entry_meta">
-
-														<span><i class="icon-calendar"></i> 2014-08-05 07:01:49</span>
-
-													</div><!--/ .entry_meta-->
-
-													<!-- - - - - - - - - - - - - - End of byline - - - - - - - - - - - - - - - - -->
-
-												</div><!--/ .wrapper-->
-
-											</article><!--/ .clearfix-->
-
-										</li>
-
-										<!-- - - - - - - - - - - - - - End of entry - - - - - - - - - - - - - - - - -->
-
-										<!-- - - - - - - - - - - - - - Entry - - - - - - - - - - - - - - - - -->
-
-										<li>
-												
-											<article class="entry">
-												
-												<!-- - - - - - - - - - - - - - Thumbnail - - - - - - - - - - - - - - - - -->
-
-												<a href="#" class="entry_thumb">
-
-													<img src="images/latest_news_thumb_2.jpg" alt="">
-
-												</a>
-
-												<!-- - - - - - - - - - - - - - End of thumbnail - - - - - - - - - - - - - - - - -->
-
-												<div class="wrapper">
-
-													<h6 class="entry_title"><a href="#">Nulla venenatis</a></h6>
-
-													<!-- - - - - - - - - - - - - - Byline - - - - - - - - - - - - - - - - -->
-
-													<div class="entry_meta">
-
-														<span><i class="icon-calendar"></i> 2014-08-05 07:01:49</span>
-
-													</div><!--/ .entry_meta-->
-
-													<!-- - - - - - - - - - - - - - End of byline - - - - - - - - - - - - - - - - -->
-
-												</div><!--/ .wrapper-->
-
-											</article><!--/ .clearfix-->
-
-										</li>
-
-										<!-- - - - - - - - - - - - - - End of entry - - - - - - - - - - - - - - - - -->
-
-										<!-- - - - - - - - - - - - - - Entry - - - - - - - - - - - - - - - - -->
-
-										<li>
-												
-											<article class="entry">
-												
-												<!-- - - - - - - - - - - - - - Thumbnail - - - - - - - - - - - - - - - - -->
-
-												<a href="#" class="entry_thumb">
-
-													<img src="images/latest_news_thumb_3.jpg" alt="">
-
-												</a>
-
-												<!-- - - - - - - - - - - - - - End of thumbnail - - - - - - - - - - - - - - - - -->
-
-												<div class="wrapper">
-
-													<h6 class="entry_title"><a href="#">Pellentesque sed dolor</a></h6>
-
-													<!-- - - - - - - - - - - - - - Byline - - - - - - - - - - - - - - - - -->
-
-													<div class="entry_meta">
-
-														<span><i class="icon-calendar"></i> 2014-08-05 07:01:49</span>
-
-													</div><!--/ .entry_meta-->
-
-													<!-- - - - - - - - - - - - - - End of byline - - - - - - - - - - - - - - - - -->
-
-												</div><!--/ .wrapper-->
-
-											</article><!--/ .clearfix-->
-
-										</li>
-
-										<!-- - - - - - - - - - - - - - End of entry - - - - - - - - - - - - - - - - -->
-
-									</ul>
-
-								</section><!--/ .widget-->
+							
 
 								<!-- - - - - - - - - - - - - - End of blog widget - - - - - - - - - - - - - - - - -->
 
@@ -1095,13 +972,9 @@
 
 							<ul class="bottombar">
 
-								<li><a href="#">Cement</a></li>
-								<li><a href="#">Tiles</a></li>
-								<li><a href="#">Bricks</a></li>
-								<li><a href="#">Paints</a></li>
-								<li><a href="#">Bathrooms</a></li>
-								<li><a href="#">Steels</a></li>
-								<li><a href="#">Sand</a></li>
+								@foreach($category as $row)
+								<li><a href="#">{{$row->category_name}}</a></li>
+										@endforeach
 
 							</ul>
 
@@ -1146,7 +1019,7 @@
 
 					<div class="animated_item">
 
-						<iframe src="http://www.facebook.com/plugins/likebox.php?href=http%3A%2F%2Fwww.facebook.com%2Fthemeforest&amp;width=235&amp;height=345&amp;colorscheme=light&amp;show_faces=true&amp;header=false&amp;stream=false&amp;show_border=false&amp;appId=438889712801266" style="border:none; overflow:hidden; width:235px; height:345px;"></iframe>
+					<iframe src="{{$social->facebook}}" style="border:none; overflow:hidden; width:235px; height:345px;"></iframe>
 
 					</div><!--/ .animated_item-->
 
@@ -1276,18 +1149,18 @@
 					 
 					<div class="animated_item">
 						
-						<p class="c_info_location">8901 Marmora Road,<br>Glasgow, D04 89GR.</p>
+						<p class="c_info_location">{{$setting->address}}</p>
 
 						<div class="proportional_frame">
 
-							<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3024.238131852431!2d-74.006059!3d40.712773999999996!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c258fda88cefb3%3A0x7f1e88758d210007!2z0J3RjNGOLdC50L7RgNC60YHQutC40Lkg0KHQuNGC0Lgt0YXQvtC70Ls!5e0!3m2!1sru!2sua!4v1415946524959" style="border:0"></iframe>
+							<iframe src="{{$setting->map2}}" style="border:0"></iframe>
 
 						</div>
 
 						<ul class="c_info_list">
 
-							<li class="c_info_phone">800-599-65-80</li>
-							<li class="c_info_mail"><a href="mailto:#">info@companyname.com</a></li>
+							<li class="c_info_phone">{{$setting->phone}}</li>
+							<li class="c_info_mail"><a href="mailto:#">{{$setting->email}}</a></li>
 							<li class="c_info_schedule">
 
 								<ul>
@@ -1334,6 +1207,7 @@
 		============================================ -->
 		<script src="{{asset('js/theme.plugins.js')}}"></script>
 		<script src="{{asset('js/theme.core.js')}}"></script>
-	
+		
 	</body>
+	@yield('extra-js')
 </html>
