@@ -174,7 +174,31 @@ class ProductController extends Controller
        //category Edit Delete View Update Process Function start Here
        public function viewCategoryId($id){
         $category = category::where('parent_id',$id)->get();
-           return view('admin/category',compact('category'));
+        $categoryLink=array();
+        $linkCat2=[];
+        if($id !="0"){
+
+            $i = $id;
+            $sn=1;
+            while ($i != "0") {
+               
+                $categories = category::find($i); 
+                $cateLink = array(
+                    'id' => $categories->id,
+                    'name' => $categories->category_name,
+                    'sn'=>$sn
+                );
+                $categoryLink[]= $cateLink;
+                $i = $categories->parent_id;
+                $sn++;
+               
+            }
+            $linkCat1 = collect($categoryLink);
+            $linkCat2 = $linkCat1->reverse();
+           //return response()->json($linkCat2->all());
+        }
+       
+           return view('admin/category',compact('category','linkCat2'));
 
        }
        public function CategorySave(Request $request){
@@ -405,6 +429,87 @@ class ProductController extends Controller
         return response()->json($product->id); 
     }
 
+
+    public function productUpdate(Request $request){
+        $request->validate([
+           // 'imgInp'=>'required',
+            'category'=>'required',
+            'group'=>'required',
+            //'product_name'=>'required|unique:products',
+            // 'sku'=>'required|unique:product_datas',
+        ]);
+
+    $fileName = null;
+    if($request->file('imgInp')!=""){
+    $image = $request->file('imgInp');
+    $fileName = rand() . '.' . $image->getClientOriginalExtension();
+    $image->move(public_path('product_img/'), $fileName);
+    }
+
+        $product = product::find($request->product_page_id);
+        $product->category = $request->category; 
+        $product->product_name = $request->product_name;
+        $product->group = $request->group;
+        $product->brand_name = $request->brand_name;
+        $product->product_description = $request->product_description;
+        $product->seo_title = $request->seo_title;
+        $product->seo_description = $request->seo_description;
+        $product->seo_keywords = $request->seo_keywords;
+        $product->product_image = $fileName;
+        $product->regular_price = $request->regular_price;
+        $product->sales_price = $request->sales_price;
+        $product->sku = $request->sku;
+        $product->stock_quantity = $request->stock_quantity;
+        $product->low_stock = $request->low_stock;
+        $product->weight = $request->weight;
+        $product->length = $request->length;
+        $product->width = $request->width;
+        $product->height = $request->height;
+        $product->shipping_type = $request->shipping_type;
+        $product->shipping_amount = $request->shipping_amount;
+        $product->related_product = collect($request->related_product)->implode(',');
+        $product->hot_product = $request->hot_product;
+        $product->review = $request->review;
+        $product->new_product = $request->new_product;
+        $product->recommended = $request->recommended;
+        $product->featured = $request->featured;
+        $product->save();
+
+        if(isset($request->attribute)){
+    
+            foreach(explode(',', $request->attribute) as $id) {
+                $attribute_data[] = attribute::find($id);        
+            }
+           
+          
+            for ($x = 0; $x < count($attribute_data); $x++) {
+                 $attrName = $attribute_data[$x]->name;
+                // $attrName = $attribute_data[$x]->name;
+                $terms[] = $request->$attrName;                
+            }
+          
+            for ($x = 0; $x < count($attribute_data); $x++) {
+                foreach($terms[$x] as $term){
+                    $ter = term::where('terms_name', $term)->first();   
+                    $product_attribute = product_attribute::where('attribute',$attribute_data[$x]->id)->where('product_id',$request->product_page_id)->first();
+                    if(!isset($product_attribute)){
+                    $attr = new product_attribute;
+                    $attr->product_id = $request->product_page_id;
+                    $attr->group_id = $request->group;
+                    $attr->attribute = $attribute_data[$x]->id;
+                    $attr->terms_id = $ter->id;
+                    $attr->terms = $ter->terms_name;
+                    $attr->save();
+                }
+            }
+            }
+        }
+
+        
+        return response()->json($request->product_page_id); 
+    }
+
+
     public function viewProduct(){
         $product = product::all();
         return view('admin/viewProduct',compact('product'));
@@ -462,6 +567,7 @@ class ProductController extends Controller
         foreach(explode(',', $product_find->related_product) as $row) {
             $related_product[] = $row;        
         }
+
        //return response()->json($data); 
         return view('admin/editProduct',compact('group','brand','product','category','attribute','product_attribute','product_find','tree_category','related_product'));
     }
@@ -499,6 +605,24 @@ class ProductController extends Controller
       
       echo $output;
     }
+}
+public function getServerImages($id)
+{
+    $images = upload::where('product_id',$id)->get();
+
+    $imageAnswer = [];
+
+    foreach ($images as $image) {
+        $imageAnswer[] = [
+            'original' => $image->filename,
+            'server' => $image->resized_name,
+            'size' => File::size(public_path('/product_gallery/' . $image->filename))
+        ];
+    }
+
+    return response()->json([
+        'images' => $imageAnswer
+    ]);
 }
 
 }

@@ -287,10 +287,9 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
             
             <li><a href="#"><i class="la la-file-o"></i> Home Page</a>
               <ul>
-                <li><a class="menu-item" href="/admin/homeSlider">  Sliders</a></li>
-                <li><a class="menu-item" href="/admin/todayDeal">Today Deals</a></li>
-                <li><a class="menu-item" href="/admin/homepageCategory"> Create Product Slider</a></li>
-                <li><a class="menu-item" href="/admin/homeAds">Ads</a></li>
+                <li><a class="menu-item" href="/admin/show-slider">  Sliders</a></li>
+                <li><a class="menu-item" href="/admin/home-layout"> Home Layout</a></li>
+                <li><a class="menu-item" href="/admin/home-add">Ads</a></li>
               </ul>
             </li>
             <li><a class="menu-item" href="/admin/terms_condition"><i class="la la-hdd-o"></i> Terms & Conditions</a></li>

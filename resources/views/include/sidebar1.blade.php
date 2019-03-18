@@ -787,25 +787,7 @@
 
         <!-- - - - - - - - - - - - - - Sign Up to Our Newsletter - - - - - - - - - - - - - - - - -->
 
-        <section class="section_offset animated transparent" data-animation="fadeInDown">
-
-            <h3>Sign Up to Our Newsletter</h3>
-
-            <div class="theme_box">
-
-                <p class="form_caption">Sing up to our newsletter and get exclusive deals you wont find any- where else straight to your inbox!</p>
-
-                <form class="newsletter subscribe clearfix" novalidate>
-
-                    <input type="email" name="sc_email" placeholder="Enter your email address">
-
-                    <button class="button_blue def_icon_btn"></button>
-
-                </form>
-
-            </div><!--/ .theme_box-->
-
-        </section>
+     
 
         <!-- - - - - - - - - - - - - - End of Sign Up to Our Newsletter - - - - - - - - - - - - - - - - -->
 

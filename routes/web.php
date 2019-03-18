@@ -11,10 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('home');
-});
-
+Route::get('/','pageController@home');
 //pages route
 Route::get('/about','pageController@about');
 Route::get('/terms','pageController@terms');
@@ -72,12 +69,16 @@ Route::get('/create-product','productController@createProduct');
 Route::get('/get-category-tree','productController@categoryTree'); 
 Route::get('/get_terms/{id}','productController@get_terms'); 
 Route::post('/productSave','productController@productSave');
+Route::post('/productUpdate','productController@productUpdate');
 Route::post('/images-save', 'UploadImagesController@store');
 Route::post('/images-delete', 'UploadImagesController@destroy');
 Route::get('/viewProduct','productController@viewProduct'); 
 Route::get('/productDelete/{id}','productController@productDelete'); 
 Route::get('/editProduct/{id}','productController@editProduct'); 
 Route::get('/get_edit_attribute/{id}','productController@getEditAttribute'); 
+
+Route::get('server-images/{id}','productController@getServerImages');
+Route::post('/images-delete', 'UploadImagesController@destroy');
 
 //page Management
 Route::get('/about','settingController@about');
@@ -102,4 +103,21 @@ Route::get('/delete_faq/{id}','settingController@deleteFaq');
 Route::post('/faq_data','settingController@faqStore');
 Route::post('/update_faq','settingController@faqUpdate');
 
+
+
+//Home Page
+Route::get('/home-add','pageSettingController@homeAd');
+Route::post('/ads-update','pageSettingController@adUpdate');
+Route::get('/show-slider','pageSettingController@showSlider');
+Route::post('/slider-save','pageSettingController@sliderSave');
+Route::post('/slider-update','pageSettingController@sliderUpdate');
+Route::get('/edit-slider/{id}','pageSettingController@editSlider');
+Route::get('/delete-slider/{id}','pageSettingController@deleteSlider');
+
+//Home Layout
+Route::get('/home-layout','pageSettingController@homeLayout');
+Route::post('/save-layout','pageSettingController@SaveLayout');
+Route::post('/update-layout','pageSettingController@UpdateLayout');
+Route::get('/edit-layout/{id}','pageSettingController@EditLayout');
+Route::get('/delete-layout/{id}','pageSettingController@DeleteLayout');
 });

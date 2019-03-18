@@ -79,6 +79,7 @@ class UploadImagesController extends Controller
         }
         return Response::json([
             'message' => 'Image saved Successfully'
+            
         ], 200);
     }
 
@@ -90,7 +91,7 @@ class UploadImagesController extends Controller
     public function destroy(Request $request)
     {
         $filename = $request->id;
-        $uploaded_image = upload::where('original_name', basename($filename))->first();
+        $uploaded_image = upload::where('filename', basename($filename))->first();
 
         if (empty($uploaded_image)) {
             return Response::json(['message' => 'Sorry file does not exist'], 400);
@@ -111,6 +112,6 @@ class UploadImagesController extends Controller
             $uploaded_image->delete();
         }
 
-        return Response::json(['message' => 'File successfully delete'], 200);
+        return Response::json($request);
     }
 }

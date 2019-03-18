@@ -17,12 +17,29 @@ Dropzone.options.myDropzone = {
 
     init: function () {
         var _this = this;
+        var myDropzone = this;
+        var product_page_id = $('#product_page_id').val();
+
+        $.get('/admin/server-images/'+product_page_id, function(data) {
+            console.log(data);
+            $.each(data.images, function (key, value) {
+
+                var file = {name: value.original, size: value.size};
+                myDropzone.options.addedfile.call(myDropzone, file);
+                myDropzone.options.thumbnail.call(myDropzone, file, '/product_gallery/' + value.server);
+                myDropzone.emit("complete", file);
+                total_photos_counter++;
+                $("#counter").text( "(" + total_photos_counter + ")");
+            });
+        });
         this.on("removedfile", function (file) {
+           
             $.post({
-                url: '/images-delete',
-                data: {id: file.customName, _token: $('[name="_token"]').val()},
+                url: '/admin/images-delete',
+                data: {id: file.name, _token: $('[name="_token"]').val()},
                 dataType: 'json',
                 success: function (data) {
+                    console.log(data);
                     total_photos_counter--;
                     $("#counter").text("# " + total_photos_counter);
                 }
@@ -45,7 +62,7 @@ Dropzone.options.myDropzone = {
         total_photos_counter++;
         $("#counter").text("# " + total_photos_counter);
         file["customName"] = name;
-        toastr.success('Product Store Successfully', 'Successfully Save');
+        toastr.success('Product Image Successfully', 'Successfully Save');
         window.location.href = "/admin/viewProduct";
     }
 };
@@ -97,6 +114,6 @@ Dropzone.options.myDropzone = {
 //   }
 //   };
 function emptyRedirect(){
-    toastr.success('Product Store Successfully', 'Successfully Save');
+    toastr.success('Product Image Successfully', 'Successfully Save');
     window.location.href = "/admin/viewProduct";
 }

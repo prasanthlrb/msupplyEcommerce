@@ -245,7 +245,7 @@
 										<style>
 										
 										</style>
-												<select class="manual" style="height: 40px !important;" name="website_main_category">
+												<select class="manual" style="border: 1px solid #ffffff;" name="website_main_category">
 													<option>All Categories</option>
 													@foreach($category as $cats)
 													<option value="{{$cats->category_name}}">{{$cats->category_name}}</option>
@@ -566,7 +566,7 @@
 											<ul>
 
 												<li class="current"><a href="index.html">Home</a></li>
-												<li><a href="#">Material Calculators</a></li>
+											
 												<li><a href="shop_my_account.html">My Account</a></li>
 												<li><a href="shop_shopping_cart.html">Shopping Cart</a></li>
 												<li><a href="shop_checkout.html">Checkout</a></li>
@@ -591,15 +591,7 @@
 
 									<!-- - - - - - - - - - - - - - End of main navigation - - - - - - - - - - - - - - - - -->
 
-									<!-- - - - - - - - - - - - - - Navigation item - - - - - - - - - - - - - - - - -->
-
-									<div class="nav_item size_4">
-
-										<a href="#" class="compare_button" data-amount="3"></a>
-										
-									</div><!--/ .nav_item-->
-
-									<!-- - - - - - - - - - - - - - End of main navigation - - - - - - - - - - - - - - - - -->
+								
 
 									<!-- - - - - - - - - - - - - - Navigation item - - - - - - - - - - - - - - - - -->
 
@@ -1073,7 +1065,7 @@
 					 
 					<div class="animated_item">
 
-						<p class="form_caption">Lorem ipsum dolor sit amet, adipis mauris accumsan.</p>
+						{{-- <p class="form_caption">Lorem ipsum dolor sit amet, adipis mauris accumsan.</p> --}}
 
 						<form class="contactform" novalidate>
 

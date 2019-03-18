@@ -4,6 +4,11 @@ namespace App\Http\Controllers;
 use App\home_setting;
 use App\ContactInfo;
 use App\faq;
+use App\adModel;
+use App\homeSlider;
+use App\home_product_layout;
+use App\category;
+use App\product;
 use Illuminate\Http\Request;
 
 class pageController extends Controller
@@ -35,4 +40,143 @@ class pageController extends Controller
         $contact_info = Contactinfo::all();
         return view('contact',compact('contact_info'));
        }
+
+       public function home(){
+           $slider = homeSlider::all();
+           $layouts = home_product_layout::all();
+           $category = category::all();
+           $product = product::all();
+           $product_today = product::where('hot_product','on')->orderBy('id', 'DESC')->take(10)->get();
+           $output ='';
+           foreach($layouts as $layout){
+               if($layout->type == 'category'){
+            foreach(explode(',', $layout->category_id) as $row) {
+                $layout_collection[] = $row;        
+            }
+			$layout->category_id = $layout_collection;
+			
+			$output .='	<section class="section_offset animated transparent" data-animation="fadeInDown">';
+            $xcount =1;
+            $output .='<h3>'.$layout->title.'</h3>
+            <div class="tabs type_2 products">
+            <ul class="tabs_nav clearfix">';
+            foreach($category as $cat){
+                if(in_array($cat->id,$layout_collection)){
+					$output .= '<li><a href="#tab-'.$xcount.'">'.$cat->category_name.'</a></li>'; 
+					$xcount++;
+                }
+			}
+         
+            $output .='</ul>
+            <div class="tab_containers_wrap">';
+            $ycount=1;
+            foreach($category as $cat){
+                if(in_array($cat->id,$layout_collection)){
+            $output .='<div id="tab-'.$ycount.'" class="tab_container">
+			<div class="owl_carousel carousel_in_tabs">';
+            $product_data = product::where('category','LIKE',"%{$cat->id}%")->get();
+            foreach($product_data as $row){
+            $output .='
+            <div class="product_item type_2">
+            <div class="image_wrap">
+            <img src="'. asset('product_img/'.$row->product_image.'').'" alt="">
+            <div class="actions_wrap">
+            <div class="centered_buttons">
+            <a href="#" class="button_dark_grey middle_btn quick_view" data-modal-url="modals/quick_view.html">Quick View</a>
+            </div>
+            </div>
+            </div>
+            <div class="label_hot">Hot</div>
+            <div class="description">
+            <a href="#">'.$row->product_name.'</a>
+            <div class="clearfix product_info">
+            <p class="product_price alignleft">';
+                       
+            if($row->sales_price != null){
+                $output .=' <s>₹ '.$row->regular_price.'</s>
+                        <b>₹ '.$row->sales_price.'</b></p>';
+            }else{
+                $output .='<b>₹ '.$row->regular_price.'</b></p>';
+            }
+       
+           
+              
+           $output .='
+            </div>
+            </div>
+            <div class="buttons_row">
+            <button class="button_blue middle_btn">Add to Cart</button>
+			<button class="button_dark_grey middle_btn def_icon_btn add_to_wishlist tooltip_container"><span class="tooltip top">Add to Wishlist</span></button>
+			<button class="button_dark_grey middle_btn def_icon_btn add_to_compare tooltip_container"><span class="tooltip top">Add to Compare</span></button>
+            </div></div>';
+            }
+            $output .='</div>
+            <footer class="bottom_box">
+            <a href="#" class="button_grey middle_btn">View All Products</a>
+            </footer></div>';
+            $ycount++;
+                                    }
+                                }
+                             
+            $output .='</div>
+				</div>
+            </section>';
+            }else{
+                foreach(explode(',', $layout->product_id) as $row) {
+                    $layout_prod_collection[] = $row;        
+                }
+
+            $output .='
+            <section class="section_offset animated transparent" data-animation="fadeInDown">
+                <h3 class="offset_title">'.$layout->title.'</h3>
+                <div class="owl_carousel carousel_in_tabs">';
+                $layout_prod = product::whereIn('id',$layout_prod_collection)->get();
+                foreach($layout_prod as $row){
+            $output .=' 
+                <div class="product_item type_2">
+                    <div class="image_wrap">
+                    <img src="'.asset('product_img/'.$row->product_image.'').'" alt="">
+                        <div class="actions_wrap">
+                            <div class="centered_buttons">
+                            <a href="#" class="button_dark_grey middle_btn quick_view" data-modal-url="modals/quick_view.html">Quick View</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="description">
+                    <a href="#">'.$row->product_name.'</a>
+                        <div class="clearfix product_info"> <p class="product_price alignleft">';
+                       
+                        if($row->sales_price != null){
+                            $output .=' <s>₹ '.$row->regular_price.'</s>
+                                    <b>₹ '.$row->sales_price.'</b></p>';
+                        }else{
+                            $output .='<b>₹ '.$row->regular_price.'</b></p>';
+                        }
+                   
+                       
+                          
+                       $output .=' </div>
+                    </div>
+                <div class="buttons_row">
+                    <button class="button_blue middle_btn">Add to Cart</button>
+                    <button class="button_dark_grey middle_btn def_icon_btn add_to_wishlist tooltip_container"><span class="tooltip top">Add to Wishlist</span></button>
+                    <button class="button_dark_grey middle_btn def_icon_btn add_to_compare tooltip_container"><span class="tooltip top">Add to Compare</span></button>
+                </div>
+            </div>';
+                }
+            $output .='
+        </div>
+
+                   <footer class="bottom_box">
+                    <a href="#" class="button_grey middle_btn">View All Products</a>
+                    </footer>
+
+                   
+               </section>';
+               }
+           }
+        return view('home',compact('slider','layouts','output','product_today'));
+        // return response()->json($output);
+       }
+       
 }

@@ -9,7 +9,21 @@
 <div class="content-wrapper">
 
     <div class="content-body">
-     
+        <div class="row breadcrumbs-top">
+            <div class="breadcrumb-wrapper col-12">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/admin/category/0">Category</a>
+                </li>
+              
+                @if(count($linkCat2) >0)
+                @foreach($linkCat2 as $link)
+              <li class="breadcrumb-item"><a href="/admin/category/{{$link['id']}}">{{$link['name']}}</a>
+                </li>
+                @endforeach
+                @endif
+              </ol>
+            </div>
+          </div>
    
 <section id="column-selectors">
     <div class="row">
