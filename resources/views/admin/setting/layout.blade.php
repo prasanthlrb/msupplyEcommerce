@@ -1,7 +1,10 @@
 @extends('admin.app')
 @section('extra-css')
-  <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/tables/datatable/datatables.min.css">
   <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/forms/selects/select2.min.css">
+ <!-- BEGIN VENDOR CSS-->
+ <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/ui/dragula.min.css">
+ <!-- END VENDOR CSS-->
+
   <style>
   .hidden-data{
     display: none !important;
@@ -25,42 +28,19 @@
             
             
           </div>
-          <div class="card-content collapse show">
-            <div class="card-body card-dashboard">
-             
-              <table class="table table-striped table-bordered zero-configuration">
-                <thead>
-                  <tr>
-                    <th>S No</th>
-                    <th>Title</th>
-                    <th>Layout Type</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @foreach($layout as $row)
-                  <tr>
-                    <td>{{$row->id}}</td>
-                    <td>{{$row->title}}</td>
-                    <td>{{$row->type}}</td>
-                   
-                    <td class="text-center" onclick="Edit({{$row->id}})"><i class="ft-edit"></i></td>
-                    <td class="text-center" onclick="Delete({{$row->id}})"><i class="ft-trash-2"></i></td>
-                  </tr>
-                @endforeach
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <th>S No</th>
-                    <th>Title</th>
-                    <th>Layout Type</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
+       
+        </div>
+        <div class="col-lg-6">
+          <div class="card">
+            <ul class="list-group" id="list-group-tags">
+                @foreach($layout as $row)
+              <li class="list-group-item" data-value="{{$row->id}}">
+                <span class="badge badge-danger badge-pill float-right" onclick="Delete({{$row->id}})"><i class="ft-trash-2"></i></span>
+                <span class="badge badge-primary badge-pill float-right" onclick="Edit({{$row->id}})"><i class="ft-edit"></i></span>
+                {{$row->title}} - ({{$row->type}})
+              </li>
+              @endforeach
+            </ul>
           </div>
         </div>
       </div>
@@ -140,14 +120,47 @@
   </div>
 @endsection
 @section('extra-js')
-
-<script src="../../../app-assets/vendors/js/tables/datatable/datatables.min.js" type="text/javascript"></script>
-
 <script src="../../../app-assets/vendors/js/forms/select/select2.full.min.js" type="text/javascript"></script>
 <script src="../../../app-assets/js/scripts/forms/select/form-select2.js" type="text/javascript"></script>
-  <script src="../../../app-assets/js/scripts/tables/datatables/datatable-basic.js"
-  type="text/javascript"></script>
+  <!-- BEGIN PAGE VENDOR JS-->
+  <script src="../../../app-assets/vendors/js/extensions/dragula.min.js" type="text/javascript"></script>
+  <!-- END PAGE VENDOR JS-->
 <script>
+//       dragula([document.getElementById('list-group-tags')],{
+//         revertOnSpill: true
+//       }).on('drop',function(el)
+// {
+//    var parentElId = $(el).parent().attr('id');
+//    var droppedElIndex = $(el).index();
+//    var droppedElId = $(el).attr('id');
+//   console.log(parentElId);
+//   console.log(droppedElIndex);
+//   console.log(droppedElId);
+// });
+//       function $(id) {
+//   return document.getElementById(id);
+// }
+// draggableElements.on('list-group-tags',function(el)
+// {
+//    var parentElId = $(el).parent().attr('id');
+//    var droppedElIndex = $(el).index();
+//    var droppedElId = $(el).attr('id');
+//   console.log(parentElId);
+//   console.log(droppedElIndex);
+//   console.log(droppedElId);
+// });
+
+dragula([document.getElementById('list-group-tags')], {
+  revertOnSpill: true
+}).on('drop', function(el) {
+     var parentElId = $(el).wrapAll();
+   var droppedElIndex = $(el).index();
+   var droppedElId = $(el).attr('data-value');
+  console.log(parentElId);
+  console.log(droppedElIndex);
+  console.log(droppedElId);
+
+});
   var action_type;
 
   $('#type').change(function(){
@@ -190,7 +203,7 @@
                   console.log(data);             
                     $("#form")[0].reset();
                      $('#category_model').modal('hide');
-                     $('.zero-configuration').load(location.href+' .zero-configuration');
+                     $('#list-group-tags').load(location.href+' #list-group-tags');
                      toastr.success('Group Store Successfully', 'Successfully Save');
                 },error: function (data) {
                 toastr.error('Group Name Required', 'Required!');
@@ -210,7 +223,7 @@
             console.log(data);
               $("#form")[0].reset();
                $('#category_model').modal('hide');
-               $('.zero-configuration').load(location.href+' .zero-configuration');
+               $('#list-group-tags').load(location.href+' #list-group-tags');
                toastr.success('Category Update Successfully', 'Successfully Update');
           },error: function (data) {
             toastr.error('Category Name Required', 'Required!');
@@ -263,7 +276,7 @@
         success: function(data)
         {
           toastr.success('Group Delete Successfully', 'Successfully Delete');
-          $('.zero-configuration').load(location.href+' .zero-configuration');
+          $('#list-group-tags').load(location.href+' #list-group-tags');
         }
       });
     } 

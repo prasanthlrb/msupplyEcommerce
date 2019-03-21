@@ -179,4 +179,81 @@ class pageController extends Controller
         // return response()->json($output);
        }
        
+       public function menuGet(){
+
+       }
+       public function categoryTree(){
+        $category = category::all();
+        // foreach ($category as $row) {
+        //    $sub_data = array(
+        //        'id' => $row->id,
+        //        'name' => $row->category_name,
+        //        'text' => $row->category_name,
+        //        'parent_id' => $row->parent_id
+        //    );
+        //    $data[] = $sub_data;
+        // }
+        // foreach ($data as $key => &$value) {
+        //   $output[$value['id']] = &$value;
+        // }
+        // echo '<pre>';
+        // print_r($output);
+        // echo '</pre>';
+        // foreach ($data as $key => &$value) {
+        //    if ($value["parent_id"] && isset($output[$value["parent_id"]])) {
+        //       $output[$value["parent_id"]]["nodes"][] =&$value;
+        //    }
+        // }
+        // foreach ($data as $key => &$value) {
+        //    if ($value["parent_id"] && isset($output[$value["parent_id"]])) {
+        //       unset($data[$key]);
+        //    }
+        // }
+
+        $output ='<div id="cssmenu">
+        <ul>';
+        foreach ($category as $row) {
+            if($row->parent_id !=0){
+                $output .=' <li class="active has-sub has-new-sub"><a href="#"><span>'.$row->category_name.'</span></a>
+                <ul class="first-child">';
+            }else{
+                $output .='<li><a href="#"><span>'.$row->category_name.'</span></a></li>';
+            }
+        }
+        $output .=' 
+        <li class="active has-sub has-new-sub"><a href="#"><span>Products</span></a>
+              <ul class="first-child"><!-- over all child bro -->
+                 <li class="has-sub has-new-sub"><a href="#"><span>Product 1</span></a>
+                    <ul class="second-child">
+                       <li class="has-sub has-new-sub"><a href="#"class="has-sub has-new-sub"><span>Sub Product</span></a>
+                             <ul class="second-child">
+                                <li><a href="#"><span>Sub Product</span></a></li>
+                                <li class="last"><a href="#"><span>Sub Product</span></a></li>
+                                <li class="last"><a href="#"><span>Sub Product</span></a></li>
+                                <li class="last"><a href="#"><span>Sub Product</span></a></li>
+                                <li class="last"><a href="#"><span>Sub Product</span></a></li>                                               
+                             </ul><!-- inner product menu -->
+                       </li>
+                       <li class="last"><a href="#"><span>Sub Product</span></a></li>
+                    </ul>
+                 </li><!-- 2nd level menu end here -->
+                 <li class="has-sub has-new-sub"><a href="#"><span>Product 2</span></a>
+                    <ul class="second-child">
+                       <li><a href="#"><span>Sub Product</span></a></li>
+                       <li class="last"><a href="#"><span>Sub Product</span></a></li>
+                    </ul>
+                 </li>
+                 <li><a href="#"><span>Product 3</span></a></li>
+              </ul>
+           </li>';
+
+           $output .='
+        </ul>
+        </div>';
+      
+        echo '<pre>';
+        print_r($data);
+        echo '</pre>';
+       
+    }
 }

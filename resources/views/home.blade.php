@@ -138,50 +138,47 @@
 						
 									<h3>Categories</h3>
 						
-									<ul class="theme_menu cats">
-						
-										<li class="has_megamenu">
-						
-											<a href="#">Cement (1375)</a>
-						
-											<!-- - - - - - - - - - - - - - Mega menu - - - - - - - - - - - - - - - - -->
-						
-											<div class="mega_menu clearfix">
-						
-												<!-- - - - - - - - - - - - - - Mega menu item - - - - - - - - - - - - - - - - -->
-						
-												<div class="mega_menu_item">
-												
-													<ul class="list_of_links">
-						
-														<li><a href="#">PPC</a>
-															<div class="mega_menu_item">
-															<ul class="list_of_links">
-																	<li><a href="#">OPC 43</a></li>
-																	<li><a href="#">OPC 53</a></li>		
-															</ul>
-														</div>
-														</li>
-														<li><a href="#">OPC 43</a></li>
-														<li><a href="#">OPC 53</a></li>
-														
-						
-													</ul>
-						
-												</div><!--/ .mega_menu_item-->
-						
-												<!-- - - - - - - - - - - - - - End of mega menu item - - - - - - - - - - - - - - - - -->
-						
-											 
-						
-											</div><!--/ .mega_menu-->
-						
-											<!-- - - - - - - - - - - - - - End of mega menu - - - - - - - - - - - - - - - - -->
-						
+								
+<div id='cssmenu'>
+	<ul>
+	   <li><a href='#'><span>Home</span></a></li>
+	   <li class='active has-sub has-new-sub'><a href='#'><span>Products</span></a>
+		  <ul class="first-child"><!-- over all child bro -->
+			 <li class='has-sub has-new-sub'><a href='#'><span>Product 1</span></a>
+				<ul class="second-child">
+				   <li class="has-sub has-new-sub"><a href='#'class='has-sub has-new-sub'><span>Sub Product</span></a>
+						 <ul class="second-child">
+							<li><a href='#'><span>Sub Product</span></a></li>
+							<li class='has-sub has-new-sub'><a href='#' class='has-sub has-new-sub'><span>Sub Product</span></a>
+								<ul class="second-child">
+										<li class='has-sub has-new-sub'><a href='#' class='has-sub has-new-sub'><span>Sub Product</span></a>
+											<ul class="second-child">
+													<li class='last'><a href='#'><span>Sub Product</span></a></li>
+												</ul>	
 										</li>
-										
-									
-									</ul>
+								</ul>
+							</li>
+							<li class='last'><a href='#'><span>Sub Product</span></a></li>
+							<li class='last'><a href='#'><span>Sub Product</span></a></li>
+							<li class='last'><a href='#'><span>Sub Product</span></a></li>                                               
+						 </ul><!-- inner product menu -->
+				   </li>
+				   <li class='last'><a href='#'><span>Sub Product</span></a></li>
+				</ul>
+			 </li><!-- 2nd level menu end here -->
+			 <li class='has-sub has-new-sub'><a href='#'><span>Product 2</span></a>
+				<ul class="second-child">
+				   <li><a href='#'><span>Sub Product</span></a></li>
+				   <li class='last'><a href='#'><span>Sub Product</span></a></li>
+				</ul>
+			 </li>
+			 <li><a href='#'><span>Product 3</span></a></li>
+		  </ul>
+	   </li>
+	   <li><a href='#'><span>About</span></a></li>
+	   <li class='last'><a href='#'><span>Contact</span></a></li>
+	</ul>
+	</div>
 						
 								</section><!--/ .animated.transparent-->
 						

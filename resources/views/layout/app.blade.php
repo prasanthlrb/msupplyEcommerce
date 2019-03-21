@@ -298,255 +298,50 @@
 
 										<ul class="theme_menu cats dropdown">
 
-											<li class="has_megamenu animated_item">
-
-												<a href="#">Cement (1375)</a>
+										
 
 												<!-- - - - - - - - - - - - - - Mega menu - - - - - - - - - - - - - - - - -->
 
-												<div class="mega_menu clearfix">
-
-													<!-- - - - - - - - - - - - - - Mega menu item - - - - - - - - - - - - - - - - -->
-
-													<div class="mega_menu_item">
-													
-														<ul class="list_of_links">
-
-                                                                <li><a href="#">PPC</a></li>
-                                                                <li><a href="#">OPC 43</a></li>
-                                                                <li><a href="#">OPC 53</a></li>
-
-														</ul>
-
-													</div><!--/ .mega_menu_item-->
-
-													<!-- - - - - - - - - - - - - - End of mega menu item - - - - - - - - - - - - - - - - -->
-
-								
-
-													<!-- - - - - - - - - - - - - - End of mega menu item - - - - - - - - - - - - - - - - -->
-
-												</div><!--/ .mega_menu-->
+												<div id='cssmenu' class="animated_item">
+													<ul>
+													   <li><a href='#'><span>Home</span></a></li>
+													   <li class='has-sub has-new-sub'><a href='#'><span>Products</span></a>
+														  <ul class="first-child"><!-- over all child bro -->
+															 <li class='has-sub has-new-sub'><a href='#'><span>Product 1</span></a>
+																<ul class="second-child">
+																   <li class="has-sub has-new-sub"><a href='#'class='has-sub has-new-sub'><span>Sub Product</span></a>
+																		 <ul class="second-child">
+																			<li><a href='#'><span>Sub Product</span></a></li>
+																			<li class='last'><a href='#'><span>Sub Product</span></a></li>
+																			<li class='last'><a href='#'><span>Sub Product</span></a></li>
+																			<li class='last'><a href='#'><span>Sub Product</span></a></li>
+																			<li class='last'><a href='#'><span>Sub Product</span></a></li>                                               
+																		 </ul><!-- inner product menu -->
+																   </li>
+																   <li class='last'><a href='#'><span>Sub Product</span></a></li>
+																</ul>
+															 </li><!-- 2nd level menu end here -->
+															 <li class='has-sub has-new-sub'><a href='#'><span>Product 2</span></a>
+																<ul class="second-child">
+																   <li><a href='#'><span>Sub Product</span></a></li>
+																   <li class='last'><a href='#'><span>Sub Product</span></a></li>
+																</ul>
+															 </li>
+															 <li><a href='#'><span>Product 3</span></a></li>
+														  </ul>
+													   </li>
+													   <li><a href='#'><span>About</span></a></li>
+													   <li class='last'><a href='#'><span>Contact</span></a></li>
+													</ul>
+													</div>
 
 												<!-- - - - - - - - - - - - - - End of mega menu - - - - - - - - - - - - - - - - -->
 
-                                            </li>
-
-											<li class="has_megamenu animated_item">
-
-												<a href="#">Tiles (1375)</a>
-
-												<!-- - - - - - - - - - - - - - Mega menu - - - - - - - - - - - - - - - - -->
-
-												<div class="mega_menu clearfix">
-
-													<!-- - - - - - - - - - - - - - Mega menu item - - - - - - - - - - - - - - - - -->
-
-													<div class="mega_menu_item">
-													
-														<ul class="list_of_links">
-
-                                                                <li><a href="javascript:void(null);">Wall - Tiles</a> </li>
-                                                                <li><a href="javascript:void(null);">Floor - Tiles</a> </li>
-                                                                <li><a href="javascript:void(null);">Elevation - Tiles</a> </li>
-                                                                <li><a href="javascript:void(null);">Kitchen - Tiles</a> </li>
-                                                                <li><a href="javascript:void(null);">Parking - Tiles</a> </li>
-                                                                
-														</ul>
-
-													</div><!--/ .mega_menu_item-->
-
-													<!-- - - - - - - - - - - - - - End of mega menu item - - - - - - - - - - - - - - - - -->
-
-													<!-- - - - - - - - - - - - - - Mega menu item - - - - - - - - - - - - - - - - -->
+                                         
 
 											
 
-													<!-- - - - - - - - - - - - - - End of mega menu item - - - - - - - - - - - - - - - - -->
-
-												</div><!--/ .mega_menu-->
-
-												<!-- - - - - - - - - - - - - - End of mega menu - - - - - - - - - - - - - - - - -->
-
-                                            </li>
-
-											<li class="has_megamenu animated_item">
-
-												<a href="#">Bricks (1375)</a>
-
-												<!-- - - - - - - - - - - - - - Mega menu - - - - - - - - - - - - - - - - -->
-
-												<div class="mega_menu clearfix">
-
-													<!-- - - - - - - - - - - - - - Mega menu item - - - - - - - - - - - - - - - - -->
-
-													<div class="mega_menu_item">
-													
-														<ul class="list_of_links">
-
-                                                                <li><a href="#">chamber bricks</a></li>
-                                                                <li><a href="#">Flyash bricks</a></li>
-
-														</ul>
-
-													</div><!--/ .mega_menu_item-->
-
-													<!-- - - - - - - - - - - - - - End of mega menu item - - - - - - - - - - - - - - - - -->
-
-
-													<!-- - - - - - - - - - - - - - End of mega menu item - - - - - - - - - - - - - - - - -->
-
-												</div><!--/ .mega_menu-->
-
-												<!-- - - - - - - - - - - - - - End of mega menu - - - - - - - - - - - - - - - - -->
-
-                                            </li>
-
-											<li class="has_megamenu animated_item">
-
-												<a href="#">Paints (1375)</a>
-
-												<!-- - - - - - - - - - - - - - Mega menu - - - - - - - - - - - - - - - - -->
-
-												<div class="mega_menu clearfix">
-
-													<!-- - - - - - - - - - - - - - Mega menu item - - - - - - - - - - - - - - - - -->
-
-													<div class="mega_menu_item">
-													
-														<ul class="list_of_links">
-
-                                                                <li><a href="#">Interior Wall Paints</a></li>
-                                                                <li><a href="#">Exterior Wall Paints</a></li>
-                                                                <li><a href="#">Wood &amp; Metal Paints</a></li>
-                                                                <li><a href="#">Construction Solutions</a></li>
-                                                                <li><a href="#">Primers / Undercoats</a></li>
-                                                             
-
-														</ul>
-
-													</div><!--/ .mega_menu_item-->
-
-													<!-- - - - - - - - - - - - - - End of mega menu item - - - - - - - - - - - - - - - - -->
-
-												
-													<!-- - - - - - - - - - - - - - End of mega menu item - - - - - - - - - - - - - - - - -->
-
-												</div><!--/ .mega_menu-->
-
-												<!-- - - - - - - - - - - - - - End of mega menu - - - - - - - - - - - - - - - - -->
-
-                                            </li>
-
-											<li class="has_megamenu animated_item">
-
-												<a href="#">Bathrooms (1375)</a>
-
-												<!-- - - - - - - - - - - - - - Mega menu - - - - - - - - - - - - - - - - -->
-
-												<div class="mega_menu clearfix">
-
-													<!-- - - - - - - - - - - - - - Mega menu item - - - - - - - - - - - - - - - - -->
-
-													<div class="mega_menu_item">
-													
-														<ul class="list_of_links">
-
-                                                                <li><a href="#">Wash Basin </a></li>
-                                                                <li><a href="#">Pan &amp; Urinal Set</a></li>
-                                                                <li><a href="#">Wall Hung &amp; Water Closet</a></li>
-                                                                <li><a href="#">FLUSH TANK</a></li>
-                                                                <li><a href="#">Taps</a></li>
-                                                                <li><a href="#">Showers &amp; Health Faucets</a></li>
-                                                           
-
-														</ul>
-
-													</div><!--/ .mega_menu_item-->
-
-													<!-- - - - - - - - - - - - - - End of mega menu item - - - - - - - - - - - - - - - - -->
-
-													
-
-													<!-- - - - - - - - - - - - - - End of mega menu item - - - - - - - - - - - - - - - - -->
-
-												</div><!--/ .mega_menu-->
-
-												<!-- - - - - - - - - - - - - - End of mega menu - - - - - - - - - - - - - - - - -->
-
-                                            </li>
-
-											<li class="has_megamenu animated_item">
-
-												<a href="#">Steels (1375)</a>
-
-												<!-- - - - - - - - - - - - - - Mega menu - - - - - - - - - - - - - - - - -->
-
-												<div class="mega_menu clearfix">
-
-													<!-- - - - - - - - - - - - - - Mega menu item - - - - - - - - - - - - - - - - -->
-
-													<div class="mega_menu_item">
-													
-														<ul class="list_of_links">
-
-                                                                <li><a href="#">Fe-500 TMT Steel Bars</a></li>
-                                                                <li><a href="#">Fe-500 D TMT Bars</a></li>
-                                                                <li><a href="#">Fe-550 TMT Steel Bars</a></li>
-                                                                <li><a href="#">Fe-600 TMT Steel Bars</a></li>
-                                
-                                
-
-														</ul>
-
-													</div><!--/ .mega_menu_item-->
-
-													<!-- - - - - - - - - - - - - - End of mega menu item - - - - - - - - - - - - - - - - -->
-
-													<!-- - - - - - - - - - - - - - End of mega menu item - - - - - - - - - - - - - - - - -->
-
-												</div><!--/ .mega_menu-->
-
-												<!-- - - - - - - - - - - - - - End of mega menu - - - - - - - - - - - - - - - - -->
-
-                                            </li>
-
-											<li class="has_megamenu animated_item">
-
-												<a href="#">Sand (1375)</a>
-
-												<!-- - - - - - - - - - - - - - Mega menu - - - - - - - - - - - - - - - - -->
-
-												<div class="mega_menu clearfix">
-
-													<!-- - - - - - - - - - - - - - Mega menu item - - - - - - - - - - - - - - - - -->
-
-													<div class="mega_menu_item">
-													
-														<ul class="list_of_links">
-
-															    <li><a href="#">M-Sand</a></li>
-                                      <li><a href="#">River-Sand</a></li>
-                                      <li><a href="#">Gravel</a></li>
-                                       <li><a href="#">Red Sand</a></li>
-                               
-
-														</ul>
-
-													</div><!--/ .mega_menu_item-->
-
-													<!-- - - - - - - - - - - - - - End of mega menu item - - - - - - - - - - - - - - - - -->
-
-								
-
-													<!-- - - - - - - - - - - - - - End of mega menu item - - - - - - - - - - - - - - - - -->
-
-												</div><!--/ .mega_menu-->
-
-												<!-- - - - - - - - - - - - - - End of mega menu - - - - - - - - - - - - - - - - -->
-
-                                            </li>
-                                            
+											
 									{{--  <li class="has_megamenu animated_item"><a href="#" class="all"><b>All Categories</b></a></li>  --}}
 
 										</ul>
@@ -1201,5 +996,6 @@
 		<script src="{{asset('js/theme.core.js')}}"></script>
 		
 	</body>
+
 	@yield('extra-js')
 </html>

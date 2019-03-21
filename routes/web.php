@@ -19,6 +19,7 @@ Route::get('/privacy','pageController@privacy');
 Route::get('/shipping_details','pageController@shipping_details');
 Route::get('/faq','pageController@faq');
 Route::get('/contact','pageController@contact');
+Route::get('/category-tree','pageController@categoryTree');
 
 Route::group(['prefix' => 'admin'],function(){
 Route::get('/login', function () {
