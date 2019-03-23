@@ -144,8 +144,9 @@
 
 @endsection
 @section('extra-js')
+
 <script>
-	$('.contactus').addClass('current');
+	$('.contact_menu').addClass('current');
 	function mailsend(){
   	var termsData = new FormData($('#contact_form')[0]);
   	$.ajax({

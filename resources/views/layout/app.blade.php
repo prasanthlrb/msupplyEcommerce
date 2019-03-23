@@ -15,7 +15,7 @@
 
 		<!-- Favicon
 		============================================ -->
-		<link rel="shortcut icon" type="image/x-icon" href="images/fav_icon.png">
+		<link rel="shortcut icon" type="image/x-icon" href="/images/fav_icon.png">
 
 		<!-- Google web fonts
 		============================================ -->
@@ -144,8 +144,8 @@
 									<!-- - - - - - - - - - - - - - Language change - - - - - - - - - - - - - - - - -->
 
 									<div class="alignright site_settings">
-                                            <img src="{{ asset('images/android-app-alt.png')}}" alt="" width="71px">
-                                            <img src="{{ asset('images/app-store.png')}}" alt="" width="71px">
+                                            <img src="{{ asset('/images/android-app-alt.png')}}" alt="" width="71px">
+                                            <img src="{{ asset('/images/app-store.png')}}" alt="" width="71px">
 									
 {{--                                         
 										<ul class="dropdown site_setting_list language">
@@ -208,7 +208,7 @@
 
 									<a href="index.html" class="logo">
 
-										<img src="images/logo.png" alt="">
+										<img src="/images/logo.png" alt="">
 
 									</a>
 
@@ -360,12 +360,12 @@
 
 											<ul>
 
-												<li class="current"><a href="index.html">Home</a></li>
+												<li class="home_menu"><a href="/">Home</a></li>
 											
-												<li><a href="shop_my_account.html">My Account</a></li>
-												<li><a href="shop_shopping_cart.html">Shopping Cart</a></li>
-												<li><a href="shop_checkout.html">Checkout</a></li>
-												<li><a href="/contact">Contact Us</a></li>
+												<li class="account_menu"><a href="/">My Account</a></li>
+												<li class="cart_menu"><a href="shop_shopping_cart.html">Shopping Cart</a></li>
+												<li class="checkout_menu"><a href="shop_checkout.html">Checkout</a></li>
+												<li class="contact_menu"><a href="/contact">Contact Us</a></li>
 											
 
 											</ul>
@@ -409,7 +409,7 @@
 
 													<div class="clearfix sc_product">
 
-														<a href="#" class="product_thumb"><img src="images/sc_img_1.jpg" alt=""></a>
+														<a href="#" class="product_thumb"><img src="/images/sc_img_1.jpg" alt=""></a>
 
 														<a href="#" class="product_name">Natural Factors PGX Daily Ultra Matrix...</a>
 
@@ -449,7 +449,7 @@
 
 													<div class="clearfix sc_product">
 
-														<a href="#" class="product_thumb"><img src="images/sc_img_3.jpg" alt=""></a>
+														<a href="#" class="product_thumb"><img src="/images/sc_img_3.jpg" alt=""></a>
 
 														<a href="#" class="product_name">Culturelle Kids! Probi-<br>otic Packets 30 ea</a>
 
@@ -740,14 +740,14 @@
 
 						<ul class="payments">
 
-							<li><img src="images/payment_1.png" alt=""></li>
-							<li><img src="images/payment_2.png" alt=""></li>
-							<li><img src="images/payment_3.png" alt=""></li>
-							<li><img src="images/payment_4.png" alt=""></li>
-							<li><img src="images/payment_5.png" alt=""></li>
-							<li><img src="images/payment_6.png" alt=""></li>
-							<li><img src="images/payment_7.png" alt=""></li>
-							<li><img src="images/payment_8.png" alt=""></li>
+							<li><img src="/images/payment_1.png" alt=""></li>
+							<li><img src="/images/payment_2.png" alt=""></li>
+							<li><img src="/images/payment_3.png" alt=""></li>
+							<li><img src="/images/payment_4.png" alt=""></li>
+							<li><img src="/images/payment_5.png" alt=""></li>
+							<li><img src="/images/payment_6.png" alt=""></li>
+							<li><img src="/images/payment_7.png" alt=""></li>
+							<li><img src="/images/payment_8.png" alt=""></li>
 
 						</ul>
 						
@@ -816,33 +816,7 @@
 
 			<!-- - - - - - - - - - - - - - End of Facebook - - - - - - - - - - - - - - - - -->
 
-			<!-- - - - - - - - - - - - - - Twitter - - - - - - - - - - - - - - - - -->
-
-			<li>
-
-				<button class="icon_btn middle_btn social_twitter open_"><i class="icon-twitter"></i></button>
-
-				<section class="dropdown">
-
-					<div class="animated_item">
-
-						<h3 class="title">Latest Tweets</h3>
-
-					</div><!--/ .animated_item-->
-
-					<div class="tweet_list_wrap"></div>
-					 
-					<footer class="animated_item bottom_box">
-
-						<a href="#" class="button_grey middle_btn twitter_follow">Follow Us</a>	
-
-					</footer><!--/ .animated_item-->
-
-				</section><!--/ .dropdown-->
-
-			</li>
-
-			<!-- - - - - - - - - - - - - - End of Twitter - - - - - - - - - - - - - - - - -->
+		
 
 			<!-- - - - - - - - - - - - - - Contact us - - - - - - - - - - - - - - - - -->
 
@@ -985,7 +959,7 @@
 		<script src="{{asset('js/jquery.countdown.plugin.min.js')}}"></script>
 		<script src="{{asset('js/jquery.countdown.min.js')}}"></script>
 		<script src="{{asset('js/arcticmodal/jquery.arcticmodal.js')}}"></script>
-		{{--  <script src="{{asset('twitter/jquery.tweet.min.js')}}"></script>  --}}
+		 <script src="{{asset('twitter/jquery.tweet.min.js')}}"></script> 
 		<script src="{{asset('js/colorpicker/colorpicker.js')}}"></script>
 		<script src="{{asset('js/retina.min.js')}}"></script>
 		<script type="text/javascript" src="http://s7.addthis.com/js/300/addthis_widget.js"></script>

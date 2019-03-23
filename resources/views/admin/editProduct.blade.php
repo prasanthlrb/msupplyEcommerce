@@ -541,7 +541,7 @@
         showCheckbox: true,
     });
     var node = {!! str_replace('"', '', json_encode($tree_category)) !!};
-    $('#default-treeview').treeview('checkNode', [ node ]);
+    $('#default-treeview').treeview('selectNode', [ node, { silent: true } ]);
       }
     });
 

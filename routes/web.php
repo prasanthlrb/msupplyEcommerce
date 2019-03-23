@@ -20,7 +20,8 @@ Route::get('/shipping_details','pageController@shipping_details');
 Route::get('/faq','pageController@faq');
 Route::get('/contact','pageController@contact');
 Route::get('/category-tree','pageController@categoryTree');
-
+Route::get('/category/{id}','categoryController@categoryProduct');
+Route::get('/product/{id}','categoryController@getProduct');
 Route::group(['prefix' => 'admin'],function(){
 Route::get('/login', function () {
     return view('admin/app');

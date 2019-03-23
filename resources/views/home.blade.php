@@ -178,6 +178,7 @@
 	   <li><a href='#'><span>About</span></a></li>
 	   <li class='last'><a href='#'><span>Contact</span></a></li>
 	</ul>
+
 	</div>
 						
 								</section><!--/ .animated.transparent-->
@@ -188,38 +189,15 @@
 						
 								<div class="section_offset animated transparent" data-animation="fadeInDown">
 						
-									<a href="#">
+									<a href="{{$adModel[2]->url}}">
 										
-										<img src="images/banner_img_10.png" alt="">
+									<img src="ads/{{$adModel[2]->ad_name}}" alt="">
 						
 									</a>
 						
 								</div>
 						
 								<!-- - - - - - - - - - - - - - End of banner - - - - - - - - - - - - - - - - -->
-				
-				
-						
-								<!-- - - - - - - - - - - - - - Banner - - - - - - - - - - - - - - - - -->
-						
-								<div class="section_offset animated transparent" data-animation="fadeInDown">
-						
-									<a href="#">
-										
-										<img src="{{ asset('images/tiles/1.jpg')}}" alt="">
-						
-									</a>
-						
-								</div>
-						
-								<!-- - - - - - - - - - - - - - End of banner - - - - - - - - - - - - - - - - -->
-	
-						
-								<!-- - - - - - - - - - - - - - Sign Up to Our Newsletter - - - - - - - - - - - - - - - - -->
-						
-							 
-						
-								<!-- - - - - - - - - - - - - - End of Sign Up to Our Newsletter - - - - - - - - - - - - - - - - -->
 						
 							</aside><!--/ [col]-->
 
@@ -276,9 +254,9 @@
 
 									<div class="col-sm-6">
 										
-										<a href="#" class="banner animated transparent" data-animation="fadeInDown">
+										<a href="{{$adModel[0]->url}}" class="banner animated transparent" data-animation="fadeInDown">
 										
-											<img src="images/banner_img_1.jpg" alt="">
+											<img src="ads/{{$adModel[0]->ad_name}}" alt="">
 
 										</a>
 
@@ -286,9 +264,9 @@
 
 									<div class="col-sm-6">
 										
-										<a href="#" class="banner animated transparent" data-animation="fadeInDown" data-animation-delay="150">
+										<a href="{{$adModel[1]->url}}" class="banner animated transparent" data-animation="fadeInDown" data-animation-delay="150">
 										
-											<img src="images/banner_img_2.jpg" alt="">
+											<img src="ads/{{$adModel[1]->ad_name}}" alt="">
 
 										</a>
 
@@ -6327,4 +6305,10 @@
 			</div><!--/ .page_wrapper-->
 			
             <!-- - - - - - - - - - - - - - End Page Wrapper - - - - - - - - - - - - - - - - -->
-            @endsection
+			@endsection
+			
+			@section('extra-js')
+			<script>
+			$('.home_menu').addClass('current');
+			</script>
+			@endsection

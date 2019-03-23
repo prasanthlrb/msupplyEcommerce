@@ -268,7 +268,9 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
             <li><a class="menu-item" href="/admin/create-product/">Add Product</a></li>
             <li><a class="menu-item" href="/admin/viewProduct/">Product List</a></li>  
             <li><a class="menu-item" href="/admin/product-group/">Product Group</a></li>  
-           
+            <li>
+              <a class="menu-item" href="/admin/brand/">Brand</a>
+            </li>
             <li><a class="menu-item" href="/admin/attribute/">Attributes</a>
             </li>
           </ul>
@@ -312,9 +314,7 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
             <li>
               <a class="menu-item" href="/admin/social-details/">Social Media Management</a>
             </li>
-            <li>
-              <a class="menu-item" href="/admin/brand/">Brand</a>
-            </li>
+         
             <li>
               <a class="menu-item" href="/admin/attribute/" data-i18n="nav.menu_levels.second_level_child.main">Attributes Management</a>
               <!-- <ul class="menu-content">
