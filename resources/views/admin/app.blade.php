@@ -298,6 +298,9 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
             <li><a class="menu-item" href="/admin/shipping_detail"><i class="la la-floppy-o"></i> Shipping Details</a></li>
             <li><a class="menu-item" href="/admin/privacy-policy"><i class="la la-floppy-o"></i> Privacy Policy</a></li>
             <li><a class="menu-item" href="/admin/about"><i class="la la-floppy-o"></i> About Us</a></li>
+            <li>
+              <a class="menu-item" href="/admin/faq/">FAQ</a>
+            </li>
           </ul>
         </li>
         <li class=" nav-item"><a href="#"><i class="la la-gear"></i><span class="menu-title">Settings</span></a>
@@ -307,9 +310,7 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
               <a class="menu-item" href="/admin/contact-details/">User Contact Info</a>
             </li>
            
-            <li>
-              <a class="menu-item" href="/admin/faq/">FAQ</a>
-            </li>
+           
           
             <li>
               <a class="menu-item" href="/admin/social-details/">Social Media Management</a>

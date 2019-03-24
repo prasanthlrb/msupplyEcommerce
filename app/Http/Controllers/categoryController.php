@@ -18,12 +18,15 @@ class categoryController extends Controller
     }
     
     public function getProduct($id){
-        $product = product::where('id',$id)->get();
+        $product1 = product::find($id);
         $Upload = Upload::where('product_id','=',$id)->get(); 
         $brand = brand::all();
-
-
-        return view('product',compact('product','brand','Upload'));
+        $related_product = [];
+        if($product1->related_product){
+            $related_product = product::whereIn('id', explode(',',$product1->related_product))->get();
+        }
+        //return response()->json($related_product);
+        return view('product',compact('product1','brand','Upload','related_product'));
 
     }
 }

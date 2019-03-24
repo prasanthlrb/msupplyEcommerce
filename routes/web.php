@@ -22,6 +22,7 @@ Route::get('/contact','pageController@contact');
 Route::get('/category-tree','pageController@categoryTree');
 Route::get('/category/{id}','categoryController@categoryProduct');
 Route::get('/product/{id}','categoryController@getProduct');
+Route::get('/quick-view/{id}','pageController@quickModel');
 Route::group(['prefix' => 'admin'],function(){
 Route::get('/login', function () {
     return view('admin/app');
@@ -115,6 +116,7 @@ Route::post('/slider-save','pageSettingController@sliderSave');
 Route::post('/slider-update','pageSettingController@sliderUpdate');
 Route::get('/edit-slider/{id}','pageSettingController@editSlider');
 Route::get('/delete-slider/{id}','pageSettingController@deleteSlider');
+Route::get('/drop-slider/{index}/{id}','pageSettingController@dropSlider');
 
 //Home Layout
 Route::get('/home-layout','pageSettingController@homeLayout');
@@ -122,4 +124,5 @@ Route::post('/save-layout','pageSettingController@SaveLayout');
 Route::post('/update-layout','pageSettingController@UpdateLayout');
 Route::get('/edit-layout/{id}','pageSettingController@EditLayout');
 Route::get('/delete-layout/{id}','pageSettingController@DeleteLayout');
+Route::get('/drop-layout/{index}/{id}','pageSettingController@dropLayout');
 });

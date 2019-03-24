@@ -1,7 +1,7 @@
 @extends('layout.app')
 @section('content')
 <!-- - - - - - - - - - - - - - Page Wrapper - - - - - - - - - - - - - - - - -->
-
+header('Content-Type: text/plain; charset=utf-8');
 <div class="secondary_page_wrapper">
 
     <div class="container">
@@ -23,8 +23,13 @@
                 <h1>About Us</h1>
 
                 <div class="theme_box clearfix">
-                    @if(isset($data[0]->about_us))
-                    {{$data[0]->about_us}}
+                    @if(isset($data->about_us))
+                    
+                  <?php 
+                  
+                  echo html_entity_decode($data->about_us);
+                  ?>
+                              
                     @endif
                 </div><!--/ .theme_box-->
 

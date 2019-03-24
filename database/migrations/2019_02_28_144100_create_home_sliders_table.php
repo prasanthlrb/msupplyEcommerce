@@ -30,6 +30,7 @@ class CreateHomeSlidersTable extends Migration
             $table->string('sub_y')->nullable();
             $table->string('desc_color')->nullable();
             $table->string('desc_y')->nullable();
+            $table->string('position')->nullable();
             $table->timestamps();
         });
     }

@@ -14,11 +14,13 @@
               <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/admin/category/0">Category</a>
                 </li>
-              
+                <?php $y=1;?>
                 @if(count($linkCat2) >0)
+               
                 @foreach($linkCat2 as $link)
               <li class="breadcrumb-item"><a href="/admin/category/{{$link['id']}}">{{$link['name']}}</a>
                 </li>
+                <?php $y++;?>
                 @endforeach
                 @endif
               </ol>
@@ -54,7 +56,9 @@
                     <th>S No</th>
                     <th>Category Name</th>
                     <th>Category Image</th>
-                    <th>SubCategory</th>
+                    @if($y < 4)
+                  <th>SubCategory</th>
+                  @endif
                     <th>Action</th>
                   
                   </tr>
@@ -66,7 +70,9 @@
                 <td>{{$x}}</td>
                 <td>{{$row->category_name}}</td>
                 <td><img src="{{ asset("category_image/$row->category_image")}}" alt="" style="width:80px"></td>
+                @if($y < 4)
                 <td><a href="/admin/category/{{$row->id}}">Create SubCategory</a></td>
+                @endif
                 <td class="text-center">
                     <span class="dropdown">
           <button id="btnSearchDrop2" type="button" data-toggle="dropdown" aria-haspopup="true"
@@ -85,14 +91,16 @@
                   @endforeach
                 </tbody>
                 <tfoot>
-                  <tr>
-                      <th>S No</th>
-                      <th>Name</th>
-                      <th>Type</th>
-                      <th>Terms</th>
-                      <th>Action</th>
+                    <tr>
+                        <th>S No</th>
+                        <th>Category Name</th>
+                        <th>Category Image</th>
+                        @if($y < 4)
+                      <th>SubCategory</th>
+                      @endif
+                        <th>Action</th>
                       
-                  </tr>
+                      </tr>
                 </tfoot>
               </table>
             </div>

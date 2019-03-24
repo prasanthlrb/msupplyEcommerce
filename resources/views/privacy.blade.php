@@ -24,7 +24,9 @@
 
                 <div class="theme_box clearfix">
                     @if(isset($data[0]->payment_terms))
-                    {{$data[0]->payment_terms}}
+                    <?php 
+                  
+                    echo html_entity_decode($data[0]->payment_terms)?>
                     @endif
                 </div><!--/ .theme_box-->
 

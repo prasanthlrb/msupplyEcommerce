@@ -1,4 +1,7 @@
 @extends('admin.app')
+@section('css-js')
+<link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/editors/tinymce/tinymce.min.css">
+@endsection
 @section('section')
 <div class="content-wrapper">
 <div class="content-body">
@@ -28,10 +31,11 @@
                              
                               
                               <div class="form-group row">
-                                <label class="col-md-3 label-control" for="projectinput9">About Us</label>
-                                <div class="col-md-9">
-                                  <textarea id="projectinput9" rows="20" class="form-control" name="about_us">{{$data[0]->about_us}}</textarea>
-                                </div>
+                              <div class="col-sm-12">
+
+                                <textarea id="projectinput9" rows="20" class="form-control tinymce" name="about_us"><?php echo $data[0]->about_us?></textarea>
+                              </div>
+                                
                               </div>
 
         
@@ -52,5 +56,11 @@
             
 </div>
 </div>
+
+@endsection
+
+@section('extra-js')
+<script src="../../../app-assets/vendors/js/editors/tinymce/tinymce.js" type="text/javascript"></script>
+<script src="../../../app-assets/js/scripts/editors/editor-tinymce.js" type="text/javascript"></script>
 
 @endsection

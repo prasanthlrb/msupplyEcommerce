@@ -23,10 +23,7 @@
         
         <div class="card">
           <div class="card-header">
-            
                 <button id="open_model" data-backdrop="false" class="btn btn-success round btn-glow px-2" data-toggle="modal">Create Layouts</button>
-            
-            
           </div>
        
         </div>
@@ -156,10 +153,20 @@ dragula([document.getElementById('list-group-tags')], {
      var parentElId = $(el).wrapAll();
    var droppedElIndex = $(el).index();
    var droppedElId = $(el).attr('data-value');
-  console.log(parentElId);
+  //console.log(parentElId);
   console.log(droppedElIndex);
   console.log(droppedElId);
+ 
+  $.ajax({
+        url : '/admin/drop-layout/'+droppedElIndex+'/'+droppedElId,
+        type: "GET",
+        dataType: "JSON",
+        success: function(data)
+        {
+          console.log(data);
+        }
 
+      });
 });
   var action_type;
 
@@ -203,8 +210,10 @@ dragula([document.getElementById('list-group-tags')], {
                   console.log(data);             
                     $("#form")[0].reset();
                      $('#category_model').modal('hide');
-                     $('#list-group-tags').load(location.href+' #list-group-tags');
+                     
+                     //$('#list-group-tags').load(location.href+' #list-group-tags');
                      toastr.success('Group Store Successfully', 'Successfully Save');
+                     location.reload();
                 },error: function (data) {
                 toastr.error('Group Name Required', 'Required!');
                 //toastr.error(data.responseJSON.errors.cat_name);
@@ -223,8 +232,9 @@ dragula([document.getElementById('list-group-tags')], {
             console.log(data);
               $("#form")[0].reset();
                $('#category_model').modal('hide');
-               $('#list-group-tags').load(location.href+' #list-group-tags');
+              // $('#list-group-tags').load(location.href+' #list-group-tags');
                toastr.success('Category Update Successfully', 'Successfully Update');
+               location.reload();
           },error: function (data) {
             toastr.error('Category Name Required', 'Required!');
         }
@@ -276,7 +286,8 @@ dragula([document.getElementById('list-group-tags')], {
         success: function(data)
         {
           toastr.success('Group Delete Successfully', 'Successfully Delete');
-          $('#list-group-tags').load(location.href+' #list-group-tags');
+          //$('#list-group-tags').load(location.href+' #list-group-tags');
+          location.reload();
         }
       });
     } 

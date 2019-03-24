@@ -11,7 +11,7 @@
 
 
 <div class="secondary_page_wrapper">
-@foreach($product as $product1)
+
     <div class="container">
 
         <!-- - - - - - - - - - - - - - Breadcrumbs - - - - - - - - - - - - - - - - -->
@@ -43,9 +43,9 @@
 
                             <div class="image_preview_container">
                                 <?php if($product1->product_image != ""){ ?>
-                                    <img id="img_zoom" data-zoom-image="{{asset('product_img/').'/'.$product1->product_image}}" src="{{asset('product_img/').'/'.$product1->product_image}}" alt="">
+                                    <img id="img_zoom" data-zoom-image="{{asset('/product_img').'/'.$product1->product_image}}" src="{{asset('/product_img').'/'.$product1->product_image}}" alt="">
                                 <?php } else{ ?>
-                                    <img id="img_zoom" data-zoom-image="{{asset('images/qv_img_1.jpg')}}" src="{{asset('images/qv_img_1.jpg')}}" alt="">
+                                    <img id="img_zoom" data-zoom-image="{{asset('/images/qv_img_1.jpg')}}" src="{{asset('/images/qv_img_1.jpg')}}" alt="">
                                 <?php } ?>     
                                 <!-- <button class="button_grey_2 icon_btn middle_btn open_qv"><i class="icon-resize-full-6"></i></button> -->
 
@@ -299,7 +299,7 @@
                                             </article>
                                         </li>
                                     </ul>
-                                    @endforeach
+                                   
                                     <!-- <a href="#" class="button_grey middle_btn">Show All</a> -->
                                 </section>
                             </div>
@@ -312,61 +312,68 @@
                 </div>
 
 
-                <section class="section_offset">
+             
+@if(!empty($related_product))
+<section class="section_offset">
 
-                    <h3 class="offset_title">Related Products</h3>
+    <h3 class="offset_title">Related Products</h3>
 
-                    <div class="owl_carousel related_products">
-
-
-                 
-                        <div class="product_item">
+    <div class="owl_carousel related_products">
 
 
-                            <div class="image_wrap">
-
-                            
-
-
-                                <div class="actions_wrap">
-
-                                    <div class="centered_buttons">
-
-                                        <a href="#" class="button_dark_grey quick_view" data-modal-url="/quick-view/">Quick View</a>
-
-                                        <!-- <a href="#" class="button_blue add_to_cart">Add to Cart</a> -->
-
-                                    </div>
-
-                                    <a href="/add-wishlist/" class="button_dark_grey def_icon_btn add_to_wishlist tooltip_container"><span class="tooltip right">Add to Wishlist</span></a>
-
-                                    <a href="/compare-product/" class="button_dark_grey def_icon_btn add_to_compare tooltip_container"><span class="tooltip left">Add to Compare</span></a>
-
-                                </div>
-
-                            </div>
-
-                            <div class="label_new">New</div>
+    @foreach($related_product as $r_product)
+        <div class="product_item">
 
 
-                            <div class="description">
+            <div class="image_wrap">
 
-                                <a href="/product-view/"></a>
-
-                                <div class="clearfix product_info">
-
-                                    <p class="product_price alignleft"><b>AED</b></p>
-
-                                </div>
-
-                            </div>
+                <?php if($r_product->product_image != ""){ ?>
+                    <img src="{{asset('/product_img').'/'.$r_product->product_image}}" alt="">
+                <?php } else{ ?>
+                    <img src="/images/product_img_30.jpg" alt="">
+                <?php } ?> 
 
 
-                        </div>
-                   
-                    </div><!--/ .owl_carousel -->
+                <div class="actions_wrap">
 
-                </section><!--/ .section_offset -->
+                    <div class="centered_buttons">
+
+                        <a href="#" class="button_dark_grey quick_view" data-modal-url="/quick-view/{{$r_product->id}}">Quick View</a>
+
+                        <!-- <a href="#" class="button_blue add_to_cart">Add to Cart</a> -->
+
+                    </div>
+
+                    <a href="/add-wishlist/{{$r_product->id}}" class="button_dark_grey def_icon_btn add_to_wishlist tooltip_container"><span class="tooltip right">Add to Wishlist</span></a>
+
+                    <a href="/compare-product/{{$r_product->id}}" class="button_dark_grey def_icon_btn add_to_compare tooltip_container"><span class="tooltip left">Add to Compare</span></a>
+
+                </div>
+
+            </div>
+
+            <div class="label_new">New</div>
+
+
+            <div class="description">
+
+                <a href="/product-view/{{$r_product->id}}">{{$r_product->product_name}}</a>
+
+                <div class="clearfix product_info">
+
+                    <p class="product_price alignleft"><b>AED{{$r_product->sales_price}}</b></p>
+
+                </div>
+
+            </div>
+
+
+        </div>
+    @endforeach
+    </div><!--/ .owl_carousel -->
+
+</section><!--/ .section_offset -->
+@endif
 
                 <!-- - - - - - - - - - - - - - End of related products - - - - - - - - - - - - - - - - -->
 

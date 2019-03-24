@@ -1,9 +1,6 @@
 @extends('admin.app')
 @section('extra-css')
-<link rel="stylesheet" type="text/css" href="../../../app-assets/css/vendors.css">
-  <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/tables/datatable/datatables.min.css">
- 
-  
+  <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/ui/dragula.min.css">
 @endsection
 @section('section')
 <div class="content-wrapper">
@@ -34,10 +31,10 @@
           <div class="card-content collapse show">
             <div class="card-body card-dashboard">
              
-              <table class="table table-striped table-bordered zero-configuration">
+              <table class="table table-striped table-bordered">
                 <thead>
                   <tr>
-                    <th>S No</th>
+                  
                     <th>Slider Title Name</th>
                     <th>SubTitle</th>
                     <th>Slider Position</th>
@@ -46,11 +43,11 @@
                   
                   </tr>
                 </thead>
-                <tbody>
-                 <?php $x=1?>
+                <tbody id="list-group-tags">
+                 
                 @foreach($slider as $row)
-                <tr>
-                <td>{{$x}}</td>
+                <tr data-value="{{$row->id}}">
+               
                 <td>{{$row->title}}</td>
                 <td>{{$row->sub_title}}</td>
                 <td>{{$row->slider_position}}</td>
@@ -70,16 +67,18 @@
                     </td>
                
                 </tr>
-                <?php $x++?>
+              
                   @endforeach
                 </tbody>
                 <tfoot>
                   <tr>
-                      <th>S No</th>
-                      <th>Name</th>
-                      <th>Type</th>
-                      <th>Terms</th>
-                      <th>Action</th>
+                    
+                     
+                    <th>Slider Title Name</th>
+                    <th>SubTitle</th>
+                    <th>Slider Position</th>
+                    <th>Slider Image</th>
+                    <th>Action</th>
                       
                   </tr>
                 </tfoot>
@@ -229,13 +228,26 @@
   </div>
 @endsection
 @section('extra-js')
-
-<script src="../../../app-assets/vendors/js/tables/datatable/datatables.min.js" type="text/javascript"></script>
-
- 
-  <script src="../../../app-assets/js/scripts/tables/datatables/datatable-basic.js"
-  type="text/javascript"></script>
+  <script src="../../../app-assets/vendors/js/extensions/dragula.min.js" type="text/javascript"></script>
 <script>
+  
+dragula([document.getElementById('list-group-tags')], {
+  revertOnSpill: true
+}).on('drop', function(el) {
+     var parentElId = $(el).wrapAll();
+   var droppedElIndex = $(el).index();
+   var droppedElId = $(el).attr('data-value');
+  $.ajax({
+        url : '/admin/drop-slider/'+droppedElIndex+'/'+droppedElId,
+        type: "GET",
+        dataType: "JSON",
+        success: function(data)
+        {
+          console.log(data);
+        }
+
+      });
+});
   var action_type;
   $('#open_model').click(function(){
     $('#attribute_model').modal('show');
@@ -262,8 +274,8 @@
                   $('#saveCat').attr('disabled',false);
                     $("#slider_form")[0].reset();
                      $('#attribute_model').modal('hide');
-                     $('.zero-configuration').load(location.href+' .zero-configuration');
                      toastr.success('Slider Store Successfully', 'Successfully Save');
+                     location.reload();   
                 },error: function (data, errorThrown) {
                 var errorData = data.responseJSON.errors;
                   $.each(errorData, function(i, obj) {
@@ -285,8 +297,8 @@
             $('#saveCat').attr('disabled',false);
               $("#slider_form")[0].reset();
                $('#attribute_model').modal('hide');
-               $('.zero-configuration').load(location.href+' .zero-configuration');
                toastr.success('Slider Update Successfully', 'Successfully Update');
+               location.reload();   
           },error: function (data, errorThrown) {
             var errorData = data.responseJSON.errors;
             $.each(errorData, function(i, obj) {
@@ -340,7 +352,7 @@
         success: function(data)
         {
           toastr.success('Slider Delete Successfully', 'Successfully Delete');
-          $('.zero-configuration').load(location.href+' .zero-configuration');
+          location.reload();
         }
       });
     } 
