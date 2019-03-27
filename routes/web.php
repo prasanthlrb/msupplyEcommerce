@@ -23,12 +23,22 @@ Route::get('/category-tree','pageController@categoryTree');
 Route::get('/category/{id}','categoryController@categoryProduct');
 Route::get('/product/{id}','categoryController@getProduct');
 Route::get('/quick-view/{id}','pageController@quickModel');
+
+
+
+Route::get('/wishlist','pageController@wishlist'); 
+Route::get('/add-wishlist/{id}','pageController@addWishlist');
+Route::get('/remove-wish/{id}','pageController@removewish');
+
+
+
+
 Route::group(['prefix' => 'admin'],function(){
 Route::get('/login', function () {
     return view('admin/app');
 });
-
-
+Auth::routes(); 
+Auth::routes(['verify' => true]);
 
 //brands
 Route::get('/brand','productController@viewBrand');
@@ -126,3 +136,7 @@ Route::get('/edit-layout/{id}','pageSettingController@EditLayout');
 Route::get('/delete-layout/{id}','pageSettingController@DeleteLayout');
 Route::get('/drop-layout/{index}/{id}','pageSettingController@dropLayout');
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

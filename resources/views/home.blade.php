@@ -20,7 +20,7 @@
 									<!-- - - - - - - - - - - - - - Carousel of today's deals - - - - - - - - - - - - - - - - -->
 						
 									<div class="owl_carousel widgets_carousel">
-						
+										<?php if(isset($product_today)){ ?>
 										<!-- - - - - - - - - - - - - - Product - - - - - - - - - - - - - - - - -->
 										@foreach($product_today as $row)
 										<div class="product_item">
@@ -106,7 +106,7 @@
 										</div>
 										@endforeach
 										<!--/ .product_item-->
-										
+										<?php }?>
 										<!-- - - - - - - - - - - - - - End of product - - - - - - - - - - - - - - - - -->
 										
 						
@@ -188,13 +188,13 @@
 								<!-- - - - - - - - - - - - - - Banner - - - - - - - - - - - - - - - - -->
 						
 								<div class="section_offset animated transparent" data-animation="fadeInDown">
-						
+						<?php if(count($adModel) > 0){?>
 									<a href="{{$adModel[2]->url}}">
 										
 									<img src="ads/{{$adModel[2]->ad_name}}" alt="">
 						
 									</a>
-						
+								<?php } ?>
 								</div>
 						
 								<!-- - - - - - - - - - - - - - End of banner - - - - - - - - - - - - - - - - -->
@@ -216,7 +216,7 @@
 									<div class="rev_slider">
 
 										<ul>
-
+											<?php if(isset($slider)){?>
 											<!-- - - - - - - - - - - - - - Slide  - - - - - - - - - - - - - - - - -->
 											@foreach($slider as $row)
 											<li data-transition="papercut" data-slotamount="7">
@@ -235,7 +235,7 @@
 
 											</li>
 											@endforeach
-											
+										<?php } ?>
 										</ul>
 
 									</div><!--/ .rev_slider-->
@@ -251,7 +251,7 @@
 							<div class="section_offset">
 
 								<div class="row">
-
+									@if(count($adModel) > 0)
 									<div class="col-sm-6">
 										
 										<a href="{{$adModel[0]->url}}" class="banner animated transparent" data-animation="fadeInDown">
@@ -271,7 +271,7 @@
 										</a>
 
 									</div><!--/ [col]-->
-
+									@endif
 								</div><!--/ .row-->
 
 							</div><!--/ .section_offset-->

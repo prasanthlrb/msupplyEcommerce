@@ -316,8 +316,7 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
               <a class="menu-item" href="/admin/social-details/">Social Media Management</a>
             </li>
          
-            <li>
-              <a class="menu-item" href="/admin/attribute/" data-i18n="nav.menu_levels.second_level_child.main">Attributes Management</a>
+            
               <!-- <ul class="menu-content">
                 <li>
                   <a class="menu-item" href="#" data-i18n="nav.menu_levels.second_level_child.third_level">Brand Management</a>
@@ -329,7 +328,7 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
                   <a class="menu-item" href="#" data-i18n="nav.menu_levels.second_level_child.third_level">Color Management</a>
                 </li>
               </ul> -->
-                </li>
+               
             
            
           </ul>

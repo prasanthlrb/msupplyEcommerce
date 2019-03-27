@@ -49,67 +49,6 @@
 	<body class="front_page promo_popup">
 
 		
-		<!-- - - - - - - - - - - - - - Cookie Message - - - - - - - - - - - - - - - - -->
-
-		<!-- <div class="cookie_message">
-
-			<div class="container">
-
-				<div class="on_the_sides">
-
-					<div class="left_side">Please note this website requires cookies in order to function correctly, they do not store any specific information about your personally.</div>
-
-					<div class="right_side">
-
-						<div class="buttons_row">
-
-							<a href="#" class="button_blue accept_cookie">Accept Cookies</a>
-
-							<a href="#" class="button_dark_grey">Read More</a>
-
-						</div>
-
-					</div>
-
-				</div>
-
-			</div>
-
-		</div> -->
-
-		<!-- - - - - - - - - - - - - - End of Cookie Message - - - - - - - - - - - - - - - - -->
-
-		<!-- - - - - - - - - - - - - - Old ie alert message - - - - - - - - - - - - - - - - -->
-
-		<!--[if lt IE 9]>
-
-			<div class="ie_alert_message">
-
-				<div class="container">
-
-					<div class="on_the_sides">
-
-						<div class="left_side">
-
-							<i class="icon-attention-5"></i> <span class="bold">Attention!</span> This page may not display correctly. You are using an outdated version of Internet Explorer. For a faster, safer browsing experience.</span>
-
-						</div>
-	
-						<div class="right_side">
-
-							<a target="_blank" href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode" class="button_black">Update Now!</a>
-
-						</div>
-
-					</div>
-
-				</div>
-
-			</div>
-				
-		<![endif]-->
-
-		<!-- - - - - - - - - - - - - - End of old ie alert message - - - - - - - - - - - - - - - - -->
 
 		<!-- - - - - - - - - - - - - - Main Wrapper - - - - - - - - - - - - - - - - -->
 
@@ -131,7 +70,7 @@
 
 								<!-- - - - - - - - - - - - - - Login - - - - - - - - - - - - - - - - -->
 
-								<p>Welcom visitor <a href="#" data-modal-url="modals/login.html">Login</a> or <a href="#">Register</a></p>
+								<p>Welcom visitor <a href="/login">Login</a> or <a href="/register">Register</a></p>
 
 								<!-- - - - - - - - - - - - - - End login - - - - - - - - - - - - - - - - -->
 
@@ -583,7 +522,7 @@
 								<p class="about_us">{{$setting->described}}</p>
 
 									<!-- - - - - - - - - - - - - - Social icons list - - - - - - - - - - - - - - - - -->
-
+									@if(isset($social))
 									<ul class="social_btns">
 										@if($social->facebook !=null)
 										<li>
@@ -632,6 +571,7 @@
 										</li>
 										@endif
 									</ul>
+									@endif
 									<!-- - - - - - - - - - - - - - End social icons list - - - - - - - - - - - - - - - - -->
 
 								</section>
@@ -674,10 +614,11 @@
 									<h4>Category</h4>
 
 									<ul class="list_of_links">
-										@foreach($category as $row)
-								<li><a href="#">{{$row->category_name}}</a></li>
-										@endforeach
-
+												<?php if(isset($category)){?>
+											@foreach($category as $row)
+											<li><a href="#">{{$row->category_name}}</a></li>
+													@endforeach
+											<?php } ?>
 									</ul>
 
 								</section><!--/ .widget-->
@@ -758,11 +699,11 @@
 						<nav class="footer_nav">
 
 							<ul class="bottombar">
-
+								<?php if(isset($category)){?>
 								@foreach($category as $row)
 								<li><a href="#">{{$row->category_name}}</a></li>
 										@endforeach
-
+								<?php } ?>
 							</ul>
 
 						</nav>
@@ -805,9 +746,9 @@
 					</div><!--/ .animated_item-->
 
 					<div class="animated_item">
-
+						@if(isset($social))
 					<iframe src="{{$social->facebook}}" style="border:none; overflow:hidden; width:235px; height:345px;"></iframe>
-
+						@endif
 					</div><!--/ .animated_item-->
 
 				</section><!--/ .dropdown-->

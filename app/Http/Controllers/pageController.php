@@ -44,6 +44,7 @@ class pageController extends Controller
        }
 
        public function home(){
+           try{
            $slider = homeSlider::orderBy('position', 'ASC')->get();
            $layouts = home_product_layout::orderBy('position', 'ASC')->get();
            $category = category::all();
@@ -101,9 +102,6 @@ class pageController extends Controller
             }else{
                 $output .='<b>₹ '.$row->regular_price.'</b></p>';
             }
-       
-           
-              
            $output .='
             </div>
             </div>
@@ -180,6 +178,10 @@ class pageController extends Controller
            }
         return view('home',compact('slider','layouts','output','product_today','adModel'));
         // return response()->json($output);
+           }
+           catch(Exception $e) {
+            echo 'Message: ' .$e->getMessage();
+          }
        }
        
        public function menuGet(){
@@ -268,8 +270,7 @@ class pageController extends Controller
         // }
        
     //   $output .='</ul>';
-        echo '<pre>';
-       
+        echo '<pre>'; 
         echo '</pre>';
         foreach($data as $d1){
             echo count($d1['nodes']);
