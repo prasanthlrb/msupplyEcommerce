@@ -268,7 +268,8 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
             <li><a class="menu-item" href="/admin/create-product/">Add Product</a></li>
             <li><a class="menu-item" href="/admin/viewProduct/">Product List</a></li>  
             <li><a class="menu-item" href="/admin/product-group/">Product Group</a></li>  
-            <li><a class="menu-item" href="/admin/tag/">Tags</a>
+            <li>
+              <a class="menu-item" href="/admin/brand/">Brand</a>
             </li>
             <li><a class="menu-item" href="/admin/attribute/">Attributes</a>
             </li>
@@ -288,16 +289,18 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
             
             <li><a href="#"><i class="la la-file-o"></i> Home Page</a>
               <ul>
-                <li><a class="menu-item" href="/admin/homeSlider">  Sliders</a></li>
-                <li><a class="menu-item" href="/admin/todayDeal">Today Deals</a></li>
-                <li><a class="menu-item" href="/admin/homepageCategory"> Create Product Slider</a></li>
-                <li><a class="menu-item" href="/admin/homeAds">Ads</a></li>
+                <li><a class="menu-item" href="/admin/show-slider">  Sliders</a></li>
+                <li><a class="menu-item" href="/admin/home-layout"> Home Layout</a></li>
+                <li><a class="menu-item" href="/admin/home-add">Ads</a></li>
               </ul>
             </li>
             <li><a class="menu-item" href="/admin/terms_condition"><i class="la la-hdd-o"></i> Terms & Conditions</a></li>
             <li><a class="menu-item" href="/admin/shipping_detail"><i class="la la-floppy-o"></i> Shipping Details</a></li>
-            <li><a class="menu-item" href="/admin/payment_terms"><i class="la la-floppy-o"></i> Privacy Policy</a></li>
+            <li><a class="menu-item" href="/admin/privacy-policy"><i class="la la-floppy-o"></i> Privacy Policy</a></li>
             <li><a class="menu-item" href="/admin/about"><i class="la la-floppy-o"></i> About Us</a></li>
+            <li>
+              <a class="menu-item" href="/admin/faq/">FAQ</a>
+            </li>
           </ul>
         </li>
         <li class=" nav-item"><a href="#"><i class="la la-gear"></i><span class="menu-title">Settings</span></a>
@@ -306,21 +309,14 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
             <li>
               <a class="menu-item" href="/admin/contact-details/">User Contact Info</a>
             </li>
-            <li>
-              <a class="menu-item" href="/admin/category/">Category Management</a>
-            </li>
-            <li>
-              <a class="menu-item" href="/admin/faq/">FAQ</a>
-            </li>
+           
+           
           
             <li>
               <a class="menu-item" href="/admin/social-details/">Social Media Management</a>
             </li>
-            <li>
-              <a class="menu-item" href="/admin/brand/">Brand</a>
-            </li>
-            <li>
-              <a class="menu-item" href="/admin/attribute/" data-i18n="nav.menu_levels.second_level_child.main">Attributes Management</a>
+         
+            
               <!-- <ul class="menu-content">
                 <li>
                   <a class="menu-item" href="#" data-i18n="nav.menu_levels.second_level_child.third_level">Brand Management</a>
@@ -332,7 +328,7 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
                   <a class="menu-item" href="#" data-i18n="nav.menu_levels.second_level_child.third_level">Color Management</a>
                 </li>
               </ul> -->
-                </li>
+               
             
            
           </ul>

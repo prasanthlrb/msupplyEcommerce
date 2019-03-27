@@ -11,13 +11,34 @@
 |
 */
 
-Route::get('/', function () {
-    return view('home');
-});
+Route::get('/','pageController@home');
+//pages route
+Route::get('/about','pageController@about');
+Route::get('/terms','pageController@terms');
+Route::get('/privacy','pageController@privacy');
+Route::get('/shipping_details','pageController@shipping_details');
+Route::get('/faq','pageController@faq');
+Route::get('/contact','pageController@contact');
+Route::get('/category-tree','pageController@categoryTree');
+Route::get('/category/{id}','categoryController@categoryProduct');
+Route::get('/product/{id}','categoryController@getProduct');
+Route::get('/quick-view/{id}','pageController@quickModel');
+
+
+
+Route::get('/wishlist','pageController@wishlist'); 
+Route::get('/add-wishlist/{id}','pageController@addWishlist');
+Route::get('/remove-wish/{id}','pageController@removewish');
+
+
+
+
 Route::group(['prefix' => 'admin'],function(){
 Route::get('/login', function () {
     return view('admin/app');
 });
+Auth::routes(); 
+Auth::routes(['verify' => true]);
 
 //brands
 Route::get('/brand','productController@viewBrand');
@@ -61,10 +82,61 @@ Route::get('/create-product','productController@createProduct');
 Route::get('/get-category-tree','productController@categoryTree'); 
 Route::get('/get_terms/{id}','productController@get_terms'); 
 Route::post('/productSave','productController@productSave');
+Route::post('/productUpdate','productController@productUpdate');
 Route::post('/images-save', 'UploadImagesController@store');
 Route::post('/images-delete', 'UploadImagesController@destroy');
 Route::get('/viewProduct','productController@viewProduct'); 
 Route::get('/productDelete/{id}','productController@productDelete'); 
 Route::get('/editProduct/{id}','productController@editProduct'); 
 Route::get('/get_edit_attribute/{id}','productController@getEditAttribute'); 
+
+Route::get('server-images/{id}','productController@getServerImages');
+Route::post('/images-delete', 'UploadImagesController@destroy');
+
+//page Management
+Route::get('/about','settingController@about');
+Route::get('/privacy-policy','settingController@privacyPolicy');
+Route::get('/terms_condition','settingController@terms_condition');
+Route::get('/shipping_detail','settingController@shipping_detail');
+
+Route::post('/homeSettingabout','settingController@homeSettingabout');
+Route::post('/homeSettingshipping','settingController@homeSettingshipping');
+Route::post('/homeSettingterms','settingController@homeSettingterms');
+Route::post('/homeSetting-Privacy','settingController@homeSettingPrivacyPolice');
+
+   
+Route::get('/social-details','settingController@socialMedia');
+Route::post('/add-social','settingController@updatesocialMedia');
+
+Route::get('/contact-details','settingController@contactView');
+Route::post('/setting-contact','settingController@contactUpdate');
+Route::get('/faq','settingController@faq');
+Route::get('/edit_faq/{id}','settingController@editFaq');
+Route::get('/delete_faq/{id}','settingController@deleteFaq');
+Route::post('/faq_data','settingController@faqStore');
+Route::post('/update_faq','settingController@faqUpdate');
+
+
+
+//Home Page
+Route::get('/home-add','pageSettingController@homeAd');
+Route::post('/ads-update','pageSettingController@adUpdate');
+Route::get('/show-slider','pageSettingController@showSlider');
+Route::post('/slider-save','pageSettingController@sliderSave');
+Route::post('/slider-update','pageSettingController@sliderUpdate');
+Route::get('/edit-slider/{id}','pageSettingController@editSlider');
+Route::get('/delete-slider/{id}','pageSettingController@deleteSlider');
+Route::get('/drop-slider/{index}/{id}','pageSettingController@dropSlider');
+
+//Home Layout
+Route::get('/home-layout','pageSettingController@homeLayout');
+Route::post('/save-layout','pageSettingController@SaveLayout');
+Route::post('/update-layout','pageSettingController@UpdateLayout');
+Route::get('/edit-layout/{id}','pageSettingController@EditLayout');
+Route::get('/delete-layout/{id}','pageSettingController@DeleteLayout');
+Route::get('/drop-layout/{index}/{id}','pageSettingController@dropLayout');
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

@@ -451,6 +451,7 @@
                                       <form method="post" action="{{ url('/admin/images-save') }}"
                                       enctype="multipart/form-data" class="dropzone" id="my-dropzone">
                                     {{ csrf_field() }}
+                                    <input type="hidden" id="product_page_id" name="product_page_id" value="{{ Request::segment(3) }}">
                                     <input type="hidden" name="product_get_id" id="product_get_id">
                                     <div class="dz-message">
                                         <div class="col-xs-8">
@@ -540,7 +541,7 @@
         showCheckbox: true,
     });
     var node = {!! str_replace('"', '', json_encode($tree_category)) !!};
-    $('#default-treeview').treeview('checkNode', [ node ]);
+    $('#default-treeview').treeview('selectNode', [ node, { silent: true } ]);
       }
     });
 
@@ -584,7 +585,7 @@ function Save_product(){
   // var seo_keywords = $('#seo_keywords').val();
    var productGallery = $('#productGallery').val();
  var product_description = tinyMCE.activeEditor.getContent();
-  // var regular_price = $('#regular_price').val();
+   var product_page_id = $('#product_page_id').val();
   // var sales_price = $('#sales_price').val();
   // var sku = $('#sku').val();
   // var stock_quantity = $('#stock_quantity').val();
@@ -643,6 +644,7 @@ for (var i = 0; i < elements.length; i++) {
    //product_form_data.append('productGallery',productGallery);
    product_form_data.append('product_description',product_description);
    product_form_data.append("attribute", attributes);
+   product_form_data.append("product_page_id", product_page_id);
 //   product_form_data.append('regular_price',regular_price);
 //   product_form_data.append('sales_price',sales_price);
 //   product_form_data.append('sku',sku);
@@ -679,7 +681,7 @@ $("span").find('.text-danger').remove();
   //var formData = product_form_data;
   $.ajax({
     headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }, 
-    url : '/admin/productSave',
+    url : '/admin/productUpdate',
     type: "POST",
     data: product_form_data,
     contentType: false,
@@ -711,6 +713,7 @@ $("span").find('.text-danger').remove();
 
 }
 function CallDropZone(){
+  console.log('CALLOK');
   $('#testSubmit').trigger('click')
 }
 
