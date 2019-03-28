@@ -30,16 +30,44 @@ Route::get('/wishlist','pageController@wishlist');
 Route::get('/add-wishlist/{id}','pageController@addWishlist');
 Route::get('/remove-wish/{id}','pageController@removewish');
 
+Route::get('/sms-demo', function () {
+   try{
+$requestParams = array(
+    'route' => '2',
+    'api-token' => '25p83e9*wu.0szd_4),7hyaokirlfbnvgcxj1mqt',
+    'sender' => 'KASMDU',
+    'numbers' => '7010384622',
+    'message' => 'Hi Prasanth test'
+);
+//merge API url and parameters
+$apiUrl = "http://smspro.co.in/httpapi/v1/sendsms?";
+foreach($requestParams as $key => $val){
+    $apiUrl .= $key.'='.urlencode($val).'&';
+}
+$apiUrl = rtrim($apiUrl, "&");
 
+//API call
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $apiUrl);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
-
-Route::group(['prefix' => 'admin'],function(){
-Route::get('/login', function () {
-    return view('admin/app');
+curl_exec($ch);
+curl_close($ch);
+   }
+   catch(Exception  $e){
+       echo $e->getMessage();
+   }
 });
+
+
+
 Auth::routes(); 
 Auth::routes(['verify' => true]);
+Route::group(['prefix' => 'admin'],function(){
 
+    Route::get('/login', function () {
+        return view('admin/app');
+    });
 //brands
 Route::get('/brand','productController@viewBrand');
 Route::get('/edit_brand/{id}','productController@editBrand');

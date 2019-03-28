@@ -263,16 +263,11 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
 
         <li class=" nav-item"><a href="#"><i class="icon-handbag"></i><span class="menu-title">Products</span></a>
           <ul class="menu-content">
-            <li><a class="menu-item" href="/admin/category/0" data-i18n="nav.dash.ecommerce">Category</a>
-            </li>
-            <li><a class="menu-item" href="/admin/create-product/">Add Product</a></li>
-            <li><a class="menu-item" href="/admin/viewProduct/">Product List</a></li>  
-            <li><a class="menu-item" href="/admin/product-group/">Product Group</a></li>  
-            <li>
-              <a class="menu-item" href="/admin/brand/">Brand</a>
-            </li>
-            <li><a class="menu-item" href="/admin/attribute/">Attributes</a>
-            </li>
+            <li><a class="menu-item" href="/admin/category/0">Category</a></li>
+            <li><a class="menu-item" href="/admin/viewProduct/">Catalog</a></li>  
+            <li><a class="menu-item" href="/admin/brand/">Item Brand</a></li>
+            <li><a class="menu-item" href="/admin/attribute/">Attributes & Values</a></li>
+            <li><a class="menu-item" href="/admin/product-group/">Attributes Set</a></li>  
           </ul>
         </li>
         

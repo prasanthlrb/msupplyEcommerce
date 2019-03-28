@@ -50,7 +50,7 @@ class pageController extends Controller
            $category = category::all();
            $product = product::all();
            $adModel = adModel::all();
-           $product_today = product::where('hot_product','on')->orderBy('id', 'DESC')->take(10)->get();
+           $product_today = product::where('featured','on')->orderBy('id', 'DESC')->take(10)->get();
            $output ='';
            foreach($layouts as $layout){
                if($layout->type == 'category'){
@@ -177,7 +177,10 @@ class pageController extends Controller
                }
            }
         return view('home',compact('slider','layouts','output','product_today','adModel'));
-        // return response()->json($output);
+        
+        //  foreach($product_today as $row){
+        //     return response()->json($row);
+        //  }
            }
            catch(Exception $e) {
             echo 'Message: ' .$e->getMessage();

@@ -53,7 +53,6 @@
 <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/file-uploaders/dropzone.min.css">
 <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/ui/prism.min.css">
 <link rel="stylesheet" type="text/css" href="../../../app-assets/css/plugins/file-uploaders/dropzone.css">
-<link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/extensions/bootstrap-treeview.min.css">
   
 @endsection
 @section('section')
@@ -72,18 +71,6 @@
                   <div class="col-md-8">
                     <div class="col-md-12">
                     <div class="card">
-                      <div class="card-header">
-                        <h4 class="card-title" id="horz-layout-basic">Add New Product</h4>
-                        <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
-                        <div class="heading-elements">
-                          <ul class="list-inline mb-0">
-                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
-                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
-                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
-                           
-                          </ul>
-                        </div>
-                      </div>
                       <div class="card-content collpase show">
                         <div class="card-body">
                           
@@ -99,16 +86,28 @@
                               </div>
                              
                               <div class="form-group row">
-                                    <label class="col-md-3 label-control" for="Select Brand">Select Brand</label>
+                                    <label class="col-md-3 label-control" for="Select Brand">Select Category</label>
                                     <div class="col-md-9">
-                                      <select name="brand_name" id="brand_name" class="form-control">
-                                      <option value="" selected="" disabled="">Select Brand</option>
-                                        @foreach($brand as $brand)
-                                        <option value="{{$brand->id}}">{{$brand->brand}}</option>
+                                      <select style="width:100%" name="category[]" id="category" class="select2 form-control col-md-12" multiple="multiple" placeholder="search for Category">
+                                        @foreach($category as $cat)
+                                        <option value="{{$cat->id}}">{{$cat->category_name}}</option>
                                         @endforeach
                                       </select>
                                     </div>
                                   </div>
+
+                                  <div class="form-group row">
+                                      <label class="col-md-3 label-control" for="Select Brand">Select Brand</label>
+                                      <div class="col-md-9">
+                                        <select name="brand_name" id="brand_name" class="form-control">
+                                        <option value="" selected="" disabled="">Select Brand</option>
+                                          @foreach($brand as $brand)
+                                          <option value="{{$brand->id}}">{{$brand->brand}}</option>
+                                          @endforeach
+                                        </select>
+                                      </div>
+                                    </div>
+
                                   <div class="form-group row">
                                       <label class="col-md-3 label-control" for="Select category">Select Product Group</label>
                                       <div class="col-md-9">
@@ -120,53 +119,45 @@
                                         </select>
                                       </div>
                                     </div>
-                                    
                                   </div>
+
+
                           
                        
                         </div>
                       </div>
                     </div>
                     </div>
-                  
-                    <div class="col-12">
-                        <div class="card">
-                          <div class="card-header">
-                            <h4 class="card-title">Product Description</h4>
-                         
-                           
-                          </div>
-                          <div class="card-content collapse show">
-                            <div class="card-body">
-                            
-                                <div class="form-group">
-                                  <textarea id="product_description" name="product_description" class="tinymce">
-                                             
-                                  </textarea>
-                                </div>
-                             
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-
                   </div>
                   <div class="col-md-4 col-sm-12">
-                    <div class="card">
-                      <div class="card-header">
-                        <h4 class="card-title">Select Category</h4>
-                      </div>
-                      <div class="card-body">
-                        <div class="card-body">
-                          <div id="default-treeview"></div>
-                        </div>
-                      </div>
-                    </div>
+                    <img id="blah" src="{{ asset('app-assets/images/product-image.png')}}" alt="your image" class="single-product text-center" />
+                    <input type='file' id="imgInp" name="imgInp" style="display: none;"/>
+                    <button type="button" id="single-product" class="btn btn-info block single-pro"><i class="la la-plus"></i> Set product image</button>
                   </div>
                 </div>
              
-             
+             <div class="row">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h4 class="card-title">Product Description</h4>
+                 
+                   
+                  </div>
+                  <div class="card-content collapse show">
+                    <div class="card-body">
+                    
+                        <div class="form-group">
+                          <textarea id="product_description" name="product_description" class="tinymce">
+                                     
+                          </textarea>
+                        </div>
+                     
+                    </div>
+                  </div>
+                </div>
+              </div>
+             </div>
             
             
                   
@@ -174,13 +165,8 @@
                    
                <div class="row">
                 
-                <div class="col-4">
-                  <img id="blah" src="{{ asset('app-assets/images/product-image.png')}}" alt="your image" class="single-product text-center" />
-                  <input type='file' id="imgInp" name="imgInp" style="display: none;"/>
-                  <button type="button" id="single-product" class="btn btn-info block single-pro"><i class="la la-plus"></i> Set product image</button>
-                </div>
-                 
-                    <div class="col-8">
+                
+                    <div class="col-12">
                       <div class="card">
                       
                        
@@ -494,147 +480,24 @@
 <script src="../../../app-assets/js/scripts/dropdowns/dropdowns.js" type="text/javascript"></script>
 <script src="../../../app-assets/vendors/js/forms/select/select2.full.min.js" type="text/javascript"></script>
 <script src="../../../app-assets/js/scripts/forms/select/form-select2.js" type="text/javascript"></script>
-      <!-- BEGIN PAGE VENDOR JS-->
-      <script src="../../../app-assets/vendors/js/extensions/bootstrap-treeview.min.js"
-      type="text/javascript"></script>
-      <!-- END PAGE VENDOR JS-->
-        <!-- BEGIN PAGE LEVEL JS-->
-        {{-- <script src="../../../app-assets/js/scripts/extensions/tree-view.js" type="text/javascript"></script> --}}
-        <!-- END PAGE LEVEL JS-->
 <script src="{{ url('/dropzone/dropzone.js') }}"></script>
     <script src="{{ url('/dropzone/config-dropzone.js') }}"></script>
 
 <script>
-  $(document).ready(function(){
-    $.ajax({
-      url:"/admin/get-category-tree",
-      method:"GET",
-      dataTypes:"json",
-      success:function(data){
-        $('#default-treeview').treeview({
-          levels: 1,
-        data: data,
-        showCheckbox: true,
-    });
-      }
-    })
-  })
- 
-
-
-
-  $('#checkTreeView').click(function(e){
-    e.preventDefault();
-    var node = [2];
-    //var nodes = $('#default-treeview').treeview('getChecked');
-    $('#default-treeview').treeview('checkNode', [ node, { silent: true } ]);
-
-    console.log(nodes);
-  })
 var attributes = [];
 function Save_product(){
 
    $("#btnSave").attr("disabled", "disabled");
   var product_form_data = new FormData($('#product_form_data')[0]);
-
-  // var seo_title = $('#seo_title').val();
-  // var seo_description = $('#seo_description').val();
-  // var seo_keywords = $('#seo_keywords').val();
    var productGallery = $('#productGallery').val();
  var product_description = tinyMCE.activeEditor.getContent();
-  // var regular_price = $('#regular_price').val();
-  // var sales_price = $('#sales_price').val();
-  // var sku = $('#sku').val();
-  // var stock_quantity = $('#stock_quantity').val();
-  // var low_stock = $('#low_stock').val();
-  // var weight = $('#weight').val();
-  // var length = $('#length').val();
-  // var width = $('#width').val();
-  // var height = $('#height').val();
-  // var shipping_type = $('#shipping_type').val();
-  // var shipping_amount = $('#shipping_amount').val();
-  // var upsells = $('#upsells').val();
-  // var cross_sells = $('#cross_sells').val();
-  // var tag = $('#tag').val();
-  // var product_image = $('#imgInp').val();
-
- 
-// if($("#hot").prop('checked') == true){
-//     var hot_product = true;
-// }else{
-//   var hot_product = false;
-// }
-//   if($("#new").prop('checked') == true){
-//     var new_product = true;
-// }else{
-//   var new_product = false;
-// }
-//   if($("#review").prop('checked') == true){
-//     var review = true;
-// }else{
-//   var review = false;
-// }
-//   if($("#recommended").prop('checked') == true){
-//     var recommended = true;
-// }else{
-//   var recommended = false;
-// }
-//   if($("#featured").prop('checked') == true){
-//     var featured = true;
-// }else{
-//   var featured = false;
-// }
-//   product_form_data.append('seo_title',seo_title);
-//   product_form_data.append('seo_description',seo_description);
-//   product_form_data.append('seo_keywords',seo_keywords);
-
-
-//Category ID Get
-var elements = $('#default-treeview').treeview('getChecked');
-var category = [];
-for (var i = 0; i < elements.length; i++) {
-    category.push(elements[i].id);
-}
-
-
-   product_form_data.append('category',category);
-   //product_form_data.append('productGallery',productGallery);
-   product_form_data.append('product_description',product_description);
-   product_form_data.append("attribute", attributes);
-//   product_form_data.append('regular_price',regular_price);
-//   product_form_data.append('sales_price',sales_price);
-//   product_form_data.append('sku',sku);
-//   product_form_data.append('stock_quantity',stock_quantity);
-//   product_form_data.append('low_stock',low_stock);
-//   product_form_data.append('weight',weight);
-//   product_form_data.append('length',length);
-//   product_form_data.append('width',width);
-//   product_form_data.append('height',height);
-//   product_form_data.append('shipping_type',shipping_type);
-//   product_form_data.append('shipping_amount',shipping_amount);
-//   product_form_data.append('upsells',upsells);
-//   product_form_data.append('cross_sells',cross_sells);
-//   product_form_data.append('tag',tag);
-//   product_form_data.append('product_image',product_image);
-//   product_form_data.append('hot_product',hot_product);
-//   product_form_data.append('new_product',new_product);
-//   product_form_data.append('review',review);
-//   product_form_data.append('recommended',recommended);
-//   product_form_data.append('featured',featured);
-  //tinyMCE.triggerSave();
-  //console.log(product_form_data.getAll('tag'));
-  // console.log(product_form_data.get('hot'));
-  // console.log(product_form_data.get('new_product'));
-  // console.log(product_form_data.get('review'));
-  // console.log(product_form_data.get('recommended'));
-  // console.log(product_form_data.get('featured'));
   
 
-
+//Category ID Get
+   //product_form_data.append('productGallery',productGallery);
+   product_form_data.append('product_description',product_description);
+  // product_form_data.append("attribute", attributes);
 $("span").find('.text-danger').remove();
-
-  //var formData = new FormData($('#product_form')[0]);
-  //var formData = product_form_data;
   $.ajax({
     headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }, 
     url : '/admin/productSave',

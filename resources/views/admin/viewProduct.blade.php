@@ -2,7 +2,11 @@
 @section('extra-css')
 <link rel="stylesheet" type="text/css" href="../../../app-assets/css/vendors.css">
   <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/tables/datatable/datatables.min.css">
-  
+  <style>
+  .clickable-Product-row{
+    cursor: pointer;
+  }
+  </style>
 @endsection
 @section('section')
 <div class="content-wrapper">
@@ -38,7 +42,6 @@
                     <th>S.No</th>
                     <th>Product Name</th>
                     <th>Image</th>
-                    <th>Edit</th>
                     <th>Delete</th>
                   </tr>
                 </thead>
@@ -46,14 +49,14 @@
                 @php ($x = 0) @endphp
                 @foreach($product as $row)
                 @php $x++ @endphp
-                  <tr>
+                <tr class='clickable-Product-row' data-href='/admin/editProduct/{{$row->id}}'>
                     <td>{{$x}}</td>
                     
                     
                     <td>{{$row->product_name}}</td>
                     <td><img src="/product_img/{{$row->product_image}}" alt="" style="width: 80px"></td>
-                    <td class="text-center"><a href="/admin/editProduct/{{$row->id}}"><i class="ft-edit"></i></a></td>
                     <td class="text-center" onclick="Delete({{$row->id}})"><i class="ft-trash-2"></i></td>
+                    
                   </tr>
                 @endforeach                  
                 </tbody>
@@ -62,7 +65,6 @@
                         <th>S.No</th>
                         <th>Product Name</th>
                         <th>Image</th>
-                        <th>Edit</th>
                         <th>Delete</th>
                   </tr>
                 </tfoot>
@@ -92,8 +94,9 @@
 $('#open_model').click(function(){
   window.location.href="/admin/create-product/";
 })
-   
+   var ClickEvent = 0;
 function Delete(id){
+  ClickEvent = 1;
     var r = confirm("Are you sure");
     if (r == true) {
     $.ajax({
@@ -108,7 +111,12 @@ function Delete(id){
       });
     } 
 }
-    
+$(".clickable-Product-row").click(function() {
+    if(ClickEvent == 0){
+      window.location = $(this).data("href");
+    }
+    ClickEvent = 0;
+    });
 </script>
 
 
