@@ -12,10 +12,10 @@
         <div class="row breadcrumbs-top">
             <div class="breadcrumb-wrapper col-12">
               <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/admin/category/0">Category</a>
-                </li>
                 <?php $y=1;?>
                 @if(count($linkCat2) >0)
+                <li class="breadcrumb-item"><a href="/admin/category/0">Category</a>
+                </li>
                
                 @foreach($linkCat2 as $link)
               <li class="breadcrumb-item"><a href="/admin/category/{{$link['id']}}">{{$link['name']}}</a>
@@ -26,7 +26,7 @@
               </ol>
             </div>
           </div>
-   
+   <br>
 <section id="column-selectors">
     <div class="row">
       <div class="col-12">
@@ -162,13 +162,18 @@
   <script src="../../../app-assets/js/scripts/tables/datatables/datatable-basic.js"
   type="text/javascript"></script>
 <script>
-  var action_type;
+
+  var action_type; // the action type used to from data Save And Update
   $('#open_model').click(function(){
     $('#attribute_model').modal('show');
+    $("#Category_form")[0].reset();
+    $('#prevImage').attr('src', '');
     action_type = 1;
     $('#saveCat').text('Save');
     $('#myModalLabel8').text('Create Category');
-  })
+  });
+
+
     function saveAttr(){
       $('#saveCat').attr('disabled',true);
       var formData = new FormData($('#Category_form')[0]);

@@ -20,16 +20,16 @@ var Core = (function(Core){
 			$("body").queryLoader2({
     			barHeight : 4,
     			backgroundColor : '#fff',
-    			barColor : '#018bc8',
+    			barColor : '#ff4557',
     			minimumTime : 2000,
     			onComplete : function(){
 
 					// show promo popup
-    				if($.arcticmodal && $('body').hasClass('promo_popup')){
-						$.arcticmodal({
-							url : "modals/promo.html"
-						});
-					}
+    				// if($.arcticmodal && $('body').hasClass('promo_popup')){
+					// 	$.arcticmodal({
+					// 		url : "modals/promo.html"
+					// 	});
+					// }
 
     			}
     		});

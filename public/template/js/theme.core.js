@@ -25,11 +25,11 @@ var Core = (function(Core){
     			onComplete : function(){
 
 					// show promo popup
-    				if($.arcticmodal && $('body').hasClass('promo_popup')){
-						$.arcticmodal({
-							url : "modals/promo.html"
-						});
-					}
+    				// if($.arcticmodal && $('body').hasClass('promo_popup')){
+					// 	$.arcticmodal({
+					// 		url : "modals/promo.html"
+					// 	});
+					// }
 
     			}
     		});

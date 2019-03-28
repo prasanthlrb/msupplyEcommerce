@@ -11,129 +11,222 @@
 						<!-- - - - - - - - - - - - - - Banners - - - - - - - - - - - - - - - - -->
 						<aside class="col-md-3 col-sm-4 has_mega_menu">
 
-								<!-- - - - - - - - - - - - - - Todays deals - - - - - - - - - - - - - - - - -->
-						
+							
+								<!-- - - - - - - - - - - - - - Today's deals - - - - - - - - - - - - - - - - -->
+								@if(isset($product_today))
 								<section class="section_offset animated transparent" data-animation="fadeInDown">
-						
-									<h3 class="widget_title">Today's Deals</h3>
-						
-									<!-- - - - - - - - - - - - - - Carousel of today's deals - - - - - - - - - - - - - - - - -->
-						
-									<div class="owl_carousel widgets_carousel">
-										<?php if(isset($product_today)){ ?>
-										<!-- - - - - - - - - - - - - - Product - - - - - - - - - - - - - - - - -->
-										@foreach($product_today as $row)
-										<div class="product_item">
-						
-											<!-- - - - - - - - - - - - - - Thumbnail - - - - - - - - - - - - - - - - -->
-						
-											<div class="image_wrap">
-						
-											<img src="product_img/{{$row->product_image}}" alt="">
-						
-												<!-- - - - - - - - - - - - - - Product actions - - - - - - - - - - - - - - - - -->
-						
-												<div class="actions_wrap">
-						
-													<div class="centered_buttons">
-						
-														<a href="#" class="button_dark_grey middle_btn quick_view" data-modal-url="modals/quick_view.html">Quick View</a>
-						
-														<a href="#" class="button_blue middle_btn add_to_cart">Add to Cart</a>
-						
-													</div><!--/ .centered_buttons -->
-						
-													<a href="#" class="button_dark_grey middle_btn def_icon_btn add_to_wishlist tooltip_container"><span class="tooltip right">Add to Wishlist</span></a>
-						
-													<a href="#" class="button_dark_grey middle_btn def_icon_btn add_to_compare tooltip_container"><span class="tooltip left">Add to Compare</span></a>
-						
-												</div><!--/ .actions_wrap-->
+
+										<h3 class="widget_title">Today's Deals</h3>
+		
+										<!-- - - - - - - - - - - - - - Carousel of today's deals - - - - - - - - - - - - - - - - -->
+									@if(count($product_today) >1)
+										<div class="owl_carousel widgets_carousel">
 												
-												<!-- - - - - - - - - - - - - - End of product actions - - - - - - - - - - - - - - - - -->
-						
-											</div><!--/. image_wrap-->
-						
-											<!-- - - - - - - - - - - - - - End thumbnail - - - - - - - - - - - - - - - - -->
-						
-											<!-- - - - - - - - - - - - - - Label - - - - - - - - - - - - - - - - -->
-						
-											<div class="label_offer percentage">
-						
-												<div>20%</div>OFF
-						
-											</div>
-						
-											<!-- - - - - - - - - - - - - - End label - - - - - - - - - - - - - - - - -->
-						
-										
-											<!-- - - - - - - - - - - - - - Product description - - - - - - - - - - - - - - - - -->
-						
-											<div class="description">
-						
-											<p><a href="#">{{$row->product_name}}</a></p>
-						
-												<div class="clearfix product_info">
-						
-													<!-- - - - - - - - - - - - - - Product rating - - - - - - - - - - - - - - - - -->
-						
-													{{-- <ul class="rating alignright">
-						
-														<li class="active"></li>
-														<li class="active"></li>
-														<li class="active"></li>
-														<li class="active"></li>
-														<li></li>
-						
-													</ul> --}}
-						
-													<!-- - - - - - - - - - - - - - End product rating - - - - - - - - - - - - - - - - -->
-						
-													<p class="product_price alignleft">
-														@if($row->sales_price != null)
-													<s>₹ {{$row->regular_price}}</s> 
-													<b>₹ {{$row->sales_price}}</b></p>
-													@else
-													<b>₹ {{$row->regular_price}}</b></p>
-														@endif
+											
+		
+											<!-- - - - - - - - - - - - - - Product - - - - - - - - - - - - - - - - -->
+		
+											@foreach($product_today as $row)
+											<div class="product_item">
+		
+												<!-- - - - - - - - - - - - - - Thumbnail - - - - - - - - - - - - - - - - -->
+		
+												<div class="image_wrap">
+		
+													<img src="product_img/{{$row->product_image}}" alt="">
+		
+													<!-- - - - - - - - - - - - - - Product actions - - - - - - - - - - - - - - - - -->
+		
+													<div class="actions_wrap">
+		
+														<div class="centered_buttons">
+		
+															<a href="#" class="button_dark_grey middle_btn quick_view" data-modal-url="modals/quick_view.html">Quick View</a>
+		
+															<a href="#" class="button_blue middle_btn add_to_cart">Add to Cart</a>
+		
+														</div><!--/ .centered_buttons -->
+		
+														<a href="#" class="button_dark_grey middle_btn def_icon_btn add_to_wishlist tooltip_container"><span class="tooltip right">Add to Wishlist</span></a>
+		
+														<a href="#" class="button_dark_grey middle_btn def_icon_btn add_to_compare tooltip_container"><span class="tooltip left">Add to Compare</span></a>
+		
+													</div><!--/ .actions_wrap-->
 													
-						
-												</div><!--/ .clearfix.product_info-->
-						
-											</div>
-						
-											<!-- - - - - - - - - - - - - - End of product description - - - - - - - - - - - - - - - - -->
-						
-										</div>
-										@endforeach
-										<!--/ .product_item-->
-										<?php }?>
-										<!-- - - - - - - - - - - - - - End of product - - - - - - - - - - - - - - - - -->
-										
-						
-										
-										
-										<!-- - - - - - - - - - - - - - End of product - - - - - - - - - - - - - - - - -->
-						
-									</div><!--/ .widgets_carousel-->
-						
-									<!-- - - - - - - - - - - - - - End of carousel of todays deals - - - - - - - - - - - - - - - - -->
-						
-									<!-- - - - - - - - - - - - - - View all deals of the day - - - - - - - - - - - - - - - - -->
-						
-									<footer class="bottom_box">
-						
-										<a href="#" class="button_grey middle_btn">View All Deals</a>
-						
-									</footer>
-						
-									<!-- - - - - - - - - - - - - - End of view all deals of the day - - - - - - - - - - - - - - - - -->
-						
-								</section><!--/ .section_offset.animated.transparent-->
-						
-								<!-- - - - - - - - - - - - - - End of todays deals - - - - - - - - - - - - - - - - -->
-						
+													<!-- - - - - - - - - - - - - - End of product actions - - - - - - - - - - - - - - - - -->
+		
+												</div><!--/. image_wrap-->
+		
+												<!-- - - - - - - - - - - - - - End thumbnail - - - - - - - - - - - - - - - - -->
+		
+												<!-- - - - - - - - - - - - - - Label - - - - - - - - - - - - - - - - -->
+		
+												<div class="label_offer percentage">
+		
+													<div>30%</div>OFF
+		
+												</div>
+		
+												<!-- - - - - - - - - - - - - - End label - - - - - - - - - - - - - - - - -->
+		
+												<!-- - - - - - - - - - - - - - Countdown - - - - - - - - - - - - - - - - -->
+		
+												<div class="countdown" data-year="2016" data-month="11" data-day="6" data-hours="15" data-minutes="0" data-seconds="0"></div>
+		
+												<!-- - - - - - - - - - - - - - End countdown - - - - - - - - - - - - - - - - -->
+		
+												<!-- - - - - - - - - - - - - - Product description - - - - - - - - - - - - - - - - -->
+												
+												<div class="description">
+														<p><a href="#">{{$row->product_name}}</a></p>
+		
+													
+		
+													<div class="clearfix product_info">
+		
+														<!-- - - - - - - - - - - - - - Product rating - - - - - - - - - - - - - - - - -->
+		
+														<ul class="rating alignright">
+		
+															<li class="active"></li>
+															<li class="active"></li>
+															<li class="active"></li>
+															<li class="active"></li>
+															<li></li>
+		
+														</ul>
+		
+														<!-- - - - - - - - - - - - - - End product rating - - - - - - - - - - - - - - - - -->
+		
+							
+												
+							
+														<p class="product_price alignleft">
+																@if($row->sales_price != null)
+															<s>₹ {{$row->regular_price}}</s> 
+															<b>₹ {{$row->sales_price}}</b></p>
+															@else
+															<b>₹ {{$row->regular_price}}</b></p>
+																@endif
+		
+															</div><!--/ .clearfix.product_info-->
+
+														</div>
+												<!-- - - - - - - - - - - - - - End of product description - - - - - - - - - - - - - - - - -->
+		
+											</div><!--/ .product_item-->
+											@endforeach
+											
+											<!-- - - - - - - - - - - - - - End of product - - - - - - - - - - - - - - - - -->
+		
+									
+		
+										</div><!--/ .widgets_carousel-->
+										@else
+										<div class="product_item">
+		
+												<!-- - - - - - - - - - - - - - Thumbnail - - - - - - - - - - - - - - - - -->
+												
+												<div class="image_wrap">
+		
+														<img src="product_img/{{$product_today[0]->product_image}}" alt="">
+		
+													<!-- - - - - - - - - - - - - - Product actions - - - - - - - - - - - - - - - - -->
+		
+													<div class="actions_wrap">
+		
+														<div class="centered_buttons">
+		
+														<a href="#" class="button_dark_grey middle_btn quick_view" data-modal-url="/quick-view/{{$product_today[0]->id}}">Quick View</a>
+		
+															<a href="#" class="button_blue middle_btn add_to_cart">Add to Cart</a>
+		
+														</div><!--/ .centered_buttons -->
+		
+														<a href="#" class="button_dark_grey middle_btn def_icon_btn add_to_wishlist tooltip_container"><span class="tooltip right">Add to Wishlist</span></a>
+		
+														<a href="#" class="button_dark_grey middle_btn def_icon_btn add_to_compare tooltip_container"><span class="tooltip left">Add to Compare</span></a>
+		
+													</div><!--/ .actions_wrap-->
+													
+													<!-- - - - - - - - - - - - - - End of product actions - - - - - - - - - - - - - - - - -->
+		
+												</div><!--/. image_wrap-->
+		
+												<!-- - - - - - - - - - - - - - End thumbnail - - - - - - - - - - - - - - - - -->
+		
+												<!-- - - - - - - - - - - - - - Label - - - - - - - - - - - - - - - - -->
+		
+												<div class="label_offer percentage">
+		
+													<div>25%</div>OFF
+		
+												</div>
+		
+												<!-- - - - - - - - - - - - - - End label - - - - - - - - - - - - - - - - -->
+		
+												<!-- - - - - - - - - - - - - - Countdown - - - - - - - - - - - - - - - - -->
+		
+												<div class="countdown" data-year="2016" data-month="2" data-day="9" data-hours="10" data-minutes="30" data-seconds="30"></div>
+		
+												<!-- - - - - - - - - - - - - - End countdown - - - - - - - - - - - - - - - - -->
+		
+												<!-- - - - - - - - - - - - - - Product description - - - - - - - - - - - - - - - - -->
+		
+												<div class="description">
+		
+														<p><a href="#">{{$product_today[0]->product_name}}</a></p>
+		
+													<div class="clearfix product_info">
+		
+														<!-- - - - - - - - - - - - - - Product rating - - - - - - - - - - - - - - - - -->
+		
+														<ul class="rating alignright">
+		
+															<li class="active"></li>
+															<li class="active"></li>
+															<li class="active"></li>
+															<li class="active"></li>
+															<li class="active"></li>
+		
+														</ul>
+		
+														<!-- - - - - - - - - - - - - - End product rating - - - - - - - - - - - - - - - - -->
+		
+														<p class="product_price alignleft">
+																@if($product_today[0]->sales_price != null)
+															<s>₹ {{$product_today[0]->regular_price}}</s> 
+															<b>₹ {{$product_today[0]->sales_price}}</b></p>
+															@else
+															<b>₹ {{$product_today[0]->regular_price}}</b></p>
+																@endif
+		
+													</div><!--/ .clearfix.product_info-->
+		
+												</div>
+		
+												<!-- - - - - - - - - - - - - - End of product description - - - - - - - - - - - - - - - - -->
+		
+											</div><!--/ .product_item-->
+										@endif
+										<!-- - - - - - - - - - - - - - End of carousel of today's deals - - - - - - - - - - - - - - - - -->
+		
+										<!-- - - - - - - - - - - - - - View all deals of the day - - - - - - - - - - - - - - - - -->
+		
+										<footer class="bottom_box">
+		
+											<a href="#" class="button_grey middle_btn">View All Deals</a>
+		
+										</footer>
+		
+										<!-- - - - - - - - - - - - - - End of view all deals of the day - - - - - - - - - - - - - - - - -->
+		
+									</section><!--/ .section_offset.animated.transparent-->
+		
+									<!-- - - - - - - - - - - - - - End of today's deals - - - - - - - - - - - - - - - - -->
+
 								<!-- - - - - - - - - - - - - - Categories - - - - - - - - - - - - - - - - -->
-						
+						@endif
 								<section class="section_offset animated transparent" data-animation="fadeInDown">
 						
 									<h3>Categories</h3>
@@ -178,8 +271,7 @@
 	   <li><a href='#'><span>About</span></a></li>
 	   <li class='last'><a href='#'><span>Contact</span></a></li>
 	</ul>
-
-	</div>
+</div>
 						
 								</section><!--/ .animated.transparent-->
 						

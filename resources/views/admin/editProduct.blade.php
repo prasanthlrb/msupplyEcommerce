@@ -70,20 +70,8 @@
                 <input type="hidden" id="id" name="id">
                 <div class="row">
                   <div class="col-md-8">
-                    <div class="col-md-12">
+    
                     <div class="card">
-                      <div class="card-header">
-                        <h4 class="card-title" id="horz-layout-basic">Add New Product</h4>
-                        <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
-                        <div class="heading-elements">
-                          <ul class="list-inline mb-0">
-                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
-                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
-                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
-                           
-                          </ul>
-                        </div>
-                      </div>
                       <div class="card-content collpase show">
                         <div class="card-body">
                           
@@ -97,6 +85,17 @@
                                 name="product_name" value="{{$product_find->product_name}}">
                                 </div>
                               </div>
+
+                              <div class="form-group row">
+                                  <label class="col-md-3 label-control" for="Select Brand">Select Category</label>
+                                  <div class="col-md-9">
+                                    <select style="width:100%" name="category[]" id="category" class="select2 form-control col-md-12" multiple="multiple" placeholder="search for Category">
+                                      @foreach($category as $cat)
+                                      <option {{in_array($cat->id, $tree_category) ? 'selected' : ''}} value="{{$cat->id}}">{{$cat->category_name}}</option>
+                                      @endforeach
+                                    </select>
+                                  </div>
+                                </div>
                              
                               <div class="form-group row">
                                     <label class="col-md-3 label-control" for="Select Brand">Select Brand</label>
@@ -129,6 +128,17 @@
                     </div>
                     </div>
                   
+                   
+
+                  <div class="col-md-4 col-sm-12">
+                      <img id="blah" src="{{ asset('product_img/'.$product_find->product_image.'')}}" alt="your image" class="single-product text-center" />
+                      <input type='file' id="imgInp" name="imgInp" style="display: none;"/>
+                      {{-- <button type="button" id="single-product" class="btn btn-info block single-pro"><i class="la la-plus"></i> Set product image</button> --}}
+                    
+                  </div>
+                </div>
+             
+                <div class="row">
                     <div class="col-12">
                         <div class="card">
                           <div class="card-header">
@@ -149,38 +159,18 @@
                           </div>
                         </div>
                       </div>
-
-
-                  </div>
-                  <div class="col-md-4 col-sm-12">
-                    <div class="card">
-                      <div class="card-header">
-                        <h4 class="card-title">Select Category</h4>
-                      </div>
-                      <div class="card-body">
-                        <div class="card-body">
-                          <div id="default-treeview"></div>
-                        </div>
-                      </div>
-                    </div>
+    
+    
                   </div>
                 </div>
-             
-             
             
-            
+         
                   
                       
                    
                <div class="row">
-                
-                <div class="col-4">
-                  <img id="blah" src="{{ asset('product_img/'.$product_find->product_image.'')}}" alt="your image" class="single-product text-center" />
-                  <input type='file' id="imgInp" name="imgInp" style="display: none;"/>
-                  {{-- <button type="button" id="single-product" class="btn btn-info block single-pro"><i class="la la-plus"></i> Set product image</button> --}}
-                </div>
                  
-                    <div class="col-8">
+                    <div class="col-12">
                       <div class="card">
                       
                        
@@ -380,7 +370,7 @@
                     </div>
                   </div>
               
-                </div>
+              
               
               </section>
                   <div class="row">
@@ -580,70 +570,16 @@ function Save_product(){
    $("#btnSave").attr("disabled", "disabled");
   var product_form_data = new FormData($('#product_form_data')[0]);
 
-  // var seo_title = $('#seo_title').val();
-  // var seo_description = $('#seo_description').val();
-  // var seo_keywords = $('#seo_keywords').val();
    var productGallery = $('#productGallery').val();
  var product_description = tinyMCE.activeEditor.getContent();
    var product_page_id = $('#product_page_id').val();
-  // var sales_price = $('#sales_price').val();
-  // var sku = $('#sku').val();
-  // var stock_quantity = $('#stock_quantity').val();
-  // var low_stock = $('#low_stock').val();
-  // var weight = $('#weight').val();
-  // var length = $('#length').val();
-  // var width = $('#width').val();
-  // var height = $('#height').val();
-  // var shipping_type = $('#shipping_type').val();
-  // var shipping_amount = $('#shipping_amount').val();
-  // var upsells = $('#upsells').val();
-  // var cross_sells = $('#cross_sells').val();
-  // var tag = $('#tag').val();
-  // var product_image = $('#imgInp').val();
-
- 
-// if($("#hot").prop('checked') == true){
-//     var hot_product = true;
-// }else{
-//   var hot_product = false;
-// }
-//   if($("#new").prop('checked') == true){
-//     var new_product = true;
-// }else{
-//   var new_product = false;
-// }
-//   if($("#review").prop('checked') == true){
-//     var review = true;
-// }else{
-//   var review = false;
-// }
-//   if($("#recommended").prop('checked') == true){
-//     var recommended = true;
-// }else{
-//   var recommended = false;
-// }
-//   if($("#featured").prop('checked') == true){
-//     var featured = true;
-// }else{
-//   var featured = false;
-// }
-//   product_form_data.append('seo_title',seo_title);
-//   product_form_data.append('seo_description',seo_description);
-//   product_form_data.append('seo_keywords',seo_keywords);
+  
 
 
 //Category ID Get
-var elements = $('#default-treeview').treeview('getChecked');
-var category = [];
-for (var i = 0; i < elements.length; i++) {
-    category.push(elements[i].id);
-}
 
-
-   product_form_data.append('category',category);
-   //product_form_data.append('productGallery',productGallery);
    product_form_data.append('product_description',product_description);
-   product_form_data.append("attribute", attributes);
+  //  product_form_data.append("attribute", attributes);
    product_form_data.append("product_page_id", product_page_id);
 //   product_form_data.append('regular_price',regular_price);
 //   product_form_data.append('sales_price',sales_price);

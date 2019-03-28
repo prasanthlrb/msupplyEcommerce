@@ -255,7 +255,8 @@ class ProductController extends Controller
         $brand = brand::all();
         $product = product::all();
         $attribute = attribute::all();
-        return view('admin.newProduct',compact('group','brand','product','attribute'));
+        $category = category::all();
+        return view('admin.newProduct',compact('group','brand','product','attribute','category'));
     }
         //category Edit Delete View Update Process Function End Here
 
@@ -370,7 +371,7 @@ class ProductController extends Controller
     }
 
         $product = new product;
-        $product->category = $request->category; 
+        $product->category = collect($request->category)->implode(','); 
         $product->product_name = $request->product_name;
         $product->group = $request->group;
         $product->brand_name = $request->brand_name;
@@ -439,15 +440,10 @@ class ProductController extends Controller
             // 'sku'=>'required|unique:product_datas',
         ]);
 
-    $fileName = null;
-    if($request->file('imgInp')!=""){
-    $image = $request->file('imgInp');
-    $fileName = rand() . '.' . $image->getClientOriginalExtension();
-    $image->move(public_path('product_img/'), $fileName);
-    }
+   
 
         $product = product::find($request->product_page_id);
-        $product->category = $request->category; 
+        $product->category = collect($request->category)->implode(',');
         $product->product_name = $request->product_name;
         $product->group = $request->group;
         $product->brand_name = $request->brand_name;
@@ -455,7 +451,13 @@ class ProductController extends Controller
         $product->seo_title = $request->seo_title;
         $product->seo_description = $request->seo_description;
         $product->seo_keywords = $request->seo_keywords;
+        $fileName = null;
+        if($request->file('imgInp')!=""){
+        $image = $request->file('imgInp');
+        $fileName = rand() . '.' . $image->getClientOriginalExtension();
+        $image->move(public_path('product_img/'), $fileName);
         $product->product_image = $fileName;
+        }
         $product->regular_price = $request->regular_price;
         $product->sales_price = $request->sales_price;
         $product->sku = $request->sku;
