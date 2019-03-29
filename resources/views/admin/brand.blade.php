@@ -144,6 +144,7 @@
   <script src="../../../app-assets/js/scripts/tables/datatables/datatable-basic.js"
   type="text/javascript"></script>
 <script>
+    $('.brand-menu').addClass('active');
   var action_type;
   $('#open_model').click(function(){
     $('#brand_model').modal('show');

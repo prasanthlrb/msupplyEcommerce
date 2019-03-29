@@ -131,6 +131,7 @@ type="text/javascript"></script>
   <script src="../../../app-assets/js/scripts/tables/datatables/datatable-basic.js"
   type="text/javascript"></script>
 <script>
+    $('.attribute-menu').addClass('active');
   var action_type;
   $('#open_model').click(function(){
     $('#terms_model').modal('show');

@@ -91,6 +91,7 @@
   type="text/javascript"></script>
 
 <script>
+    $('.catalog-menu').addClass('active');
 $('#open_model').click(function(){
   window.location.href="/admin/create-product/";
 })
@@ -107,6 +108,7 @@ function Delete(id){
         {
           toastr.success('Product Delete Successfully', 'Successfully Delete');
           $('.table').load(location.href+' .table');
+          ClickEvent = 0;
         }
       });
     } 

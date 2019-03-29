@@ -400,7 +400,7 @@ class ProductController extends Controller
 
         if(isset($request->attribute)){
 
-             foreach(explode(' ,', $request->attribute) as $id) {
+             foreach(explode(',',$request->attribute) as $id) {
                 $attribute_data[] = attribute::find($id);
             }
 
@@ -409,7 +409,7 @@ class ProductController extends Controller
                     $attrName = $attribute_data[$x]->name;
                     $ter = term::where('id',$request[$attrName])->first();
                     $attr = new product_attribute;
-                    $attr->product_id = $request->product_page_id;
+                    $attr->product_id = $product->id;
                     $attr->group_id = $request->group;
                     $attr->attribute = $attribute_data[$x]->id;
                     $attr->terms_id = $ter->id;

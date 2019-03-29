@@ -162,7 +162,7 @@
   <script src="../../../app-assets/js/scripts/tables/datatables/datatable-basic.js"
   type="text/javascript"></script>
 <script>
-
+  $('.category-menu').addClass('active');
   var action_type; // the action type used to from data Save And Update
   $('#open_model').click(function(){
     $('#attribute_model').modal('show');

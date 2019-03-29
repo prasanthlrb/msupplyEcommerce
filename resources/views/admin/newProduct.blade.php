@@ -306,11 +306,11 @@
                                       </div>
                                     <div class="dropdown-item">
                                         <input type="checkbox" name="hot_product" id="hot_product" class="switchery-xs" />
-                                        <label for="switchery2" class="card-title ml-1">Enable as a Bestselling Products product</label>
+                                        <label for="switchery2" class="card-title ml-1">Enable as a Bestselling Products</label>
                                       </div>
                                     <div class="dropdown-item">
                                         <input type="checkbox" name="new_product" id="new_product" class="switchery-xs" />
-                                        <label for="switchery3" class="card-title ml-1">Enable as a On Sale Products product</label>
+                                        <label for="switchery3" class="card-title ml-1">Enable as a On Sale Products</label>
                                       </div>
                                     <div class="dropdown-item">
                                         <input type="checkbox" name="recommended" id="recommended" class="switchery-xs" />
@@ -469,15 +469,11 @@ function Save_product(){
   var product_form_data = new FormData($('#product_form_data')[0]);
   // var productGallery = $('#productGallery').val();
  var product_description = tinyMCE.activeEditor.getContent();
-  
-
-//Category ID Get
-   //product_form_data.append('productGallery',productGallery);
    product_form_data.append('product_description',product_description);
    product_form_data.append("attribute", attributes);
 $("span").find('.text-danger').remove();
   $.ajax({
-    headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }, 
+    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }, 
     url : '/admin/productSave',
     type: "POST",
     data: product_form_data,
@@ -491,7 +487,7 @@ $("span").find('.text-danger').remove();
       // $('input[name=pro_id]').val(data);                
       // $('input[name=personal]').val(data);                
       //$("#product_form_data")[0].reset();
-     
+    
       toastr.success('Product Store Successfully', 'Successfully Save');
       //location.reload();
        CallDropZone();

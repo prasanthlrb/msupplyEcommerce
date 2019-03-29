@@ -263,11 +263,11 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
 
         <li class=" nav-item"><a href="#"><i class="icon-handbag"></i><span class="menu-title">Products</span></a>
           <ul class="menu-content">
-            <li><a class="menu-item" href="/admin/category/0">Category</a></li>
-            <li><a class="menu-item" href="/admin/viewProduct/">Catalog</a></li>  
-            <li><a class="menu-item" href="/admin/brand/">Item Brand</a></li>
-            <li><a class="menu-item" href="/admin/attribute/">Attributes & Values</a></li>
-            <li><a class="menu-item" href="/admin/product-group/">Attributes Set</a></li>  
+            <li class="category-menu"><a class="menu-item" href="/admin/category/0">Category</a></li>
+            <li class="catalog-menu"><a class="menu-item" href="/admin/viewProduct/">Catalog</a></li>  
+            <li class="brand-menu"><a class="menu-item" href="/admin/brand/">Item Brand</a></li>
+            <li class="attribute-menu"><a class="menu-item" href="/admin/attribute/">Attributes & Values</a></li>
+            <li class="attributeSet-menu"><a class="menu-item" href="/admin/product-group/">Attributes Set</a></li>  
           </ul>
         </li>
         
@@ -363,7 +363,10 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
   $('#add-contact').click(function(e){
     e.preventDefault();
     window.location.href = "/admin/add-contact";
-  })
+  });
+  $('form input').on('keypress', function(e) {
+    return e.which !== 13;
+});
 </script>
 <script src="{{ asset('app-assets/js/scripts/extensions/toastr.js')}}" type="text/javascript"></script>
 <script src="{{ asset('app-assets/vendors/js/extensions/toastr.min.js')}}" type="text/javascript"></script>
