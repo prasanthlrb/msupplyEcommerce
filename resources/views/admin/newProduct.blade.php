@@ -257,29 +257,7 @@
                                           </div>
                                         </div>
                                       </div>
-                                      <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="dropdown-item">
-                                              <span class="skin skin-futurico">
-                                                <input type="radio" id="shipping_type" name="shipping_type" checked value="1" class="shipping">
-                                                <label for="radio1" class="ml-1"> Free Shipping</label>
-                                              </span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="dropdown-item">
-                                                <span class="skin skin-futurico">
-                                                  <input type="radio" id="shipping_type" name="shipping_type" value="2" class="shipping">
-                                                  <label for="radio2" class="ml-1"> Paid Shipping</label>
-                                                </span>
-                                              </div>
-                                        </div>
-                                      </div>
-                                      
-                                      <div class="form-group hide-form" id="shipping-amount" style="padding-left:10px">
-                                          <label for="projectinput1">Shipping Amount per Km</label>
-                                          <input type="text" class="form-control" id="shipping_amount" name="shipping_amount">
-                                        </div>
+                                    
                                 </div>
                                 <div class="tab-pane" id="tabVerticalLeft24" aria-labelledby="baseVerticalLeft2-tab4">
                                  
@@ -324,7 +302,7 @@
                                 <div class="tab-pane" id="tabVerticalLeft26" aria-labelledby="baseVerticalLeft2-tab6">
                                     <div class="dropdown-item">
                                         <input type="checkbox" name="featured" id="featured" class="switchery-xs" />
-                                        <label for="switchery1" class="card-title ml-1">Enable as a Today's Deals product</label>
+                                        <label for="switchery1" class="card-title ml-1">Enable as a Todays Deals product</label>
                                       </div>
                                     <div class="dropdown-item">
                                         <input type="checkbox" name="hot_product" id="hot_product" class="switchery-xs" />
@@ -487,16 +465,16 @@
 var attributes = [];
 function Save_product(){
 
-   $("#btnSave").attr("disabled", "disabled");
+  $("#btnSave").attr("disabled", "disabled");
   var product_form_data = new FormData($('#product_form_data')[0]);
-   var productGallery = $('#productGallery').val();
+  // var productGallery = $('#productGallery').val();
  var product_description = tinyMCE.activeEditor.getContent();
   
 
 //Category ID Get
    //product_form_data.append('productGallery',productGallery);
    product_form_data.append('product_description',product_description);
-  // product_form_data.append("attribute", attributes);
+   product_form_data.append("attribute", attributes);
 $("span").find('.text-danger').remove();
   $.ajax({
     headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }, 
@@ -565,18 +543,6 @@ $('input[name="shipping_type"]').on('ifClicked', function(event){
     }
     });
 
-function get_sub_category()
-{
-  var id = $('#category').val();
-    $.ajax({        
-        url : '/admin/get_sub_category/'+id,
-        type: "GET",
-        success: function(data)
-        {
-           $('#sub_category').html(data);
-        }
-   });
-}
 
 $("#attribute").on("change", function(){
 

@@ -21,7 +21,7 @@ var Core = (function(Core){
     			barHeight : 4,
     			backgroundColor : '#fff',
     			barColor : '#ff4557',
-    			minimumTime : 2000,
+    			minimumTime : 1000,
     			onComplete : function(){
 
 					// show promo popup
@@ -236,7 +236,7 @@ var Core = (function(Core){
 
 								}
 
-							}
+							};
 
 							tabs.init();
 

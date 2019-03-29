@@ -78,9 +78,11 @@
 
                     <div class="tags_container">
                             <ul class="tags_cloud">
+                                @if(count($brand)>0)
                                 @foreach($brand as $brand1)    
                                     <li><a href="/filter-brand/{{$brand1->id}}" class="button_grey">{{$brand1->brand}}</a></li>
                                 @endforeach
+                                @endif
                                 </ul>
                        
                         
@@ -95,11 +97,11 @@
                 <!-- - - - - - - - - - - - - - Banner - - - - - - - - - - - - - - - - -->
 
                 <div class="section_offset">
-						
+						@if(count($adModel) > 0)
                     <a href="{{$adModel[2]->url}}">
                         
                     <img src="/ads/{{$adModel[2]->ad_name}}" alt="">
-        
+                        @endif
                     </a>
         
                 </div>
@@ -131,7 +133,7 @@
 
                                 <div class="clearfix product_info">
 
-                                    <p class="product_price alignleft"><b>AED5.99</b></p>
+                                    <p class="product_price alignleft"><b>₹5.99</b></p>
 
                                     <!-- - - - - - - - - - - - - - Product rating - - - - - - - - - - - - - - - - -->
 
@@ -183,7 +185,7 @@
                     <div class="section_offset">
 
                         <div class="row">
-
+                        @if(count($adModel) > 0)
                             <div class="col-sm-6">
                                 
                                 <a href="{{$adModel[0]->url}}" class="banner animated transparent" data-animation="fadeInDown">
@@ -203,7 +205,7 @@
                                 </a>
 
                             </div><!--/ [col]-->
-
+                                @endif
                         </div><!--/ .row-->
 
                     </div><!--/ .section_offset-->
@@ -321,11 +323,11 @@
 
                                     <div class="description">
 
-                                        <a href="/product-view/{{$product1->id}}">{{$product1->product_name}}</a>
+                                        <a href="/product/{{$product1->id}}">{{$product1->product_name}}</a>
 
                                         <div class="clearfix product_info">
 
-                                            <p class="product_price alignleft"><b>AED{{$product1->sales_price}}</b></p>
+                                            <p class="product_price alignleft"><b>₹{{$product1->sales_price}}</b></p>
 
                                             <!-- <ul class="rating alignright">
 
@@ -343,7 +345,7 @@
 
                                     <div class="full_description">
 
-                                        <a class="product_title" href="/product-view/{{$product1->id}}">{{$product1->product_name}}</a>
+                                        <a class="product_title" href="/product/{{$product1->id}}">{{$product1->product_name}}</a>
 
                                         <a href="/filter-product/{{$product1->category}}" class="product_category">
                                             
@@ -378,7 +380,7 @@
 
                                     <div class="actions">
 
-                                        <p class="product_price bold">AED{{$product1->sales_price}}</p>
+                                        <p class="product_price bold">₹{{$product1->sales_price}}</p>
 
                                         <ul class="seller_stats">
 

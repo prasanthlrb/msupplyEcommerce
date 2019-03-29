@@ -14,6 +14,7 @@ class categoryController extends Controller
         $adModel = adModel::all();
         $product = product::where('category','LIKE',"%{$id}%")->paginate(6);
         $brand = brand::all();
+       // return response()->json($product);
         return view('category',compact('product','brand','adModel'));
     }
     
@@ -25,8 +26,10 @@ class categoryController extends Controller
         if($product1->related_product){
             $related_product = product::whereIn('id', explode(',',$product1->related_product))->get();
         }
+        $category_id = explode(',',$product1->category);
+        $breadcrumbs = category::find($category_id[0]);
         //return response()->json($related_product);
-        return view('product',compact('product1','brand','Upload','related_product'));
+        return view('product',compact('product1','brand','Upload','related_product','breadcrumbs'));
 
     }
 }

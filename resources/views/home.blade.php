@@ -12,8 +12,8 @@
 						<aside class="col-md-3 col-sm-4 has_mega_menu">
 
 							
-								<!-- - - - - - - - - - - - - - Today's deals - - - - - - - - - - - - - - - - -->
-								@if(isset($product_today))
+								<!-- - - - - - - - - - - - - - Todays deals - - - - - - - - - - - - - - - - -->
+								@if(count($product_today) > 0)
 								<section class="section_offset animated transparent" data-animation="fadeInDown">
 
 										<h3 class="widget_title">Today's Deals</h3>

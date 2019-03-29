@@ -19,7 +19,9 @@
         <ul class="breadcrumbs">
 
             <li><a href="/">Home</a></li>
-            <li>
+            <li><a href="/category/{{$breadcrumbs->id}}">{{$breadcrumbs->category_name}}</a></li>
+            <li>{{$product1->product_name}}</li>
+            
            
         </ul>
 
@@ -167,7 +169,7 @@
                                             <td>@if($product1->shipping_type == 1)
                                                 <span class="success">Free Shipping</span>
                                                 @else
-                                                <span class="success">Paid Shipping AED{{$product1->shipping_amount}}</span>
+                                                <span class="success">Paid Shipping ₹{{$product1->shipping_amount}}</span>
                                                 @endif</td>
 
                                         </tr>
@@ -190,9 +192,9 @@
 
                             
                                 @if($product1->regular_price !="")
-                                    <p class="product_price"><s>AED{{$product1->regular_price}}</s> <b class="theme_color">AED{{$product1->sales_price}}</b></p>
+                                    <p class="product_price"><s>₹{{$product1->regular_price}}</s> <b class="theme_color">₹{{$product1->sales_price}}</b></p>
                                 @else    
-                                    <p class="product_price"><b class="theme_color">AED{{$product1->sales_price}}</b></p>
+                                    <p class="product_price"><b class="theme_color">₹{{$product1->sales_price}}</b></p>
                                 @endif
 
 
@@ -361,7 +363,7 @@
 
                 <div class="clearfix product_info">
 
-                    <p class="product_price alignleft"><b>AED{{$r_product->sales_price}}</b></p>
+                    <p class="product_price alignleft"><b>₹{{$r_product->sales_price}}</b></p>
 
                 </div>
 
@@ -402,7 +404,7 @@
                                 <div class="wrapper">
                                     <a href="/product-view/" class="product_title"></a>
                                     <div class="clearfix product_info">
-                                        <p class="product_price alignleft"><b>AED</b></p>
+                                        <p class="product_price alignleft"><b>₹</b></p>
                                         <ul class="rating alignright">
                                             <!-- <li class="active"></li>
                                             <li class="active"></li>
@@ -434,7 +436,7 @@
 
                                     <div class="clearfix product_info">
 
-                                        <p class="product_price alignleft"><b>AED5.99</b></p>
+                                        <p class="product_price alignleft"><b>₹5.99</b></p>
 
                                         <!-- - - - - - - - - - - - - - Product rating - - - - - - - - - - - - - - - - -->
 
@@ -474,7 +476,7 @@
 
                                     <div class="clearfix product_info">
 
-                                        <p class="product_price alignleft"><b>AED8.99</b></p>
+                                        <p class="product_price alignleft"><b>₹8.99</b></p>
 
                                         <!-- - - - - - - - - - - - - - Product rating - - - - - - - - - - - - - - - - -->
 
@@ -514,7 +516,7 @@
 
                                     <div class="clearfix product_info">
 
-                                        <p class="product_price alignleft"><b>AED76.99</b></p>
+                                        <p class="product_price alignleft"><b>₹76.99</b></p>
 
                                         <!-- - - - - - - - - - - - - - Product rating - - - - - - - - - - - - - - - - -->
 
@@ -588,7 +590,7 @@
 
                                 <div class="clearfix product_info">
 
-                                    <p class="product_price alignleft"><b>AED5.99</b></p>
+                                    <p class="product_price alignleft"><b>₹5.99</b></p>
 
                                     <!-- - - - - - - - - - - - - - Product rating - - - - - - - - - - - - - - - - -->
 
@@ -628,7 +630,7 @@
 
                                 <div class="clearfix product_info">
 
-                                    <p class="product_price alignleft"><s>AED19.99</s> <b>AED13.99</b></p>
+                                    <p class="product_price alignleft"><s>₹19.99</s> <b>₹13.99</b></p>
 
                                 </div>
 

@@ -338,14 +338,13 @@ class ProductController extends Controller
         $attribute = attribute::find($id);
 
 
-      $output = '<script src="../../../app-assets/vendors/js/forms/select/select2.full.min.js" type="text/javascript"></script>';
-      $output .= '<script src="../../../app-assets/js/scripts/forms/select/form-select2.js" type="text/javascript"></script>';
-      $output .= '<div id="'.$attribute->id.'">';
+     
+      $output = '<div id="'.$attribute->id.'">';
       $output .= '<br><label>Choose The '.$attribute->name.' </label><a float="right" class="pull-right href="javascript:void(0)" onclick="RemovePop('.$attribute->id.')"><i class="ft-trash-2"></i></a>';
-      $output .= '<br><select style="width:100%" id="'.$attribute->name.'" name="'.$attribute->name.'[]" class="select2 form-control col-md-12" >';
+      $output .= '<br><select style="width:100%" id="'.$attribute->name.'" name="'.$attribute->name.'" class="select2 form-control col-md-12" >';
       $output .= '<optgroup label="'.$attribute->name.'">';
         foreach ($data as $value){
-            $output .='<option value="'.$value->terms_name.'">'.$value->terms_name.'</option>'; 
+            $output .='<option value="'.$value->id.'">'.$value->terms_name.'</option>'; 
         }
         $output .= '</optgroup>';
         $output .= '</select>';
@@ -400,23 +399,17 @@ class ProductController extends Controller
         $product->save();
 
         if(isset($request->attribute)){
-    
-            foreach(explode(',', $request->attribute) as $id) {
-                $attribute_data[] = attribute::find($id);        
+
+             foreach(explode(' ,', $request->attribute) as $id) {
+                $attribute_data[] = attribute::find($id);
             }
-           
-          
-            for ($x = 0; $x < count($attribute_data); $x++) {
-                 $attrName = $attribute_data[$x]->name;
-                // $attrName = $attribute_data[$x]->name;
-                $terms[] = $request->$attrName;                
-            }
-          
-            for ($x = 0; $x < count($attribute_data); $x++) {
-                foreach($terms[$x] as $term){
-                    $ter = term::where('terms_name', $term)->first();     
+
+            if(count($attribute_data) > 0){
+                 for ($x = 0; $x < count($attribute_data); $x++) {
+                    $attrName = $attribute_data[$x]->name;
+                    $ter = term::where('id',$request[$attrName])->first();
                     $attr = new product_attribute;
-                    $attr->product_id = $product->id;
+                    $attr->product_id = $request->product_page_id;
                     $attr->group_id = $request->group;
                     $attr->attribute = $attribute_data[$x]->id;
                     $attr->terms_id = $ter->id;
@@ -424,7 +417,8 @@ class ProductController extends Controller
                     $attr->save();
                 }
             }
-        }
+            
+         }
 
         
         return response()->json($product->id); 
@@ -439,9 +433,6 @@ class ProductController extends Controller
             //'product_name'=>'required|unique:products',
             // 'sku'=>'required|unique:product_datas',
         ]);
-
-   
-
         $product = product::find($request->product_page_id);
         $product->category = collect($request->category)->implode(',');
         $product->product_name = $request->product_name;
@@ -482,30 +473,24 @@ class ProductController extends Controller
             foreach(explode(',', $request->attribute) as $id) {
                 $attribute_data[] = attribute::find($id);        
             }
-           
-          
-            for ($x = 0; $x < count($attribute_data); $x++) {
-                 $attrName = $attribute_data[$x]->name;
-                // $attrName = $attribute_data[$x]->name;
-                $terms[] = $request->$attrName;                
-            }
-          
-            for ($x = 0; $x < count($attribute_data); $x++) {
-                foreach($terms[$x] as $term){
-                    $ter = term::where('terms_name', $term)->first();   
+            if(count($attribute_data) > 0){
+                for ($x = 0; $x < count($attribute_data); $x++) {
+                    $attrName = $attribute_data[$x]->name;
+                    $ter = term::where('id',$request[$attrName])->first();
                     $product_attribute = product_attribute::where('attribute',$attribute_data[$x]->id)->where('product_id',$request->product_page_id)->first();
-                    if(!isset($product_attribute)){
-                    $attr = new product_attribute;
-                    $attr->product_id = $request->product_page_id;
-                    $attr->group_id = $request->group;
-                    $attr->attribute = $attribute_data[$x]->id;
-                    $attr->terms_id = $ter->id;
-                    $attr->terms = $ter->terms_name;
-                    $attr->save();
-                }
+                    if(!isset($product_attribute)){    
+                        $attr = new product_attribute;
+                        $attr->product_id = $request->product_page_id;
+                        $attr->group_id = $request->group;
+                        $attr->attribute = $attribute_data[$x]->id;
+                        $attr->terms_id = $ter->id;
+                        $attr->terms = $ter->terms_name;
+                        $attr->save();              
             }
             }
-        }
+            }
+            
+         }
 
         
         return response()->json($request->product_page_id); 
@@ -590,14 +575,14 @@ class ProductController extends Controller
       $attribute = attribute::find($row->attribute);
       $output .= '<div id="'.$attribute->id.'">';
       $output .= '<br><label>Choose The '.$attribute->name.' </label><a float="right" class="pull-right href="javascript:void(0)" onclick="RemovePop('.$attribute->id.')"><i class="ft-trash-2"></i></a>';
-      $output .= '<br><select style="width:100%" id="'.$attribute->name.'" name="'.$attribute->name.'[]" class="select2 form-control col-md-12" >';
+      $output .= '<br><select style="width:100%" id="'.$attribute->name.'" name="'.$attribute->name.'" class="select2 form-control col-md-12" >';
       $output .= '<optgroup label="'.$attribute->name.'">';
         foreach ($data as $value){
             if($value->terms_name == $row->terms){
-                $output .='<option selected value="'.$value->terms_name.'">'.$value->terms_name.'</option>'; 
+                $output .='<option selected value="'.$value->id.'">'.$value->terms_name.'</option>'; 
             }
             else{
-                $output .='<option value="'.$value->terms_name.'">'.$value->terms_name.'</option>'; 
+                $output .='<option value="'.$value->id.'">'.$value->terms_name.'</option>'; 
             }
             
         }

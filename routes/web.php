@@ -163,8 +163,56 @@ Route::post('/update-layout','pageSettingController@UpdateLayout');
 Route::get('/edit-layout/{id}','pageSettingController@EditLayout');
 Route::get('/delete-layout/{id}','pageSettingController@DeleteLayout');
 Route::get('/drop-layout/{index}/{id}','pageSettingController@dropLayout');
+
+
+//Transports Management
+Route::get('/transport', 'transportController@viewTransport');
+Route::get('/edit-transport/{id}','transportController@editTransport');
+Route::get('/delete-transport/{id}','transportController@deleteTransport');
+Route::post('/save-transport','transportController@saveTransport');
+Route::post('/update-transport','transportController@updateTransport'); 
 });
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::group(['prefix' => 'account'],function( ){ 
+    Route::get('/review','AccountController@review');
+    Route::get('/dashboard','AccountController@dashboard');
+    Route::get('/wishlist','AccountController@wishlist');
+    Route::get('/address','AccountController@address');
+    Route::get('/orders','AccountController@orders');
+    Route::get('/editCustomer/{id}','AccountController@editCustomer');
+    Route::get('/editAddress/{id}','AccountController@editAddress');
+    Route::post('/updateCustomer','AccountController@updateCustomer');
+    Route::post('/userchangePassword','AccountController@userchangePassword');
+    Route::post('/updateAddress','AccountController@updateAddress');
+    Route::get('/vieworders/{id}','AccountController@vieworders');
+});
+
+//Cart Management
+Route::post('/add-cart/{id}','pageController@addCart');
+Route::get('/get-cart', function () {
+    $total = Cart::getTotal();
+    $cartTotalQuantity = Cart::getTotalQuantity();
+    $data = $total . '|' . $cartTotalQuantity;
+    return json_encode($data);
+});
+Route::get('/clean-cart', function () {
+    Cart::clear();
+    Session::forget('coupon');
+});
+Route::get('/cart-qty-minus/{id}', function ($id) {
+    Cart::update($id, array(
+        'quantity' => -1,
+    ));
+});
+Route::get('/cart-qty-plus/{id}', function ($id) {
+    Cart::update($id, array(
+        'quantity' => +1,
+    ));
+});
+Route::get('/remove-cart/{id}', function ($id) {
+    Cart::remove($id);
+    Session::forget('coupon');
+});

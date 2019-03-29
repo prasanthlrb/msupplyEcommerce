@@ -1,49 +1,51 @@
-
 @extends('admin.app')
 @section('extra-css')
 <style>
-  .nav-vertical .nav-left.nav-tabs li.nav-item a.nav-link {
-      min-width: 11.5rem !important;
-      
-  }
-  
- .single-product{
-  display: block;
-  width: 100%;
-  height: 300px;
-  background-color: white;
-  border-radius: 5px;
-  
- }
- .single-dynamic-product{
-  display: block;
-  width: 100%;
-  height: 185px;
-  background-color: white;
-  border-radius: 5px;
-  
- }
- .seo-preview-content h3 {
-  color: #1a0dab;
-  font-size: 18px;
-  font-family: arial,sans-serif;
-  font-weight: normal;
-}
-.seo-preview-content p.link {
-  color: #006621;
-  font-size: 14px;
-  font-family: arial,sans-serif;
-  font-weight: normal;
-  line-height: 5px;
-}
-.hide-form{
-  display: none;
-}
-.nav-vertical {
-  padding: 35px;
-}
+    .nav-vertical .nav-left.nav-tabs li.nav-item a.nav-link {
+        min-width: 11.5rem !important;
 
+    }
 
+    .single-product {
+        display: block;
+        width: 100%;
+        height: 300px;
+        background-color: white;
+        border-radius: 5px;
+
+    }
+
+    .single-dynamic-product {
+        display: block;
+        width: 100%;
+        height: 185px;
+        background-color: white;
+        border-radius: 5px;
+
+    }
+
+    .seo-preview-content h3 {
+        color: #1a0dab;
+        font-size: 18px;
+        font-family: arial, sans-serif;
+        font-weight: normal;
+    }
+
+    .seo-preview-content p.link {
+        color: #006621;
+        font-size: 14px;
+        font-family: arial, sans-serif;
+        font-weight: normal;
+        line-height: 5px;
+    }
+
+    .hide-form {
+        display: none;
+    }
+
+    .nav-vertical {
+        padding: 35px;
+    }
 </style>
 <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/forms/selects/select2.min.css">
 <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/forms/icheck/icheck.css">
@@ -53,18 +55,19 @@
 <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/file-uploaders/dropzone.min.css">
 <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/ui/prism.min.css">
 <link rel="stylesheet" type="text/css" href="../../../app-assets/css/plugins/file-uploaders/dropzone.css">
-  
+<link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/extensions/bootstrap-treeview.min.css">
+
 @endsection
 @section('section')
 
 
 <div class="content-wrapper">
-<div class="content-body">
-   
-      
-        
+    <div class="content-body">
+
+
+
         <section id="horizontal-form-layouts">
-           <form action="POST" id="product_form_data" enctype="multipart/form-data">
+            <form action="POST" id="product_form_data" enctype="multipart/form-data">
                 {{ csrf_field() }}
                 <input type="hidden" id="id" name="id">
                 <div class="row">
@@ -160,12 +163,10 @@
 
 
                 </div>
-            
-            
-                  
-                      
-                   
-             
+    </div>
+
+
+
 
 
     <div class="row">
@@ -254,8 +255,35 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
-                                   
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="dropdown-item">
+                                                <span class="skin skin-futurico">
+                                                    <input <?php echo $product_find->shipping_type == '1' ? 'checked' : '' ?> type="radio" id="shipping_type" name="shipping_type" value="1" class="shipping">
+                                                    <label for="radio1" class="ml-1"> Free Shipping</label>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="dropdown-item">
+                                                <span class="skin skin-futurico">
+                                                    <input <?php echo $product_find->shipping_type == '2' ? 'checked' : '' ?> type="radio" id="shipping_type1" name="shipping_type" value="2" class="shipping">
+                                                    <label for="radio2" class="ml-1"> Paid Shipping</label>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @if($product_find->shipping_type == 1)
+                                    <div class="form-group hide-form" id="shipping-amount" style="padding-left:10px">
+                                        <label for="projectinput1">Shipping Amount per Km</label>
+                                        <input type="text" class="form-control" id="shipping_amount" name="shipping_amount">
+                                    </div>
+                                    @else
+                                    <div class="form-group" id="shipping-amount" style="padding-left:10px">
+                                        <label for="projectinput1">Shipping Amount per Km</label>
+                                        <input value="{{$product_find->shipping_amount}}" type="text" class="form-control" id="shipping_amount" name="shipping_amount">
+                                    </div>
+                                    @endif
                                 </div>
                                 <div class="tab-pane" id="tabVerticalLeft24" aria-labelledby="baseVerticalLeft2-tab4">
 
@@ -273,40 +301,44 @@
                                     </div>
 
                                 </div>
-                            <div class="tab-pane" id="tabVerticalLeft25" aria-labelledby="baseVerticalLeft2-tab5">
-                                {{-- <form method="post" id="termsData">
+                                <div class="tab-pane" id="tabVerticalLeft25" aria-labelledby="baseVerticalLeft2-tab5">
+                                    {{-- <form method="post" id="termsData">
                                 {{ csrf_field() }} --}}
-                                {{-- <input type="hidden" name="pro_id" value="10"> --}}
-                                  <div class="form-group">
-                                    <label for="projectinput6">Select Attribute</label>
-                                    <div class="">
-                                      <select style="width:100%" name="attribute" id="attribute" class="form-control col-md-12" >
-                                      <option value="">Select The Atribute</option>
-                                       <?php $arraydata3 = array(); ?>
+                                    {{-- <input type="hidden" name="pro_id" value="10"> --}}
+                                    <div class="form-group">
+                                        <label for="projectinput6">Select Attribute</label>
+                                        <div class="">
+                                            <select style="width:100%" name="attribute" id="attribute" class="form-control col-md-12">
+                                                <option value="">Select The Atribute</option>
+                                                <?php $arraydata3 = array(); ?>
                                                 @foreach($product_attribute as $data1)
                                                 <?php $arraydata3[] = '' . $data1->attribute . ''; ?>
                                                 @endforeach
                                                 @foreach($attribute as $attribute)
                                                 <option {{in_array($attribute->id, $arraydata3) ? 'disabled' : ''}} value="{{$attribute->id}}">{{$attribute->name}}</option>
-                                                @endforeach
-                                      </select>
-                                    </div>
-                                   
-                                  <div id="show_terms"> 
 
-                                  </div>
-                               
-                                  </div>
-                                
-   
-                                {{-- </form> --}}
+
+                                                @endforeach
+
+
+                                            </select>
+                                        </div>
+
+                                        <div id="show_terms">
+
+                                        </div>
+
+                                    </div>
+
+
+                                    {{-- </form> --}}
                                 </div>
 
 
                                 <div class="tab-pane" id="tabVerticalLeft26" aria-labelledby="baseVerticalLeft2-tab6">
                                     <div class="dropdown-item">
                                         <input <?php echo $product_find->featured == 'on' ? 'checked' : '' ?> type="checkbox" name="featured" id="featured" class="switchery-xs" />
-                                        <label for="switchery1" class="card-title ml-1">Enable as a Todays Deals product</label>
+                                        <label for="switchery1" class="card-title ml-1">Enable as a Today's Deals product</label>
                                     </div>
                                     <div class="dropdown-item">
                                         <input <?php echo $product_find->hot_product == 'on' ? 'checked' : '' ?> type="checkbox" name="hot_product" id="hot_product" class="switchery-xs" />
@@ -332,8 +364,10 @@
                 </div>
             </div>
 
-              </section>
-                  <div class="row">
+
+
+            </section>
+            <div class="row">
                 <div class="col-6">
                     <div class="card">
                         <div class="card-header">
@@ -424,33 +458,33 @@
             </div>
 
 
-                    <div class="row">
-                        <div class="col-md-6">
-                          <div class="card">
-                            <div class="card-header">
-                             
-                            
-                              
-                            </div>
-                            <div class="card-content collpase show">
-                              <div class="card-body">
-                              
-                               
-                                  <div class="form-actions">
-                                    <button id="btnSave" onclick="Save_product()" type="button" class="btn btn-primary">
-                                      <i class="la la-check-square-o"></i> Save & Publish
-                                    </button>
-                                  </div>
-                                
-                              </div>
-                            </div>
-                          </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+
+
+
                         </div>
-                       
+                        <div class="card-content collpase show">
+                            <div class="card-body">
+
+
+                                <div class="form-actions">
+                                    <button id="btnSave" onclick="Save_product()" type="button" class="btn btn-primary">
+                                        <i class="la la-check-square-o"></i> Save & Publish
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
-                    
-</div>
-</div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
 </div>
 
 @endsection
@@ -462,9 +496,14 @@
 <script src="../../../app-assets/js/scripts/dropdowns/dropdowns.js" type="text/javascript"></script>
 <script src="../../../app-assets/vendors/js/forms/select/select2.full.min.js" type="text/javascript"></script>
 <script src="../../../app-assets/js/scripts/forms/select/form-select2.js" type="text/javascript"></script>
+<!-- BEGIN PAGE VENDOR JS-->
+<script src="../../../app-assets/vendors/js/extensions/bootstrap-treeview.min.js" type="text/javascript"></script>
+<!-- END PAGE VENDOR JS-->
+<!-- BEGIN PAGE LEVEL JS-->
+{{-- <script src="../../../app-assets/js/scripts/extensions/tree-view.js" type="text/javascript"></script> --}}
+<!-- END PAGE LEVEL JS-->
 <script src="{{ url('/dropzone/dropzone.js') }}"></script>
-    <script src="{{ url('/dropzone/config-dropzone.js') }}"></script>
-
+<script src="{{ url('/dropzone/config-dropzone.js') }}"></script>
 <script>
     var attributes = [];
 </script>
@@ -475,9 +514,29 @@
 </script>
 @endforeach
 <script>
-   $(document).ready(function() {
-   $.ajax({
-            url:'/admin/get_edit_attribute/'+{!!$product_find->id!!},
+    $(document).ready(function() {
+        $.ajax({
+            url: "/admin/get-category-tree",
+            method: "GET",
+            dataTypes: "json",
+            success: function(data) {
+                $('#default-treeview').treeview({
+                    data: data,
+                    showCheckbox: true,
+                });
+                var node = {
+                    !!str_replace('"', '', json_encode($tree_category)) !!
+                };
+                $('#default-treeview').treeview('selectNode', [node, {
+                    silent: true
+                }]);
+            }
+        });
+
+        $.ajax({
+            url: '/admin/get_edit_attribute/' + {
+                !!$product_find - > id!!
+            },
             type: "GET",
             success: function(data) {
                 //$('#attribute').val('');
@@ -492,16 +551,35 @@
             }
         });
 
-   });
+    })
+
+
+
+
+    $('#checkTreeView').click(function(e) {
+        e.preventDefault();
+
+        //var nodes = $('#default-treeview').treeview('getChecked');
+
+
+        console.log(nodes);
+    })
+
     function Save_product() {
 
         $("#btnSave").attr("disabled", "disabled");
         var product_form_data = new FormData($('#product_form_data')[0]);
+
         var productGallery = $('#productGallery').val();
         var product_description = tinyMCE.activeEditor.getContent();
         var product_page_id = $('#product_page_id').val();
+
+
+
+        //Category ID Get
+
         product_form_data.append('product_description', product_description);
-        product_form_data.append("attribute", attributes);
+        //  product_form_data.append("attribute", attributes);
         product_form_data.append("product_page_id", product_page_id);
         //   product_form_data.append('regular_price',regular_price);
         //   product_form_data.append('sales_price',sales_price);
@@ -750,4 +828,4 @@
 </script>
 
 
-@endsection
+@endsection 

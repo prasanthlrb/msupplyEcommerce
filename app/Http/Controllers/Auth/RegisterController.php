@@ -42,39 +42,39 @@ class RegisterController extends Controller
     }
 
 
-    public function register(Request $request)
-    {
-        $this->validator($request->all())->validate();
+    // public function register(Request $request)
+    // {
+    //     $this->validator($request->all())->validate();
 
-        event(new Registered($user = $this->create($request->all())));
+    //     event(new Registered($user = $this->create($request->all())));
 
-        $requestParams = array(
-            'route' => '2',
-            'api-token' => '25p83e9*wu.0szd_4),7hyaokirlfbnvgcxj1mqt',
-            'sender' => 'KASMDU',
-            'numbers' => '7010384622',
-            'message' => 'Hi Prasanth'
-        );
-        //merge API url and parameters
-        $apiUrl = "http://smspro.co.in/httpapi/v1/sendsms?";
-        foreach($requestParams as $key => $val){
-            $apiUrl .= $key.'='.urlencode($val).'&';
-        }
-        $apiUrl = rtrim($apiUrl, "&");
+    //     $requestParams = array(
+    //         'route' => '2',
+    //         'api-token' => '25p83e9*wu.0szd_4),7hyaokirlfbnvgcxj1mqt',
+    //         'sender' => 'KASMDU',
+    //         'numbers' => '7010384622',
+    //         'message' => 'Hi Prasanth'
+    //     );
+    //     //merge API url and parameters
+    //     $apiUrl = "http://smspro.co.in/httpapi/v1/sendsms?";
+    //     foreach($requestParams as $key => $val){
+    //         $apiUrl .= $key.'='.urlencode($val).'&';
+    //     }
+    //     $apiUrl = rtrim($apiUrl, "&");
         
-        //API call
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $apiUrl);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    //     //API call
+    //     $ch = curl_init();
+    //     curl_setopt($ch, CURLOPT_URL, $apiUrl);
+    //     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         
-        curl_exec($ch);
-        curl_close($ch);
+    //     curl_exec($ch);
+    //     curl_close($ch);
 
-        $this->guard()->login($user);
+    //     $this->guard()->login($user);
 
-        return $this->registered($request, $user)
-                        ?: redirect($this->redirectPath());
-    }
+    //     return $this->registered($request, $user)
+    //                     ?: redirect($this->redirectPath());
+    // }
 
   
     /**

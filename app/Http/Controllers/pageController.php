@@ -186,10 +186,7 @@ class pageController extends Controller
             echo 'Message: ' .$e->getMessage();
           }
        }
-       
-       public function menuGet(){
-
-       }
+      
        public function categoryTree(){
         $category = category::all();
         foreach ($category as $row) {

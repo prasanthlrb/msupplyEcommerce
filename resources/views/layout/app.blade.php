@@ -70,7 +70,24 @@
 
 								<!-- - - - - - - - - - - - - - Login - - - - - - - - - - - - - - - - -->
 
-								<p>Welcom visitor <a href="/login">Login</a> or <a href="/register">Register</a></p>
+								
+
+
+								 
+												@if(Auth::user())										
+												<p><b>Hello </b> <i style="color:#ff4557">{{Auth::user()->name}}</i>
+												<a href="{{ route('logout') }}" onclick="event.preventDefault();
+													document.getElementById('logout-form').submit();">
+									    Logout</a> </p>
+												
+									
+																		<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+																			@csrf
+																		</form>
+												@else
+												<p>Welcom visitor <a href="/login">Login</a> or <a href="/register">Register</a></p>
+												@endif
+																
 
 								<!-- - - - - - - - - - - - - - End login - - - - - - - - - - - - - - - - -->
 
@@ -328,111 +345,25 @@
 								
 
 									<!-- - - - - - - - - - - - - - Navigation item - - - - - - - - - - - - - - - - -->
-
 									<div class="nav_item size_3">
 
 										<button id="open_shopping_cart" class="open_button" data-amount="3">
 											<b class="title">My Cart</b>
-											<b class="total_price">$999.00</b>
+											<b class="total_price">AED 0.00</b>
 										</button>
 
 										<!-- - - - - - - - - - - - - - Products list - - - - - - - - - - - - - - - - -->
 
-										<div class="shopping_cart dropdown">
+										<div class="shopping_cart dropdown active visible" id="cart-menu">
 
-												<div class="animated_item">
-
-													<p class="title">Recently added item(s)</p>
-
-													<!-- - - - - - - - - - - - - - Product - - - - - - - - - - - - - - - - -->
-
-													<div class="clearfix sc_product">
-
-														<a href="#" class="product_thumb"><img src="/images/sc_img_1.jpg" alt=""></a>
-
-														<a href="#" class="product_name">Natural Factors PGX Daily Ultra Matrix...</a>
-
-														<p>1 x $499.00</p>
-
-														<button class="close"></button>
-
-													</div><!--/ .clearfix.sc_product-->
-													
-													<!-- - - - - - - - - - - - - - End of product - - - - - - - - - - - - - - - - -->
-
-												</div><!--/ .animated_item-->
-
-												<div class="animated_item">
-
-													<!-- - - - - - - - - - - - - - Product - - - - - - - - - - - - - - - - -->
-
-													<div class="clearfix sc_product">
-
-														<a href="#" class="product_thumb"><img src="images/sc_img_2.jpg" alt=""></a>
-
-														<a href="#" class="product_name">Oral-B Glide Pro-Health Floss...</a>
-
-														<p>1 x $499.00</p>
-
-														<button class="close"></button>
-
-													</div><!--/ .clearfix.sc_product-->
-													
-													<!-- - - - - - - - - - - - - - End of product - - - - - - - - - - - - - - - - -->
-
-												</div><!--/ .animated_item-->
-
-												<div class="animated_item">
-
-													<!-- - - - - - - - - - - - - - Product - - - - - - - - - - - - - - - - -->
-
-													<div class="clearfix sc_product">
-
-														<a href="#" class="product_thumb"><img src="/images/sc_img_3.jpg" alt=""></a>
-
-														<a href="#" class="product_name">Culturelle Kids! Probi-<br>otic Packets 30 ea</a>
-
-														<p>1 x $499.00</p>
-
-														<button class="close"></button>
-
-													</div><!--/ .clearfix.sc_product-->
-													
-													<!-- - - - - - - - - - - - - - End of product - - - - - - - - - - - - - - - - -->
-
-												</div><!--/ .animated_item-->
-
-												<div class="animated_item">
-
-													<!-- - - - - - - - - - - - - - Total info - - - - - - - - - - - - - - - - -->
-
-													<ul class="total_info">
-
-														<li><span class="price">Tax:</span> $0.00</li>
-
-														<li><span class="price">Discount:</span> $37.00</li>
-
-														<li class="total"><b><span class="price">Total:</span> $999.00</b></li>
-
-													</ul>
-													
-													<!-- - - - - - - - - - - - - - End of total info - - - - - - - - - - - - - - - - -->
-
-												</div><!--/ .animated_item-->
-
-												<div class="animated_item">
-
-													<a href="#" class="button_grey">View Cart</a>
-
-													<a href="#" class="button_blue">Checkout</a>
-
-												</div><!--/ .animated_item-->
+												
 
 											</div><!--/ .shopping_cart.dropdown-->
 										
 										<!-- - - - - - - - - - - - - - End of products list - - - - - - - - - - - - - - - - -->
 										
 									</div><!--/ .nav_item-->
+
 
 									<!-- - - - - - - - - - - - - - End of navigation item - - - - - - - - - - - - - - - - -->
 
@@ -472,7 +403,7 @@
 								<a href="#" class="infoblock type_1">
 
 									<i class="icon-paper-plane"></i>
-									<span class="caption"><b>Fast &amp; Free Delivery</b></span>
+									<span class="caption"><b>Fast Delivery</b></span>
 
 								</a><!--/ .infoblock-->
 							</li>
@@ -694,23 +625,9 @@
 						
 						<!-- - - - - - - - - - - - - - End of payments - - - - - - - - - - - - - - - - -->
 
-						<!-- - - - - - - - - - - - - - Footer navigation - - - - - - - - - - - - - - - - -->
-
-						<nav class="footer_nav">
-
-							<ul class="bottombar">
-								<?php if(isset($category)){?>
-								@foreach($category as $row)
-								<li><a href="#">{{$row->category_name}}</a></li>
-										@endforeach
-								<?php } ?>
-							</ul>
-
-						</nav>
 						
-						<!-- - - - - - - - - - - - - - End of footer navigation - - - - - - - - - - - - - - - - -->
-
-						<p class="copyright">&copy; 2018 <a href="index.html">K.A.S Housing Pvt Ltd</a>. All Rights Reserved.</p>
+						<p class="copyright">&copy; {{date('Y')}} <a href="index.html">K.A.S Housing Pvt Ltd</a>. All Rights Reserved.</p>
+						<p>Development &amp; Maintenance By <a href="http://lrbtech.com"> LRB INFO TECH</a></p>
 
 					</div><!--/ .container -->
 
@@ -913,4 +830,18 @@
 	</body>
 
 	@yield('extra-js')
+	<script>
+		$(document).ready(function(){
+		$.ajax({        
+			url : '/get-cart',
+			type: "GET",
+			success: function(data)
+			{
+			   var result = data.split('|');
+			   $('.total_price').text(result[0]);
+			   $('#open_shopping_cart').attr("data-amount",result[1]);
+			}
+		});
+	});
+	</script>
 </html>
