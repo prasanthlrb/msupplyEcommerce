@@ -10,6 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+use App\product;
 
 Route::get('/','pageController@home');
 //pages route
@@ -23,7 +24,7 @@ Route::get('/category-tree','pageController@categoryTree');
 Route::get('/category/{id}','categoryController@categoryProduct');
 Route::get('/product/{id}','categoryController@getProduct');
 Route::get('/quick-view/{id}','pageController@quickModel');
-
+Route::get('/product-advance-filter/{product}/{attr}/{terms}','categoryController@advanceFilter');
 
 
 Route::get('/wishlist','pageController@wishlist'); 
@@ -190,8 +191,26 @@ Route::group(['prefix' => 'account'],function( ){
     Route::get('/vieworders/{id}','AccountController@vieworders');
 });
 
+Route::get('/get-compare','pageController@compare');
+Route::get('/add-compare/{id}','pageController@addCompare');
+Route::get('/remove-compare/{id}','pageController@removeCompare');
+Route::get('/compare',function(){
+    return view('compare');
+});
+
 //Cart Management
-Route::post('/add-cart/{id}','pageController@addCart');
+Route::get('/add-cart/{id}/{qty}', function ($id, $qty) {
+    $product = product::find($id);
+    Cart::add(array(
+        'id' => $id,
+        'name' => $product->product_name,
+        'price' => $product->sales_price,
+        'quantity' => $qty,
+    ));
+    $total = Cart::getTotal();
+    $quantity = Cart::getTotalQuantity();
+    return response()->json(array($total,$quantity)); 
+});
 Route::get('/get-cart', function () {
     $total = Cart::getTotal();
     $cartTotalQuantity = Cart::getTotalQuantity();
@@ -215,4 +234,179 @@ Route::get('/cart-qty-plus/{id}', function ($id) {
 Route::get('/remove-cart/{id}', function ($id) {
     Cart::remove($id);
     Session::forget('coupon');
+});
+
+Route::get('/cart',function(){
+    return view('cart');
+});
+Route::get('/cart-menu', function(){
+    $cartCollection = Cart::getContent();
+    $total = Cart::getTotal();
+    $tax = round($total*5/105,2);
+    $output='';
+    foreach($cartCollection as $cartData){
+          $amount = ($cartData->quantity * $cartData->price);
+          $product = product::find($cartData->id);
+
+    $output .='            
+    <div class="animated_item">
+    <div class="clearfix sc_product">
+          <a href="/product/'.$cartData->id.'" class="product_thumb"><img src="'.asset('/product_img').'/'.$product->product_image.'" alt="" style="width:50px"></a>
+          <a href="/product/'.$cartData->id.'" class="product_name">'.$cartData->name.'</a>
+          <p>'.$cartData->quantity.'x'.$amount.'</p>
+          <button class="close" onclick="removeCartItem('.$cartData->id.')"></button>
+    </div>
+</div>';
+    }
+
+$output .='<div class="animated_item">
+<ul class="total_info">
+          <li class="total"><b><span class="price">Total:</span> '.$total.'</b></li>
+    </ul>
+</div>
+<div class="animated_item">
+    <a href="/cart" class="button_grey">View Cart</a>
+    <a href="/checkout" class="button_blue">Checkout</a>
+</div>';
+echo $output;
+});
+Route::get('/cart-data', function(){
+    $cartCollection = Cart::getContent();
+    $total = Cart::getTotal();
+    $shipping_charge=0;
+    if(!Cart::isEmpty()){
+    $output='<div class="container">
+    <ul class="breadcrumbs">
+    
+        <li><a href="index.html">Home</a></li>
+        <li>Shopping Cart</li>
+
+    </ul>
+
+    <section class="section_offset">
+
+        <h1>Shopping Cart</h1>
+
+        <!-- - - - - - - - - - - - - - Shopping cart table - - - - - - - - - - - - - - - - -->
+
+        <div class="table_wrap">
+
+            <table class="table_type_1 shopping_cart_table">
+
+                <thead>
+
+                    <tr>
+                        <th class="product_image_col">Product Image</th>
+                        <th class="product_title_col">Product Name</th>
+                       
+                        <th>Price</th>
+                        <th class="product_qty_col">Quantity</th>
+                        <th>Total</th>
+                        <th class="product_actions_col">Action</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>';
+    foreach($cartCollection as $cartData){
+          $amount = ($cartData->quantity * $cartData->price);
+          $product = product::find($cartData->id);
+
+    $output .=' <tr>
+        
+    <td class="product_image_col" data-title="Product Image">
+        
+        <a href="/product/'.$cartData->id.'"><img src="/product_img/'.$product->product_image.'" alt=""></a>
+
+    </td>
+    <td data-title="Product Name">
+
+        <a href="/product/'.$cartData->id.'" class="product_title">'.$cartData->name.'</a>
+
+        <ul class="sc_product_info">';
+   
+        $output .='  </ul>
+
+    </td>
+
+    <td class="subtotal" data-title="Price">
+       '.$cartData->price.'
+    </td>
+
+    <td data-title="Quantity">
+        <div class="qty min clearfix">
+            <button class="theme_button" data-direction="minus" onclick="updateqtyMinus('.$cartData->id.')">&#45;</button>
+            <input type="text" name="cartQty" id="cartQty" value="'.$cartData->quantity.'">
+            <button class="theme_button" data-direction="plus" onclick="updateqtyPlus('.$cartData->id.')">&#43;</button>
+        </div>
+    </td>
+
+    <td class="total" data-title="Total">
+        '.$amount.'
+    </td>
+
+    <td data-title="Action">
+        <a href="javascript:void(null)" onclick="removeCartItem('.$cartData->id.')" class="button_dark_grey icon_btn remove_product"><i class="icon-cancel-2"></i></a>
+    </td>
+
+</tr>';
+    }
+    $total = $total+$shipping_charge;
+    $output .=' </tbody>
+    </table>
+
+</div>
+
+<footer class="bottom_box on_the_sides">
+    <div class="left_side">
+        <a href="/" class="button_blue middle_btn">Continue Shopping</a>
+    </div>
+    <div class="right_side">
+        <a href="javascript:void(null)" onclick="cleanCart()" class="button_grey middle_btn">Clear Shopping Cart</a>
+    </div>
+</footer>
+
+</section>
+
+<div class="section_offset">
+<div class="row">
+    <section class="col-sm-6">
+       
+    </section>
+    <section class="col-sm-6">
+        <h3>Total</h3>
+        <div class="table_wrap">
+            <table class="zebra">
+                <tfoot>
+                    ';
+                  
+                 $output .='   <tr class="total">
+                        <td>Total</td>
+                        <td>AED '.$total.'</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <footer class="bottom_box text-center">
+            <a class="button_blue middle_btn" href="/checkout">Proceed to Checkout</a>
+            <div class="single_link_wrap">
+               
+            </div>
+        </footer>
+    </section>
+</div>
+</div>
+</div>';
+}else{
+    $output = '<div class="container">
+    <ul class="breadcrumbs">
+        <li><a href="index.html">Home</a></li>
+        <li>Shopping Cart</li>
+    </ul>
+    <section class="section_offset">
+        <h1 style="text-align:center">Your Shopping Cart is Empty</h1>
+    </section>
+</div>';
+}
+print $output;
 });

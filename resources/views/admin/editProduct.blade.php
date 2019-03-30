@@ -75,7 +75,7 @@
                                 <div class="card-body">
 
                                     <div class="form-body">
-                                        <h4 class="form-section"><i class="ft-shopping-cart"></i> Add New Product</h4>
+                                        <h4 class="form-section"><i class="ft-shopping-cart"></i> Edit Product</h4>
 
                                         <div class="form-group row">
                                             <label class="col-md-3 label-control" for="projectinput1">Product Name</label>
@@ -467,6 +467,7 @@
 
 <script>
     var attributes = [];
+    $('.catalog-menu').addClass('active');
 </script>
 @foreach($product_attribute as $data1)
 <script>

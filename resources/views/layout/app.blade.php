@@ -319,7 +319,7 @@
 												<li class="home_menu"><a href="/">Home</a></li>
 											
 												<li class="account_menu"><a href="/">My Account</a></li>
-												<li class="cart_menu"><a href="shop_shopping_cart.html">Shopping Cart</a></li>
+												<li class="cart_menu"><a href="/cart">Shopping Cart</a></li>
 												<li class="checkout_menu"><a href="shop_checkout.html">Checkout</a></li>
 												<li class="contact_menu"><a href="/contact">Contact Us</a></li>
 											
@@ -336,10 +336,16 @@
 
 									<div class="nav_item size_4">
 
-										<a href="#" class="wishlist_button" data-amount="7"></a>
-										
+										<a href="/account/wishlist" class="wishlist_button" data-amount="0"></a>
+									
 									</div><!--/ .nav_item-->
 
+									
+									<div class="nav_item size_4">
+
+										<a href="/compare" class="compare_button" data-amount="0"></a>
+										
+									</div><!--/ .nav_item-->
 									<!-- - - - - - - - - - - - - - End of main navigation - - - - - - - - - - - - - - - - -->
 
 								
@@ -349,7 +355,7 @@
 
 										<button id="open_shopping_cart" class="open_button" data-amount="3">
 											<b class="title">My Cart</b>
-											<b class="total_price">AED 0.00</b>
+											<b class="total_price">₹ 0.00</b>
 										</button>
 
 										<!-- - - - - - - - - - - - - - Products list - - - - - - - - - - - - - - - - -->
@@ -843,5 +849,41 @@
 			}
 		});
 	});
+	$('#open_shopping_cart').on('click',function(){
+		$.ajax({        
+			url : '/cart-menu/',
+			type: "GET",
+			success: function(data)
+			{
+			   $('#cart-menu').html(data);
+			}
+	   });
+	});
+	function removeCartItem(id){
+	var route = $('#routes').val();
+	$.ajax({        
+        url : '/remove-cart/'+id,
+        type: "GET",
+        success: function(data)
+        {
+			//if(route == 'cart'){
+			
+			//}
+			cartSubFunction();
+			
+        }
+   });
+}
+function addCompare(id){
+	$.ajax({        
+			url : '/add-compare/'+id,
+			type: "GET",
+			success: function(data)
+			{
+				console.log(id);
+			   //$('#cart-menu').html(data);
+			}
+	   });
+}
 	</script>
 </html>

@@ -10,6 +10,7 @@ use App\home_product_layout;
 use App\category;
 use App\product;
 use App\upload;
+use Session;
 use Illuminate\Http\Request;
 
 class pageController extends Controller
@@ -383,26 +384,15 @@ class pageController extends Controller
      $output.='<form method="post" id="termsData">'.csrf_field().'
      ';
      
-     
-     
      $output.='
                  <input type="hidden" id="shipping_amount" name="shipping_amount" value="'.$product->shipping_amount.'">
-                
-     
                  <div class="buttons_row">
                      <a class="button_blue middle_btn" href="/product/'.$product->id.'">See product details</a>
                      <a href="/add-wishlist/'.$product->id.'"><button type="button" class="button_dark_grey def_icon_btn middle_btn add_to_wishlist tooltip_container"><span class="tooltip top">Add to Wishlist</span></button></a>
                    
                  </div>
-     
-               
-                 <!-- - - - - - - - - - - - - - End of product actions - - - - - - - - - - - - - - - - -->
      </form>   
            </div>
-     
-           <!-- - - - - - - - - - - - - - End of product description column - - - - - - - - - - - - - - - - -->
-     
-     
      </div>
      
      </div>
@@ -410,5 +400,191 @@ class pageController extends Controller
      
         echo $output;
      }
-     
+
+     public function compare(){
+        $output='';
+        if(!empty(Session::get('compare'))){
+        $output .='<tr>
+            <th class="row_title_col">Product Image</th>';
+            foreach(Session::get('compare') as $data){
+                $product = product::find($data);
+                $output .='    <td>
+                    <a href="#"><img style="width:250px;height:200px;" src="'.asset('/product_img').'/'.$product->product_image.'" alt=""></a>
+                </td>';
+            }
+        $output .='</tr>
+        <tr>
+            <th class="row_title_col">Product Name</th>';
+            foreach(Session::get('compare') as $data){
+                $product = product::find($data);
+                $output .='<td>
+                <a href="/product/'.$product->id.'">'.$product->product_name.'</a>
+            </td>';
+            }
+        $output .='</tr>
+        <tr>
+            <th class="row_title_col">Rating</th>';
+            foreach(Session::get('compare') as $data){
+        $output .='<td>
+                <div class="v_baseline">';
+            $product = product::find($data);
+            $review = DB::table('reviews')
+                ->where('product_id',$product->id)
+                ->get(); 
+            $review_count = DB::table('reviews')
+                ->where('product_id',$product->id)
+                ->count();   
+                        if($review_count > 0){
+                            $review_value=0;
+                            foreach($review as $review1)
+                            {
+                                $review_value+=$review1->price_rate;
+                            }
+                            $rat = $review_value;
+                            $rating = $rat / $review_count;
+                            $output.='<ul class="rating">';
+                            for ($i = 1; $i <= 5; $i++){
+                                if($i <= $rating){
+                                $output.='<li class="active"></li>';
+                                }else{
+                                $output.='<li class=""></li>';
+                                }
+                            }
+                            $output.='</ul>';
+                        }
+    $output .='<a href="#" class="small_link">'.$review_count.' Review(s)</a>
+                </div></td>';
+            }
+    $output .='</tr>
+        <tr>        
+            <th class="row_title_col">Price</th>';
+            foreach(Session::get('compare') as $data){
+                $product_data = product::find($data);
+            $output .=' <td class="total">AED '.$product_data[0]->sales_price.'</td>';
+    
+            }
+            $output .='</tr>
+        <tr>
+            <th class="row_title_col">Description</th>';
+            foreach(Session::get('compare') as $data){
+                $product = product::find($data);
+            $output .=' <td>
+                <p>'.strip_tags($product->product_description).'</p>
+            </td>';
+            }
+        $output .='<tr>
+            <th class="row_title_col">Availability</th>';
+            foreach(Session::get('compare') as $data){
+                $product_data = product::find($data);
+            $output .='  <td>
+                <span class="in_stock">in stock</span> '.$product_data[0]->stock_quantity.' item (s)
+            </td>';
+            }
+            $output .='</tr>
+        <tr>
+            <th class="row_title_col">SKU</th>';
+            foreach(Session::get('compare') as $data){
+                $product_data = product::find($data);
+            $output .=' <td>'.$product_data[0]->sku.' </td>';
+            }
+        // <tr>
+        //     <th class="row_title_col">Size</th>';
+        //     $output .='<td>XL</td>';
+        //     $output .='
+        // </tr>
+        // <tr>
+        //     <th class="row_title_col">Color</th>';
+        //     $output .=' <td>Red</td>';
+        //     $output .='
+        // </tr>
+        $output .='</tr>
+        <tr>
+            <th class="row_title_col">Weight</th>';
+            foreach(Session::get('compare') as $data){
+                $product_data = product::find($data);
+            $output .='<td>'.$product_data[0]->weight.'</td>';
+            }
+            $output .=' </tr>
+        <tr>
+            <th class="row_title_col">Dimensions<br>(L x W x H)</th>';
+            foreach(Session::get('compare') as $data){
+                $product_data = product::find($data);
+            $output .='<td>'.$product_data[0]->length.' * '.$product_data[0]->width.' * '.$product_data[0]->height.' Cm</td>';
+            }
+            $output .=' </tr>
+        <tr>
+            <th class="row_title_col">Action</th>';
+            foreach(Session::get('compare') as $data){
+                $product_data = product::find($data);
+        $output .='<td>
+                <div class="buttons_row">
+                    <a href="/remove-compare/'.$product_data[0]->product_id.'" class="button_dark_grey middle_btn icon_btn tooltip_container"><span class="tooltip top">Remove from Compare</span><i class="icon-cancel-2"></i></a>
+                </div>
+        </td>';
+            }
+    // <a href="#" class="button_blue middle_btn">Add to Cart</a>
+    // <a href="#" class="button_dark_grey middle_btn def_icon_btn add_to_wishlist tooltip_container"><span class="tooltip top">Add to Wishlist</span></a>
+            $output .='</tr>';
+        }
+        else{
+            $output.='<br><h3 style="text-align:center;">Compare Product is Empty</h3>';
+        }
+        print $output;
+    }
+    
+        
+public function getCompare($id){
+    $product = $id;
+    $arraydata=array();
+    if(!empty(Session::get('compare'))){
+        foreach(Session::get('compare') as $data){
+            $arraydata[]=$data;
+        }
+    }
+    if(!in_array($product, $arraydata)){
+        Session::push('compare', $product);
+    }
+    return redirect('compare');
+}
+
+public function removeCompare($id){
+    $remove = ''.$id.'';
+
+    if (Session::has('compare'))
+    {
+        foreach (Session::get('compare') as $key => $value) 
+        {
+            if ($value === $remove)
+            {
+                Session::pull('compare.'.$key); // retrieving the value and remove it from the array
+                break;
+            }
+        }
+    }
+    return redirect('compare');
+}
+
+public function addCompare($id){
+    if(!empty(Session::get('compare'))){
+
+    }else{
+
+
+        Session::set('compare', $value);
+
+
+    }
+    // $product = $id;
+    // $arraydata=array();
+    // if(!empty(Session::get('compare'))){
+    //     foreach(Session::get('compare') as $data){
+    //         $arraydata[]=$data;
+    //     }
+    // }
+    // if(!in_array($product, $arraydata)){
+    //     Session::push('compare', $arraydata);
+    // }
+    // return response()->json(Session::get('compare')); 
+}
+
 }

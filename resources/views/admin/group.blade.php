@@ -38,13 +38,7 @@
                   <tr>
                     <td>{{$row->id}}</td>
                     <td>{{$row->group}}</td>
-                    <td class="text-center" onclick="Edit({{$row->id}})">
-                      @if($row->status == 0)
-                      <i class="ft-check-circle text-success"></i>
-                      @else
-                      <i class="ft-slash text-danger"></i>
-                      @endif
-                    </td>
+                   
                     <td class="text-center" onclick="Edit({{$row->id}})"><i class="ft-edit"></i></td>
                     <td class="text-center" onclick="Delete({{$row->id}})"><i class="ft-trash-2"></i></td>
                   </tr>

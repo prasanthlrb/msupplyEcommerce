@@ -463,6 +463,7 @@
 
 <script>
 var attributes = [];
+$('.catalog-menu').addClass('active');
 function Save_product(){
 
   $("#btnSave").attr("disabled", "disabled");

@@ -69,12 +69,6 @@
 		
 												<!-- - - - - - - - - - - - - - End label - - - - - - - - - - - - - - - - -->
 		
-												<!-- - - - - - - - - - - - - - Countdown - - - - - - - - - - - - - - - - -->
-		
-												<div class="countdown" data-year="2016" data-month="11" data-day="6" data-hours="15" data-minutes="0" data-seconds="0"></div>
-		
-												<!-- - - - - - - - - - - - - - End countdown - - - - - - - - - - - - - - - - -->
-		
 												<!-- - - - - - - - - - - - - - Product description - - - - - - - - - - - - - - - - -->
 												
 												<div class="description">

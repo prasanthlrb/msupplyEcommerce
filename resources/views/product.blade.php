@@ -65,20 +65,16 @@
                                 </a>
                                 @foreach($Upload as $upload1)
                                     @if(!empty($upload1))
-                                    <a href="#" data-image="{{asset('/product_gallery').'/'.$upload1->resized_name}}" data-zoom-image="{{asset('/product_gallery').'/'.$upload1->filename}}">
+                                    <a href="#" data-image="{{asset('/product_gallery').'/'.$upload1->filename}}" data-zoom-image="{{asset('/product_gallery').'/'.$upload1->filename}}">
 
-                                        <img src="{{asset('/product_gallery').'/'.$upload1->resized_name}}" data-large-image="{{asset('/product_gallery').'/'.$upload1->resized_name}}" alt="">
+                                        <img src="{{asset('/product_gallery').'/'.$upload1->resized_name}}" data-large-image="{{asset('/product_gallery').'/'.$upload1->filename}}" alt="">
                                     </a>
-                                    @else
-                                    <a href="#" data-image="{{asset('/images/qv_img_1.jpg')}}" data-zoom-image="{{asset('/images/qv_large_1.jpg')}}">
-
-                                        <img src="{{asset('/images/qv_thumb_1.jpg')}}" data-large-image="{{asset('/images/qv_img_1.jpg')}}" alt="">
-
-                                    </a>
+             
                                     @endif
                                 @endforeach
                                     
                                 </div><!--/ .owl-carousel-->
+                                
 
                             </div><!--/ .product_preview-->
                             
@@ -163,17 +159,6 @@
 
                                         </tr>
 
-                                        <tr>
-
-                                            <td>Shipping Details: </td>
-                                            <td>@if($product1->shipping_type == 1)
-                                                <span class="success">Free Shipping</span>
-                                                @else
-                                                <span class="success">Paid Shipping ₹{{$product1->shipping_amount}}</span>
-                                                @endif</td>
-
-                                        </tr>
-
                                     </tbody>
 
                                 </table>
@@ -203,7 +188,60 @@
 {{ csrf_field() }}
 
                     
+<?php $arraydata=array(); ?>
+<?php $term_id=array(); ?>
+<?php $x=0; ?>
+@foreach($product_attribute as $data1)
+    <?php $arraydata[]=''.$data1->attribute.''; ?>
+@endforeach
+@foreach($product_attribute as $testTerms)
+@if($product1->id == $testTerms->product_id)
+<?php $term_id[]=''.$testTerms->terms_id.''; ?>
+@endif
+
+@endforeach
+                @foreach($attribute as $attri)
+                    @if(in_array($attri->id, $arraydata))
+                        <div class="description_section_2 v_centered">
+                            <span class="title">{{$attri->name}}:</span>
+                         
+                            <?php
+                             $term=array(); 
+
+                             
+                             ?>
+                            @foreach($product_attribute as $pro_attri)
+                           
+                           
+                              @if(!in_array($pro_attri->terms_id, $term ) && $attri->id == $pro_attri->attribute)
+                              
+                              @if(!in_array($pro_attri->terms_id, $term_id ) && $product1->id != $pro_attri->product_id)
+                              <a href="/product-advance-filter/{{$product1->id}}/{{$pro_attri->attribute}}/{{$pro_attri->terms_id}}" class="button_grey">{{$pro_attri->terms}}</a>
+                              @else
+            
+                              <a href="javascript:void(null)" class="button_grey active">{{$pro_attri->terms}}</a>
+                             
+                           
+                             
+                                @endif
                                 
+                                <?php 
+
+                                $term[]=$pro_attri->terms_id;
+                                  
+                                ?>
+                                
+                             
+                              @endif
+                             
+                             
+                              
+                              
+                            @endforeach
+                        </div>
+                        <br>
+                    @endif
+                @endforeach            
 
                             
                             <div class="description_section_2 v_centered">
@@ -213,7 +251,7 @@
 
                                 <div class="qty min clearfix">
                                     <button class="theme_button" type="button" data-direction="minus">-</button>
-                                    <input type="text" name="button_qty" value="1">
+                                    <input type="text" name="button_qty" value="1" id="button_qty">
                                     <button class="theme_button" type="button" data-direction="plus">+</button>
 
                                 </div>
@@ -226,11 +264,11 @@
 
                             <div class="buttons_row">
 
-                                <button type="button" onclick="addCart({{$product1->product_id}})" class="button_blue middle_btn">Add to Cart</button>
+                                <button type="button" onclick="addCart({{$product1->id}})" class="button_blue middle_btn">Add to Cart</button>
 
-                                <a href="/add-wishlist/{{$product1->product_id}}"><button type="button" class="button_dark_grey def_icon_btn middle_btn add_to_wishlist tooltip_container"><span class="tooltip top">Add to Wishlist</span></button></a>
+                                <a href="/add-wishlist/{{$product1->id}}"><button type="button" class="button_dark_grey def_icon_btn middle_btn add_to_wishlist tooltip_container"><span class="tooltip top">Add to Wishlist</span></button></a>
 
-                                <a href="/compare-product/{{$product1->product_id}}"><button type="button" class="button_dark_grey def_icon_btn middle_btn add_to_compare tooltip_container"><span class="tooltip top">Add to Compare</span></button></a>
+                                <a href="javascript:void(null)" onclick="addCompare({{$product1->id}})"><button type="button" class="button_dark_grey def_icon_btn middle_btn add_to_compare tooltip_container"><span class="tooltip top">Add to Compare</span></button></a>
 
                             </div>
 
@@ -667,4 +705,20 @@
     <script src="/js/fancybox/source/jquery.fancybox.pack.js"></script>
     <script src="/js/fancybox/source/helpers/jquery.fancybox-media.js"></script>
     <script src="/js/fancybox/source/helpers/jquery.fancybox-thumbs.js"></script>
+    <script>
+    		function addCart(id){
+                var qty  = $('#button_qty').val();
+			$.ajax({
+			  url : '/add-cart/'+id+'/'+qty,
+              type: "GET",
+            dataType: "JSON",
+             success: function(data)
+				{
+				 $('.total_price').text(data[0]);
+					 $('#open_shopping_cart').attr("data-amount",data[1]);
+					// window.location.href = "/cart";
+				}
+			});
+	}
+    </script>
 @endsection
