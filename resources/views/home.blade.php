@@ -41,7 +41,7 @@
 		
 														<div class="centered_buttons">
 		
-															<a href="#" class="button_dark_grey middle_btn quick_view" data-modal-url="modals/quick_view.html">Quick View</a>
+															<a href="#" class="button_dark_grey middle_btn quick_view" data-modal-url="/quick-view/{{$row->id}}">Quick View</a>
 		
 															<a href="#" class="button_blue middle_btn add_to_cart">Add to Cart</a>
 		
@@ -78,7 +78,7 @@
 												<!-- - - - - - - - - - - - - - Product description - - - - - - - - - - - - - - - - -->
 												
 												<div class="description">
-														<p><a href="#">{{$row->product_name}}</a></p>
+														<p><a href="/product/{{$row->id}}">{{$row->product_name}}</a></p>
 		
 													
 		
@@ -175,7 +175,7 @@
 		
 												<div class="description">
 		
-														<p><a href="#">{{$product_today[0]->product_name}}</a></p>
+														<p><a href="product/{{$product_today[0]->id}}">{{$product_today[0]->product_name}}</a></p>
 		
 													<div class="clearfix product_info">
 		

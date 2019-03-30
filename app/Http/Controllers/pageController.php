@@ -363,7 +363,7 @@ class pageController extends Controller
                                          if($product->shipping_type == 1){
                                              $output.='<td><span class="success">Free Shipping</span></td>';
                                          }else{
-                                             $output.='<td><span class="success">Paid Shipping AED '.$product->shipping_amount.'</span></td>';
+                                             $output.='<td><span class="success">Paid Shipping ₹ '.$product->shipping_amount.'</span></td>';
                                          }
                                      $output.='</tr>
                              </tbody>
@@ -375,9 +375,9 @@ class pageController extends Controller
                  </div>
                  <hr>';
      if($product->regular_price!=""){
-           $output.=' <p class="product_price"><s>AED'.$product->regular_price.'</s> <b class="theme_color">AED'.$product->sales_price.'</b></p>';
+           $output.=' <p class="product_price"><s>₹'.$product->regular_price.'</s> <b class="theme_color">₹'.$product->sales_price.'</b></p>';
      }else{
-        $output.=' <p class="product_price"><b class="theme_color">AED'.$product->sales_price.'</b></p>';
+        $output.=' <p class="product_price"><b class="theme_color">₹'.$product->sales_price.'</b></p>';
      }
                 
      $output.='<form method="post" id="termsData">'.csrf_field().'

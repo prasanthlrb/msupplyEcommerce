@@ -547,7 +547,7 @@
 									<ul class="list_of_links">
 												<?php if(isset($category)){?>
 											@foreach($category as $row)
-											<li><a href="#">{{$row->category_name}}</a></li>
+											<li><a href="/category/{{$row->id}}">{{$row->category_name}}</a></li>
 													@endforeach
 											<?php } ?>
 									</ul>
