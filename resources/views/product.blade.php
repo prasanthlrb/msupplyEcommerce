@@ -706,19 +706,6 @@
     <script src="/js/fancybox/source/helpers/jquery.fancybox-media.js"></script>
     <script src="/js/fancybox/source/helpers/jquery.fancybox-thumbs.js"></script>
     <script>
-    		function addCart(id){
-                var qty  = $('#button_qty').val();
-			$.ajax({
-			  url : '/add-cart/'+id+'/'+qty,
-              type: "GET",
-            dataType: "JSON",
-             success: function(data)
-				{
-				 $('.total_price').text(data[0]);
-					 $('#open_shopping_cart').attr("data-amount",data[1]);
-					// window.location.href = "/cart";
-				}
-			});
-	}
+    		
     </script>
 @endsection

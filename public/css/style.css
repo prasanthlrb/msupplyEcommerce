@@ -886,9 +886,9 @@
 
 		#back_to_top{
 			position: fixed;
-			top:700px;
-			right:15%;
-			font-size:17px;
+			top: 85%;
+			right: 5%;
+			font-size: 17px;
 			z-index: 120;
 		}
 

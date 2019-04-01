@@ -48,52 +48,16 @@ function getCartPage(){
         }
     });
 }
-function usecoupon(){
-    var termsData = new FormData($('#discount_form')[0]);
-    $.ajax({
-        url : '/use-coupon',
-        type: "POST",
-        data: termsData,
-        contentType: false,
-        processData: false,
-        dataType: "JSON",
+function updateCart(id){
+var cartQty = $('#cartQty'+id).val();
+ $.ajax({        
+        url : '/cart-update-value/'+id+'/'+cartQty,
+        type: "GET",
         success: function(data)
         {
-            alert(data);
-            //var result = data.split('|');
-            //$('.total_price').text(result[0]);
-            //$('#open_shopping_cart').attr("data-amount",result[1]);
+            getCartPage();
         }
     });
-}
-
-function couponCheck(){
-    var checkUser = $('#userCheck').val();
-    var couponcode = $('#couponcode').val();
-    if(couponcode){
-    if(checkUser){
-        $.ajax({        
-            url : '/check-coupon/'+couponcode,
-            type: "GET",
-            success: function(data)
-            {
-                console.log(data);
-                if(data[0] == '0'){
-                   
-                    toastr.success(data[1]);
-                   // $('.discount-next').after('<tr class="couponLabel"><td id="couponLabelTitle">Coupon Discount('+data.coupon_code+') </td>                <td id="couponLabelContent">'+data.amount+'</td>            </tr>');
-                   getCartPage();
-                }else{
-                    toastr.error(data[1]);
-                }
-            }
-        });
-    }else{
-        toastr.error('Please Login');
-    }
-}else{
-    toastr.error('Please Enter Valid Coupon Code');
-}
 }
                 
 </script>

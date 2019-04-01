@@ -336,14 +336,14 @@
 
 									<div class="nav_item size_4">
 
-										<a href="/account/wishlist" class="wishlist_button" data-amount="0"></a>
+										<a href="/account/wishlist" class="wishlist_button" data-amount="{{count(Cart::getContent())}}"></a>
 									
 									</div><!--/ .nav_item-->
 
 									
 									<div class="nav_item size_4">
 
-										<a href="/compare" class="compare_button" data-amount="0"></a>
+										<a href="/compare" class="compare_button" data-amount="{{count(Session::get('compare'))}}" id="compare_button"></a>
 										
 									</div><!--/ .nav_item-->
 									<!-- - - - - - - - - - - - - - End of main navigation - - - - - - - - - - - - - - - - -->
@@ -880,10 +880,23 @@ function addCompare(id){
 			type: "GET",
 			success: function(data)
 			{
-				console.log(id);
-			   //$('#cart-menu').html(data);
+				$('#compare_button').attr("data-amount",data);
 			}
 	   });
 }
+function addCart(id){
+                var qty  = $('#button_qty').val();
+			$.ajax({
+			  url : '/add-cart/'+id+'/'+qty,
+              type: "GET",
+            dataType: "JSON",
+             success: function(data)
+				{
+				 $('.total_price').text(data[0]);
+					 $('#open_shopping_cart').attr("data-amount",data[1]);
+					// window.location.href = "/cart";
+				}
+			});
+	}
 	</script>
 </html>

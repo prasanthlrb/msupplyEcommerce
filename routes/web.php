@@ -190,12 +190,12 @@ Route::group(['prefix' => 'account'],function( ){
     Route::post('/updateAddress','AccountController@updateAddress');
     Route::get('/vieworders/{id}','AccountController@vieworders');
 });
-
 Route::get('/get-compare','pageController@compare');
 Route::get('/add-compare/{id}','pageController@addCompare');
 Route::get('/remove-compare/{id}','pageController@removeCompare');
 Route::get('/compare',function(){
-    return view('compare');
+    $product = product::whereIn('id', Session::get('compare'))->get();
+    return view('compare',compact('product'));
 });
 
 //Cart Management
@@ -208,12 +208,12 @@ Route::get('/add-cart/{id}/{qty}', function ($id, $qty) {
         'quantity' => $qty,
     ));
     $total = Cart::getTotal();
-    $quantity = Cart::getTotalQuantity();
+    $quantity = count(Cart::getContent());
     return response()->json(array($total,$quantity)); 
 });
 Route::get('/get-cart', function () {
     $total = Cart::getTotal();
-    $cartTotalQuantity = Cart::getTotalQuantity();
+    $cartTotalQuantity = count(Cart::getContent());
     $data = $total . '|' . $cartTotalQuantity;
     return json_encode($data);
 });
@@ -235,7 +235,14 @@ Route::get('/remove-cart/{id}', function ($id) {
     Cart::remove($id);
     Session::forget('coupon');
 });
-
+Route::get('/cart-update-value/{id}/{value}', function ($id,$value) {
+    Cart::update($id, array(
+        'quantity' => array(
+            'relative' => false,
+            'value' => $value
+  ),
+    ));
+});
 Route::get('/cart',function(){
     return view('cart');
 });
@@ -336,8 +343,11 @@ Route::get('/cart-data', function(){
     <td data-title="Quantity">
         <div class="qty min clearfix">
             <button class="theme_button" data-direction="minus" onclick="updateqtyMinus('.$cartData->id.')">&#45;</button>
-            <input type="text" name="cartQty" id="cartQty" value="'.$cartData->quantity.'">
-            <button class="theme_button" data-direction="plus" onclick="updateqtyPlus('.$cartData->id.')">&#43;</button>
+            <input type="text" name="cartQty" id="cartQty'.$cartData->id.'" value="'.$cartData->quantity.'">
+            <button class="theme_button" data-direction="plus" onclick="updateqtyPlus('.$cartData->id. ')">&#43;</button>
+            <div class="left_side" style="margin-top: 12px;">
+        <a href="javascript:void(null)" onclick="updateCart('. $cartData->id.')" class="button_blue middle_btn">Update</a>
+    </div>
         </div>
     </td>
 
