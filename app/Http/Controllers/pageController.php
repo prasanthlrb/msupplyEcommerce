@@ -11,6 +11,7 @@ use App\category;
 use App\product;
 use App\upload;
 use Session;
+use App\transport;
 use Illuminate\Http\Request;
 
 class pageController extends Controller
@@ -284,7 +285,6 @@ class pageController extends Controller
         $product = product::find($id);
      
            $output='
-     
      <div id="quick_view" class="modal_window">
      
      <button class="close arcticmodal-close"></button>
@@ -299,10 +299,8 @@ class pageController extends Controller
      }else{ 
         $output.='<img src="images/qv_thumb_2.jpg" alt="">';
      } 
-     $output.='</div>
-                 
+     $output.='</div>         
                  <div class="product_preview" data-output="#qv_preview">
-     
                        <div class="owl_carousel" id="thumbnails">';
      $output.='<img src="'.asset('/product_img').'/'.$product->product_image.'" data-large-image="'.asset('/product_img').'/'.$product->product_image.'" alt="">';
      foreach($upload as $upload1){
@@ -313,13 +311,9 @@ class pageController extends Controller
      }                   
      }
      $output.='</div>
-     
                  </div>
-                 
                  <div class="v_centered">
-     
                        <span class="title">Share this:</span>
-     
                        <div class="addthis_widget_container">
                              <!-- AddThis Button BEGIN -->
                              <div class="addthis_toolbox addthis_default_style addthis_32x32_style">
@@ -435,13 +429,12 @@ public function removeCompare($id){
 }
 
 public function addCompare($id){
-    // if(Session::has('compare')){
-    //     Session::push('compare', $id);
-    // }else{
-    //     Session::set('compare', $id);
-    // }
-    if(!in_array($id, Session::get('compare'))){
-        Session::push('compare',$id);
+    if(Session::has('compare')){
+        if(!in_array($id, Session::get('compare'))){
+            Session::push('compare',$id);
+        }
+    }else{
+        Session::push('compare', $id);
     }
     // $product = $id;
     // $arraydata=array();
@@ -454,6 +447,130 @@ public function addCompare($id){
     //     Session::push('compare', $arraydata);
     // }
      return response()->json(count(Session::get('compare'))); 
+}
+
+public function transport(){
+$transport = transport::all();
+//return response()->json($transport);
+return view('transport',compact('transport'));
+}
+
+
+public function transportPopup($id){
+    $id = 3;
+    $upload = upload::where('product_id', $id)->get();
+    $product = product::find($id);
+    $output='
+ <div id="quick_view" class="modal_window">
+ <button class="close arcticmodal-close"></button>
+ <div class="clearfix">
+ <div class="single_product">
+ <div class="image_preview_container" id="qv_preview">';
+ if($product->product_image != ""){
+    $output.='<img id="img_zoom" data-zoom-image="images/product_img5.JPG" src="'.asset('/product_img').'/'.$product->product_image.'" alt="">';
+ }else{ 
+    $output.='<img src="images/qv_thumb_2.jpg" alt="">';
+ } 
+ $output.='</div>         
+             <div class="product_preview" data-output="#qv_preview">
+             <div class="owl_carousel" id="thumbnails">';
+ $output.='<img src="'.asset('/product_img').'/'.$product->product_image.'" data-large-image="'.asset('/product_img').'/'.$product->product_image.'" alt="">';
+ foreach($upload as $upload1){
+ if(!empty($upload1)){
+     $output.='<img src="'.asset('/product_gallery').'/'.$upload1->filename.'" data-large-image="'.asset('/product_gallery').'/'.$upload1->filename.'" alt="">';
+ }else{ 
+    $output.='<img src="images/qv_thumb_2.jpg" data-large-image="images/qv_img_2.jpg" alt="">';
+ }                   
+ }
+ $output.='</div>
+             </div>
+             
+       </div>
+       <div class="single_product_description">
+
+        <h3>Select Transport(shipping)</h3>
+
+        <div class="theme_box">
+
+            <p class="form_caption">Enter your destination to get a shipping estimate.</p>
+
+            <form id="estimate_shipping" class="type_2">
+
+                <ul>
+
+                    <li class="row">
+                        
+                        <div class="col-xs-12">
+
+                            <label>Country</label>
+
+                            <div class="custom_select">
+
+                                <select>
+                                    
+                                    <option value="Australia">Australia</option>
+                                    <option value="Austria">Austria</option>
+                                    <option value="Argentina">Argentina</option>
+                                    <option value="Canada">Canada</option>
+                                    <option selected value="USA">USA</option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                    </li>
+
+                    <li class="row">
+                        
+                        <div class="col-lg-7 col-md-6">
+
+                            <label>State/Province</label>
+
+                            <div class="custom_select">
+
+                                <select>
+
+                                    <option value="Alabama">Alabama</option>
+                                    <option value="Illinois">Illinois</option>
+                                    <option value="Kansas">Kansas</option>
+
+                                </select>
+
+                            </div>
+
+                        </div><!--/ [col] -->
+
+                        <div class="col-lg-5 col-md-6">
+
+                            <label for="postal_code">Zip/Postal Code</label>
+                            <input type="text" name="" id="postal_code">
+
+                        </div><!--/ [col] -->
+
+                    </li>
+
+                </ul>
+
+            </form>
+
+        </div><!--/ .theme_box -->
+
+        <footer class="bottom_box">
+
+            <button type="submit" form="estimate_shipping" class="button_grey middle_btn">Get a Quote</button>
+
+        </footer><!--/ .bottom_box -->
+
+    </section><!--/ [col] -->  
+       </div>
+ </div>
+ 
+ </div>
+ ';  
+ 
+    echo $output;
 }
 
 }

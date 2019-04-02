@@ -41,6 +41,7 @@
                     <th>vehicle Name</th>                   
                     <th>Per Kmpl Price</th>
                     <th>vehicle Image</th>                   
+                    <th>Other Rate</th>
                     <th>Edit</th>
                     <th>Delete</th>
                   </tr>
@@ -54,7 +55,7 @@
                     <td style="text-align:center;font-weight:700">₹ {{$row->price}}</td>
                     <td><img style="width: 100px;" src="{{asset('transport/').'/'.$row->vehicle_image}}" alt=""></td>
                     
-                    
+                    <td style="text-align:center;font-weight:700">₹ {{$row->other}}</td>
                     <td class="text-center" onclick="editCat({{$row->id}})"><i class="ft-edit"></i></td>
                     <td class="text-center" onclick="deleteCat({{$row->id}})"><i class="ft-trash-2"></i></td>
                   </tr>
@@ -66,7 +67,8 @@
                        <th>S No</th>
                     <th>vehicle Name</th>                   
                     <th>Per Kmpl Price</th>
-                    <th>vehicle Image</th>                   
+                    <th>vehicle Image</th>   
+                    <th>Other Rate</th>                
                     <th>Edit</th>
                     <th>Delete</th>
                   </tr>
@@ -108,6 +110,13 @@
             <div class="col-md-9">
               <input type="text" class="form-control" placeholder="Enter kmpl price"
               name="price" id="price">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-3 label-control" for="projectinput1">Other Rate</label>
+            <div class="col-md-9">
+              <input type="text" class="form-control" placeholder="Enter Other Rate"
+              name="other_rate" id="other_rate">
             </div>
           </div>
           <div class="form-group row">
@@ -205,6 +214,7 @@
           $('input[name=vehicle_name]').val(data.vehicle_name);
           $('input[name=price]').val(data.price);
           $('input[name=vehicle_image1]').val(data.vehicle_image);
+          $('input[name=other_rate]').val(data.other);
           $('input[name=id]').val(id);
           $('#brand_model').modal('show');
           action_type = 2;

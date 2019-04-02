@@ -49,7 +49,7 @@
 		
 														<a href="#" class="button_dark_grey middle_btn def_icon_btn add_to_wishlist tooltip_container"><span class="tooltip right">Add to Wishlist</span></a>
 		
-														<a href="#" class="button_dark_grey middle_btn def_icon_btn add_to_compare tooltip_container"><span class="tooltip left">Add to Compare</span></a>
+														<a href="javascript:void(null)" onclick="addCompare({{$row->id}})" class="button_dark_grey middle_btn def_icon_btn add_to_compare tooltip_container"><span class="tooltip left">Add to Compare</span></a>
 		
 													</div><!--/ .actions_wrap-->
 													
@@ -139,7 +139,7 @@
 		
 														<a href="#" class="button_dark_grey middle_btn def_icon_btn add_to_wishlist tooltip_container"><span class="tooltip right">Add to Wishlist</span></a>
 		
-														<a href="#" class="button_dark_grey middle_btn def_icon_btn add_to_compare tooltip_container"><span class="tooltip left">Add to Compare</span></a>
+														<a href="javascript:void(null)" onclick="addCompare({{$product_today[0]->id}})" class="button_dark_grey middle_btn def_icon_btn add_to_compare tooltip_container"><span class="tooltip left">Add to Compare</span></a>
 		
 													</div><!--/ .actions_wrap-->
 													

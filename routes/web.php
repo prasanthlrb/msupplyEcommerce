@@ -30,7 +30,7 @@ Route::get('/product-advance-filter/{product}/{attr}/{terms}','categoryControlle
 Route::get('/wishlist','pageController@wishlist'); 
 Route::get('/add-wishlist/{id}','pageController@addWishlist');
 Route::get('/remove-wish/{id}','pageController@removewish');
-
+Route::get('/transports','pageController@transport'); 
 Route::get('/sms-demo', function () {
    try{
 $requestParams = array(
@@ -51,7 +51,6 @@ $apiUrl = rtrim($apiUrl, "&");
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $apiUrl);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
 curl_exec($ch);
 curl_close($ch);
    }
@@ -59,16 +58,14 @@ curl_close($ch);
        echo $e->getMessage();
    }
 });
-
-
-
+Route::get('/transport-popup/{id}','pageController@transportPopup');
 Auth::routes(); 
 Auth::routes(['verify' => true]);
 Route::group(['prefix' => 'admin'],function(){
-
     Route::get('/login', function () {
         return view('admin/app');
     });
+
 //brands
 Route::get('/brand','productController@viewBrand');
 Route::get('/edit_brand/{id}','productController@editBrand');
@@ -194,7 +191,12 @@ Route::get('/get-compare','pageController@compare');
 Route::get('/add-compare/{id}','pageController@addCompare');
 Route::get('/remove-compare/{id}','pageController@removeCompare');
 Route::get('/compare',function(){
-    $product = product::whereIn('id', Session::get('compare'))->get();
+    if(Session::has('compare')){
+
+        $product = product::whereIn('id',Session::get('compare'))->get();
+    }else{
+        $product= [];
+    }
     return view('compare',compact('product'));
 });
 
@@ -245,6 +247,14 @@ Route::get('/cart-update-value/{id}/{value}', function ($id,$value) {
 });
 Route::get('/cart',function(){
     return view('cart');
+});
+Route::get('/cart-item',function(){
+    $cartCollection = Cart::getContent();
+    $output = '';
+    foreach($cartCollection as $row){
+        $output .='<option value="'.$row->id.'">'.$row->name.'</option>';
+    }
+    echo $output;
 });
 Route::get('/cart-menu', function(){
     $cartCollection = Cart::getContent();

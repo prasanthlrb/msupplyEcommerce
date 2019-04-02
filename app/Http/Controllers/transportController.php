@@ -22,6 +22,7 @@ class transportController extends Controller
        $transport = new transport;
        $transport->vehicle_name = $request->vehicle_name;
        $transport->price = $request->price; 
+       $transport->other = $request->other_rate; 
        $transport->vehicle_image = $fileName;
        $transport->save();
         return response()->json(['message' => 'Successfully Save'], 200); 
@@ -36,6 +37,7 @@ class transportController extends Controller
         $fileName = null;
         $transport = transport::find($request->id);
         $transport->vehicle_name = $request->vehicle_name;
+        $transport->other = $request->other_rate;
         $transport->price = $request->price;
                     if ($request->file('vehicle_image') != "") {
                    if( $request->vehicle_image1 != ""){

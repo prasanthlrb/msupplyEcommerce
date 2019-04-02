@@ -241,6 +241,7 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
       <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
             <li class=" nav-item"><a href="#"><i class="la la-support"></i><span class="menu-title">Dashboard</span></a>
             </li>
+           
 
 
         <li class="nav-item"><a href="#"><i class="la la-user-plus"></i><span class="menu-title">Customer</span></a>
@@ -297,6 +298,8 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
               <a class="menu-item" href="/admin/faq/">FAQ</a>
             </li>
           </ul>
+        </li>
+        <li class="nav-item"><a href="/admin/transport"><i class="la la-truck"></i><span class="menu-title">Transport</span></a>
         </li>
         <li class=" nav-item"><a href="#"><i class="la la-gear"></i><span class="menu-title">Settings</span></a>
           <ul class="menu-content">

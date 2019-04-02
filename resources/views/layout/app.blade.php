@@ -343,7 +343,7 @@
 									
 									<div class="nav_item size_4">
 
-										<a href="/compare" class="compare_button" data-amount="{{count(Session::get('compare'))}}" id="compare_button"></a>
+										<a href="/compare" class="compare_button" data-amount="{{Session::has('compare') ? count(Session::get('compare')) : '0'}}" id="compare_button"></a>
 										
 									</div><!--/ .nav_item-->
 									<!-- - - - - - - - - - - - - - End of main navigation - - - - - - - - - - - - - - - - -->
@@ -875,11 +875,13 @@
    });
 }
 function addCompare(id){
+	alert(id);
 	$.ajax({        
 			url : '/add-compare/'+id,
 			type: "GET",
 			success: function(data)
 			{
+				console.log(data);
 				$('#compare_button').attr("data-amount",data);
 			}
 	   });
