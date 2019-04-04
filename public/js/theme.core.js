@@ -680,7 +680,7 @@ var Core = (function(Core){
 					$.arcticmodal({
 						url : $(this).data('modal-url')
 					});
-
+					perKm = $(this).data('modal-id');
 					event.preventDefault();
 
 				});

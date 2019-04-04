@@ -573,4 +573,15 @@ public function transportPopup($id){
     echo $output;
 }
 
+public function getTransportData($id){
+    $transport = transport::find($id);
+    return response()->json($transport);
+}
+
+public function transportDetails(Request $request){
+    Session::forget('transport');
+    Session::push('transport',$request->datas['data']);
+    return redirect('checkout');
+}
+
 }

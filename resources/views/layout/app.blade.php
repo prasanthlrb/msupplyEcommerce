@@ -320,7 +320,7 @@
 											
 												<li class="account_menu"><a href="/">My Account</a></li>
 												<li class="cart_menu"><a href="/cart">Shopping Cart</a></li>
-												<li class="checkout_menu"><a href="shop_checkout.html">Checkout</a></li>
+												<li class="checkout_menu"><a href="/transports">Checkout</a></li>
 												<li class="contact_menu"><a href="/contact">Contact Us</a></li>
 											
 
@@ -834,7 +834,6 @@
 		<script src="{{asset('js/theme.core.js')}}"></script>
 		
 	</body>
-
 	@yield('extra-js')
 	<script>
 		$(document).ready(function(){

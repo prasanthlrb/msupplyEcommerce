@@ -31,6 +31,7 @@ Route::get('/wishlist','pageController@wishlist');
 Route::get('/add-wishlist/{id}','pageController@addWishlist');
 Route::get('/remove-wish/{id}','pageController@removewish');
 Route::get('/transports','pageController@transport'); 
+Route::get('/get-transport-data/{id}','pageController@getTransportData'); 
 Route::get('/sms-demo', function () {
    try{
 $requestParams = array(
@@ -250,12 +251,11 @@ Route::get('/cart',function(){
 });
 Route::get('/cart-item',function(){
     $cartCollection = Cart::getContent();
-    $output = '';
-    foreach($cartCollection as $row){
-        $output .='<option value="'.$row->id.'">'.$row->name.'</option>';
-    }
-    echo $output;
+    
+    return response()->json($cartCollection);
 });
+
+Route::post('/transportDetails-save','pageController@transportDetails');
 Route::get('/cart-menu', function(){
     $cartCollection = Cart::getContent();
     $total = Cart::getTotal();
@@ -430,3 +430,7 @@ Route::get('/cart-data', function(){
 }
 print $output;
 });
+Route::get('/shipping', 'AccountController@shipping');
+Route::get('/billing', 'AccountController@billing');
+Route::post('createShipping', 'AccountController@createShipping');
+Route::post('createBilling', 'AccountController@createBilling');

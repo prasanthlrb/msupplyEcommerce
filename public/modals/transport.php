@@ -1,6 +1,6 @@
 <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/forms/selects/select2.min.css">
 <div id="quick_view" class="modal_window">
-        <button class="close arcticmodal-close"></button>
+        <button class="close arcticmodal-close" id="close_button"></button>
         <div class="clearfix">
         <div class="row">
             <div class="col-sm-6 col-md-6">
@@ -15,19 +15,19 @@
             <div class="col-sm-6 col-md-6">
    
           <div class="single_product_description">
-          <a href="">If you know About Shipping Location, <span style="weight:700;color:#ff4557">please click to Skip.</span></a>  
+          <!-- <a href="">If you know About Shipping Location, <span style="weight:700;color:#ff4557">please click to Skip.</span></a>   -->
    
            <div class="theme_box">
    
-             <a href=""><p class="form_caption">Select Shipping Cart item.</p></a>  
+            <p class="form_caption">Select Shipping Cart item.</p>
    
                <form id="estimate_shipping" class="type_2">
    
                    <ul>
-                        <div class="form-group row">
+                        <li class="form-group row">
                               
                                 <div class="col-md-12">
-                                  <select style="width:100%" name="category[]" id="category" class="select2 form-control col-md-12" multiple="multiple" placeholder="search for Category">
+                                  <select style="width:100%" name="cartItem[]" id="cartItem" class="select2 form-control col-md-12" multiple="multiple" placeholder="search for Category">
                                  
                                   <optgroup label="Shopping Cart Item" id="cart-item">
 
@@ -36,61 +36,21 @@
                                   
                                   </select>
                                 </div>
-                              </div>
-
+</li>
+    <br>
    
                        <li class="row">
                            
                            <div class="col-xs-12">
    
-                               <label>Country</label>
-   
-                               <div class="custom_select">
-   
-                                   <select>
-                                       
-                                       <option value="Australia">Australia</option>
-                                       <option value="Austria">Austria</option>
-                                       <option value="Argentina">Argentina</option>
-                                       <option value="Canada">Canada</option>
-                                       <option selected value="USA">USA</option>
-   
-                                   </select>
-   
-                               </div>
-   
+                              <p>Per Km Rate (<span class="perKmpl"></span>) X Distance (<span class="distance_price"></span>)</p>
+                                <p>Other <span class="other_rate"></span></p>
+                                <h2>Total Transport Price: <span class="total_tran_price"></span></h2>
                            </div>
    
                        </li>
    
-                       <li class="row">
-                           
-                           <div class="col-lg-7 col-md-6">
-   
-                               <label>State/Province</label>
-   
-                               <div class="custom_select">
-   
-                                   <select>
-   
-                                       <option value="Alabama">Alabama</option>
-                                       <option value="Illinois">Illinois</option>
-                                       <option value="Kansas">Kansas</option>
-   
-                                   </select>
-   
-                               </div>
-   
-                           </div><!--/ [col] -->
-   
-                           <div class="col-lg-5 col-md-6">
-   
-                               <label for="postal_code">Zip/Postal Code</label>
-                               <input type="text" name="" id="postal_code">
-   
-                           </div><!--/ [col] -->
-   
-                       </li>
+                    
    
                    </ul>
    
@@ -100,7 +60,8 @@
    
            <footer class="bottom_box">
    
-               <button type="submit" form="estimate_shipping" class="button_grey middle_btn">Get a Quote</button>
+               <button type="button" class="button_grey middle_btn" id="otherVehicle">Other Vehicle</button>
+               <button type="button" class="button_grey middle_btn" id="gotoShipping">Go to Shipping</button>
    
            </footer>
    
@@ -113,13 +74,40 @@
     <script src="../../../app-assets/vendors/js/forms/select/select2.full.min.js" type="text/javascript"></script>
     <script src="../../../app-assets/js/scripts/forms/select/form-select2.js" type="text/javascript"></script>
 <script>
+    
 $(document).ready(function(){
     $.ajax({        
         url : '/cart-item',
         type: "GET",
         success: function(data)
         {
-            $('#cart-item').html(data);
+            var x =0;
+            console.log(data);
+            //$('#cart-item').html(data);
+            var card_data = '';
+            $.each( data, function( key, value ) {
+                if(jQuery.inArray(value.id, transportDataFinal.cart_item) !== -1){
+
+                }else{
+                    card_data += '<option value="'+value.id+'">'+value.name+' </option>';
+                }
+                
+                x++;
+            });
+            cardItemCount = x;
+            $('#cart-item').html(card_data);
+        }
+    });
+    $.ajax({        
+        url : '/get-transport-data/'+perKm,
+        type: "GET",
+        success: function(data)
+        {
+            transportData.transport_id =perKm;
+            transportData.price =data.price;
+            transportData.other =data.other;
+            $('.perKmpl').text('₹'+data.price)
+            $('.other_rate').text('₹'+data.other)
         }
     });
 });
@@ -161,9 +149,13 @@ $(document).ready(function(){
         marker.remove();
         addMarker(e.lngLat,'click');
         var current_loc ='78.10098082241404,9.959194195481757;';
-        var newCoords = current_loc + '78.09465931140852,9.893505079270398';
+        //var newCoords = current_loc + '78.09465931140852,9.893505079270398';
+        transportData.lat = e.lngLat.lat;
+        transportData.lng = e.lngLat.lng;
+
+        var newCoords = current_loc + e.lngLat.lng+','+e.lngLat.lat;
         getMatch(newCoords);
-       // console.log(e.lngLat.lat);
+       console.log(e.lngLat.lat+','+e.lngLat.lng);
         // document.getElementById("lat").value = e.lngLat.lat;
         // document.getElementById("lng").value = e.lngLat.lng;
     
@@ -193,6 +185,12 @@ $(document).ready(function(){
             // get distance and duration
            // instructions.insertAdjacentHTML('beforeend', '<p>' +  'Distance: ' + distance.toFixed(2) + ' km<br>Duration: ' + duration.toFixed(2) + ' minutes' + '</p>');
             console.log('Distance: ' + distance.toFixed(2) + ' km<br>Duration: ' + duration.toFixed(2) + ' minutes');
+            transportData.distance = distance.toFixed(2);
+            $('.distance_price').text(distance.toFixed(2)+' km');
+            var calculateRate = Math.round(transportData.price * distance.toFixed(2));
+            var subTotal = parseInt(calculateRate) + parseInt(transportData.other);
+            transportData.total = subTotal;
+            $('.total_tran_price').text('₹'+subTotal);
             // add the route to the map
             //addRoute(coords);
           //  console.log(coordinates);
@@ -233,23 +231,40 @@ $(document).ready(function(){
         document.getElementById("lng").value = lngLat.lng;
         console.log('lng: ' + lngLat.lng + '<br />lat: ' + lngLat.lat);
     }
-
-    // $('#signupForm').submit(function(event){
-    //     event.preventDefault();
-    //     var lat = $('#lat').val();
-    //     var lng = $('#lng').val();
-    //     var url = 'locations_model.php?add_location&lat=' + lat + '&lng=' + lng;
-        // $.ajax({
-        //     url: url,
-        //     method: 'GET',
-        //     dataType: 'json',
-        //     success: function(data){
-        //         alert(data);
-        //         location.reload();
-        //     }
-        // });
-    // });
-
     document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
+
+    $('#gotoShipping').click(function(){
+        var cartItem  = $('#cartItem').val();
+        if(cartItem != null){
+            // transportData.cart_item = cartItem;
+            // console.log(transportData);
+            // transportDataFFinal.selected_id = transportData;
+            // transportSuccess();
+        }else{
+            alert("Please Select Shipping Cart Item");
+        }
+        //$('#close_button').trigger('click');
+    });
+
+    $('#otherVehicle').click(function(){
+        var cartItem  = $('#cartItem').val();
+        if(cartItem != null){
+            $.each( cartItem, function( key, value ) {
+                transportDataFinal.cart_item.push(value);
+            });
+            transportData.cart_item = cartItem;
+            var dataFinal ={
+            'selected_id':transportData.transport_id,
+            'selected_data':transportData
+            };
+            console.log(transportData);
+            transportDataFinal.data.push(dataFinal);
+            transportSuccess(transportData.transport_id);
+            $('#close_button').trigger('click');
+        }else{
+            alert("Please Select Shipping Cart Item");
+        }
+        //$('#close_button').trigger('click');
+    });
 
 </script>

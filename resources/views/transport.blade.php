@@ -31,8 +31,6 @@ display: none !important;
 <div class="secondary_page_wrapper">
 
     <div class="container">
-
-        
 					<section class="section_offset">
 
 						<h3 class="offset_title">1. Checkout </h3>
@@ -146,7 +144,7 @@ display: none !important;
                                                             </td>
                                                             <td>
                     
-                                                                <button type="button"  data-modal-url="/modals/transport.php" class="button_blue">Select</button>
+                                                                <button type="button" id="transportSelect{{$row->id}}"data-modal-id="{{$row->id}}"  data-modal-url="/modals/transport.php" class="button_blue">Select</button>
                     
                                                             </td>
                     
@@ -189,7 +187,7 @@ display: none !important;
 
 											<div class="right_side v_centered">
 
-												<button type="submit" form="login_form" class="button_blue middle_btn hide_transport">Continue</button>
+												<button type="submit" id="gotoNext" class="button_blue middle_btn hide_transport">Continue</button>
 
 											
 
@@ -220,7 +218,40 @@ display: none !important;
 <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.3.0/mapbox-gl-geocoder.min.js'></script>
 <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.0/mapbox-gl-draw.js'></script>
 <script type="text/javascript">
+var perKm = 0;
+var cardItemCount;
+var transportDataFinal ={'data':[],'cart_item':[]};
+var transportData = {
+    'cart_item':'',
+    'price':'',
+    'distance':'',
+    'other':'',
+    'transport_id':'',
+    'lat':'',
+    'lng':'',
+    'total':''
+}
 
+function transportSuccess(tran_id){
+  $('#transportSelect'+tran_id).addClass('button_dark_grey ');
+  $('#transportSelect'+tran_id).attr('disabled', true);
+  console.log(transportDataFinal);
+  transportData = {
+    'cart_item':'',
+    'price':'',
+    'distance':'',
+    'other':'',
+    'transport_id':'',
+    'lat':'',
+    'lng':'',
+    'total':''
+}
+console.log(cardItemCount);
+console.log(transportDataFinal.cart_item.length);
+if(cardItemCount == transportDataFinal.cart_item.length){
+    $('#gotoNext').removeClass('hide_transport');
+}
+}
     $(document).ready(function(){
         $('.select_transport').click(function(){
             var value = $(this).val();
@@ -234,6 +265,22 @@ display: none !important;
         });
     });
 
+    $('#gotoNext').click(function(){
+        $.ajax({
+                url : '/transportDetails-save',
+                type: "POST",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "datas": transportDataFinal
+                    },
+                dataType: "JSON",
+                success: function(data)
+                {    
+                    console.log(data);
+                }
 
+        });
+
+    });
 </script>
 @endsection

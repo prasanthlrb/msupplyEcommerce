@@ -397,7 +397,7 @@
 
             <div class="description">
 
-                <a href="/product-view/{{$r_product->id}}">{{$r_product->product_name}}</a>
+                <a href="/product/{{$r_product->id}}">{{$r_product->product_name}}</a>
 
                 <div class="clearfix product_info">
 
