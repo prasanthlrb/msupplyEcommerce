@@ -82,9 +82,21 @@
 
 										<div class="col-sm-6">
 											
-											<label for="city" class="required">City</label>
-											<input value="<?php echo old('city'); ?>" type="text" name="city" id="city">
-											<label style="color:red;"><?php echo $errors->first('city'); ?></label>
+											<label class="required"> City </label>
+
+											<div class="custom_select">
+
+												<select name="state" id="state">
+												@if (old('state') != "")
+												<option value="<?php echo old('state'); ?>"><?php echo old('state'); ?></option>
+												@else
+													<option value="Abu Dhabi">Abu Dhabi</option>
+											
+												@endif
+												</select>
+												<label style="color:red;"><?php echo $errors->first('state'); ?></label>
+
+											</div>
 
 										</div>
 
@@ -98,13 +110,9 @@
 												@if (old('state') != "")
 												<option value="<?php echo old('state'); ?>"><?php echo old('state'); ?></option>
 												@else
-													<option value="Abu Dhabi">Abu Dhabi</option>
-													<option value="Ajman">Ajman</option>
-													<option value="Sharjah">Sharjah</option>
-													<option value="Dubai">Dubai</option>
-													<option value="Fujairah">Fujairah</option>
-													<option value="Ras Al Khaimah">Ras Al Khaimah</option>
-													<option value="Umm Al Quwain">Umm Al Quwain</option>
+													<option value="Tamil Nadu">Tamil Nadu</option>
+													<option value="Other state">Other state</option>
+											
 												@endif
 												</select>
 												<label style="color:red;"><?php echo $errors->first('state'); ?></label>
@@ -135,7 +143,7 @@
 												@if (old('country') != "")
 												<option value="<?php echo old('country'); ?>"><?php echo old('country'); ?></option>
 												@else
-												<option value="UAE">UAE</option>
+												<option value="India">India</option>
 												@endif
 												</select>
 												<label style="color:red;"><?php echo $errors->first('country'); ?></label>
@@ -145,19 +153,7 @@
 										</div><!--/ [col] -->
 
 									</li><!--/ .row -->
-                                    <li class="row">
-
-										<div class="col-xs-12">
-											<label for="Address Type" class="required">Address Type :</label>
-										<br>
-											<input {{ (old('address_type') == '1') ? 'checked' : '' }} value="1" type="radio" checked name="address_type" id="address_type_1">
-											<label for="address_type_1">Home</label>
-
-											<input {{ (old('address_type') == '2') ? 'checked' : '' }} value="2" type="radio" name="address_type" id="address_type_2">
-											<label for="address_type_2">Work</label>
-										</div>
-
-									</li>
+                                 
 
                                     <br>
                             </ul>

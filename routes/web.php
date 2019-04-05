@@ -430,6 +430,7 @@ Route::get('/cart-data', function(){
 }
 print $output;
 });
+Route::get('/checkout', 'AccountController@checkout'); 
 Route::get('/shipping', 'AccountController@shipping');
 Route::get('/billing', 'AccountController@billing');
 Route::post('createShipping', 'AccountController@createShipping');

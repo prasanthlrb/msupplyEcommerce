@@ -18,7 +18,38 @@ class AccountController extends Controller
         return view('customer.dashboard');
     }
     public function shipping(){
-        return view('shipping');
+        $city =[
+            'Chennai',
+            'Coimbatore',
+            'Madurai',
+            'Tiruchirappalli',
+            'Salem',
+            'Tiruppur',
+            'Erode',
+            'Tirunelveli',
+            'Vellore',
+            'Thoothukkudi',
+            'Dindigul',
+            'Thanjavur',
+            'Karur',
+            'Sivakasi',
+            'Ranipet',
+            'Udhagamandalam',
+            'Hosur',
+            'Nagercoil',
+            'Kanchipuram',
+            'Namakkal',
+            'Sivaganga',
+            'Neyveli',
+            'Cuddalore',
+            'Kumbakonam',
+            'Tiruvannamalai',
+            'Pollachi',
+            'Virudunagar',
+            'Pudukottai',
+            'Nagapattinam'
+        ];
+        return view('shipping',compact('city'));
     }
     public function billing(){
         return view('billing');
@@ -71,5 +102,27 @@ class AccountController extends Controller
         return redirect('/checkout');
        
      }
+
+    public function checkout()
+    {
+
+        $User_Shipping = order_detail::where('customer_id', Auth::user()->id)->whereNotNull('address_type')->get();
+        if ($User_Shipping->count() > 0) {
+            $User_Billing = order_detail::where('customer_id', Auth::user()->id)->whereNull('address_type')->get();
+            if ($User_Billing->count() > 0) {
+                $shipping = order_detail::where('customer_id', Auth::user()->id)->whereNotNull('address_type')->get();
+                $billing = order_detail::where('customer_id', Auth::user()->id)->whereNull('address_type')->get();
+                $getCart = Cart::getContent();
+                $product_data = product_data::all();
+
+                return view('checkout', compact('getCart', 'product_data', 'shipping', 'billing'));
+                //return response()->json($User_Shipping); 
+            } else {
+                return redirect('/billing');
+            }
+        } else {
+            return redirect('/shipping');
+        }
+    }
 
 }
