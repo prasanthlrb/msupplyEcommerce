@@ -1,4 +1,7 @@
 @extends('layout.app')
+@section('extra-css')
+<link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/forms/selects/select2.min.css">
+@endsection
 @section('content')
 
 <!-- - - - - - - - - - - - - - Page Wrapper - - - - - - - - - - - - - - - - -->
@@ -82,11 +85,20 @@
 
 										<div class="col-sm-6">
 											
-											<label for="city" class="required">City</label>
-											<input value="<?php echo old('city'); ?>" type="text" name="city" id="city">
-											<label style="color:red;"><?php echo $errors->first('city'); ?></label>
+											<label class="required"> City </label>
 
-										</div>
+										
+											<select style="width:100%" name="city" id="city" class="select2 form-control col-md-12" placeholder="search for Category">
+												
+												@foreach($citys as $data)
+												<option value="{{$data}}">{{$data}}</option>
+												@endforeach
+										
+											
+											</select>
+
+											
+										</div>>
 
 										<div class="col-sm-6">
 
@@ -98,13 +110,9 @@
 												@if (old('state') != "")
 												<option value="<?php echo old('state'); ?>"><?php echo old('state'); ?></option>
 												@else
-													<option value="Abu Dhabi">Abu Dhabi</option>
-													<option value="Ajman">Ajman</option>
-													<option value="Sharjah">Sharjah</option>
-													<option value="Dubai">Dubai</option>
-													<option value="Fujairah">Fujairah</option>
-													<option value="Ras Al Khaimah">Ras Al Khaimah</option>
-													<option value="Umm Al Quwain">Umm Al Quwain</option>
+													<option value="Tamil Nadu">Tamil Nadu</option>
+													<option value="Other state">Other state</option>
+											
 												@endif
 												</select>
 												<label style="color:red;"><?php echo $errors->first('state'); ?></label>
@@ -119,9 +127,9 @@
 
 										<div class="col-sm-6">
 
-											<label for="postal_code" class="required">Zip/Postal Code</label>
-											<input value="<?php echo old('postal_code'); ?>" type="text" name="postal_code" id="postal_code">
-											<label style="color:red;"><?php echo $errors->first('postal_code'); ?></label>
+											<label for="zip" class="required">Zip/Postal Code</label>
+											<input value="<?php echo old('zip'); ?>" type="text" name="zip" id="zip">
+											<label style="color:red;"><?php echo $errors->first('zip'); ?></label>
 
 										</div><!--/ [col] -->
 
@@ -135,7 +143,7 @@
 												@if (old('country') != "")
 												<option value="<?php echo old('country'); ?>"><?php echo old('country'); ?></option>
 												@else
-												<option value="UAE">UAE</option>
+												<option value="India">India</option>
 												@endif
 												</select>
 												<label style="color:red;"><?php echo $errors->first('country'); ?></label>
@@ -168,5 +176,8 @@
 				</div><!--/ .container-->
 
 			</div><!--/ .page_wrapper-->
-
+			@section('extra-js')
+			<script src="../../../app-assets/vendors/js/forms/select/select2.full.min.js" type="text/javascript"></script>
+			<script src="../../../app-assets/js/scripts/forms/select/form-select2.js" type="text/javascript"></script>
+			@endsection
 @endsection

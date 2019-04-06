@@ -18,7 +18,7 @@
 	  padding: 10px;
 	  margin-left: 10px;
 	  margin-top: 15px;
-	  border: 2px solid #93c4e0f7;
+	  border: 2px solid #58585a;
 	  height: 220px;
 	}
 	.shipping-details{
@@ -29,6 +29,12 @@
 	  padding: 6px;
 	  border-radius: 5px;
 	 width: auto !important;
+	}
+	.transport_style{
+	border: #58585a 1px solid;
+    padding: 15px;
+    text-align: justify;
+    margin-left: 10px;
 	}
   </style>
 @endsection
@@ -81,13 +87,7 @@
 												@else
 												<input type="radio" name="ship" id="radio_<?php echo $x?>" value="{{$item->id}}">
 												@endif
-												<label for="radio_<?php echo $x?>">{{$item->telephone}}</label><label class="shipping-details" for=billing_<?php echo $x?>">
-													@if($item->address_type == 1)
-													Home
-													@else
-													Work
-													@endif
-													</label><br>
+												
 												<label for="radio_<?php echo $x?>" class="address-align">{{$item->address}}</label><br>
 												<label for="radio_<?php echo $x?>" class="item-align-left-shipping">{{$item->state}}</label> <label class="item-align-left-shipping" for="radio_<?php echo $x?>">{{$item->zip}}</label>
 												
@@ -183,7 +183,24 @@
 					
 						<br>
 						<br>
-						<footer class="bottom_box"></footer>
+					
+						<br>
+						<br>
+							<h3>Transport </h3>
+
+							<?php echo $output; ?>
+						<br>
+						<br>
+						<div class="left_side v_centered">
+
+								<span>Forgot anything from Transport?</span>
+
+								<a href="/edit-transport" class="button_grey middle_btn">Edit Your Transport</a>
+
+							</div>
+							<br>
+						<br>
+						
 						<h3>Order Review</h3>
 
 						
@@ -197,6 +214,8 @@
 										<th colspan="2" class="product_title_col">Product Name</th>
 										<th class="product_price_col">Price</th>
 										<th class="product_qty_col">Quantity</th>
+										<th class="product_qty_col">TAX(GST)</th>
+										{{-- <th class="product_qty_col">Sub Total</th> --}}
 										<th class="product_total_col">Total</th>
 									</tr>
 								</thead>
@@ -217,26 +236,16 @@
 											@endforeach
 											@endforeach
 											@endif 
-											@foreach($product_data as $datas)
-											@if($datas->product_id == $getCarts->id)
-											@if($datas->shipping_type == 1)
-											<li> Shipping : Free</li>
-											@else
-												<?php $shipping_charge +=$datas->shipping_amount;?>
-										 <li> Shipping Charge: {{$datas->shipping_amount}}</li>
-										  
-										  @endif 
-										  @endif
-										  @endforeach
+											
 											</ul>
-
+											
 										</td>
 
-										<td data-title="Price" class="subtotal">AED {{$getCarts->price}}</td>
+										<td data-title="Price" class="subtotal">₹ {{$getCarts->price}}</td>
 
 										<td data-title="Quantity">{{$getCarts->quantity}}</td>
 
-										<td data-title="Total" class="total">AED {{$getCarts->quantity * $getCarts->price}}</td>
+										<td data-title="Total" class="total">₹ {{$getCarts->quantity * $getCarts->price}}</td>
 
 									</tr>
 								@endforeach
@@ -255,29 +264,34 @@
 								<tfoot>
 									<tr>
 										<td colspan="4" class="bold">Subtotal</td>
-										<td class="total">AED {{$subTotal}}</td>
+										<td class="total">₹ {{$subTotal}}</td>
 									</tr>
 									<tr>
 										<td colspan="4" class="bold">Tax 5%( price inclusive of VAT )</td>
-										<td class="total">AED {{$tax}}</td>
+										<td class="total">₹ {{$tax}}</td>
 									</tr>
 									<tr>
-										<td colspan="4" class="bold">Shipping Charge </td>
-										<td class="total">AED {{$shipping_charge}}</td>
+										<td colspan="4" class="bold">Transport
+										<tr>
+										<td>Transport </td>	
+										<td>Transport </td>	
+										</tr>	
+										</td>
+										<td class="total">₹ {{$shipping_charge}}</td>
 									</tr>
 									<?php
             $coupon_data = Session::get('coupon');
                             if(!empty($coupon_data)){
 ?>
                             <tr class="couponLabel"><td colspan="4">Coupon Discount({{$coupon_data[0]['name']}}) </td>
-                            <td style="color:#6db108">AED -{{$coupon_data[0]['value']}}</td></tr>
+                            <td style="color:#6db108">₹ -{{$coupon_data[0]['value']}}</td></tr>
                        <?php     $total = $total - $coupon_data[0]['value'];
                             }
                           ?>
                        
 									<tr>
 										<td colspan="4" class="grandtotal">Grand Total</td>
-										<td class="grandtotal">AED {{$total}}</td>
+										<td class="grandtotal">₹ {{$total}}</td>
 									</tr>
 
 								</tfoot>

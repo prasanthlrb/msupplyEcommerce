@@ -868,7 +868,8 @@
 			//if(route == 'cart'){
 			
 			//}
-			cartSubFunction();
+			
+			CartMenuUpdate();
 			
         }
    });
@@ -896,8 +897,21 @@ function addCart(id){
 				 $('.total_price').text(data[0]);
 					 $('#open_shopping_cart').attr("data-amount",data[1]);
 					// window.location.href = "/cart";
+					CartMenuUpdate();
 				}
 			});
+	}
+	function CartMenuUpdate(){
+		$.ajax({        
+			url : '/get-cart',
+			type: "GET",
+			success: function(data)
+			{
+			   var result = data.split('|');
+			   $('.total_price').text(result[0]);
+			   $('#open_shopping_cart').attr("data-amount",result[1]);
+			}
+		});
 	}
 	</script>
 </html>

@@ -449,11 +449,7 @@ public function addCompare($id){
      return response()->json(count(Session::get('compare'))); 
 }
 
-public function transport(){
-$transport = transport::all();
-//return response()->json($transport);
-return view('transport',compact('transport'));
-}
+
 
 
 public function transportPopup($id){
@@ -581,7 +577,8 @@ public function getTransportData($id){
 public function transportDetails(Request $request){
     Session::forget('transport');
     Session::push('transport',$request->datas['data']);
-    return redirect('checkout');
+    //return response()->json($transport);
+    return response()->json(Session::get('transport'));
 }
 
 }

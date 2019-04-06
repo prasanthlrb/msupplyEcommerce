@@ -43,7 +43,7 @@
 		
 															<a href="#" class="button_dark_grey middle_btn quick_view" data-modal-url="/quick-view/{{$row->id}}">Quick View</a>
 		
-															<a href="#" class="button_blue middle_btn add_to_cart">Add to Cart</a>
+														
 		
 														</div><!--/ .centered_buttons -->
 		
@@ -60,13 +60,15 @@
 												<!-- - - - - - - - - - - - - - End thumbnail - - - - - - - - - - - - - - - - -->
 		
 												<!-- - - - - - - - - - - - - - Label - - - - - - - - - - - - - - - - -->
-		
+												@if($row->regular_price != null)
+
 												<div class="label_offer percentage">
-		
-													<div>30%</div>OFF
+													<?php $v1 = $row->regular_price - $row->sales_price;
+													$v2 = ceil($v1/$row->regular_price*100); ?>
+													<div>{{$v2}}%</div>OFF
 		
 												</div>
-		
+												@endif
 												<!-- - - - - - - - - - - - - - End label - - - - - - - - - - - - - - - - -->
 		
 												<!-- - - - - - - - - - - - - - Product description - - - - - - - - - - - - - - - - -->
@@ -96,11 +98,11 @@
 												
 							
 														<p class="product_price alignleft">
-																@if($row->sales_price != null)
+																@if($row->regular_price != null)
 															<s>₹ {{$row->regular_price}}</s> 
 															<b>₹ {{$row->sales_price}}</b></p>
 															@else
-															<b>₹ {{$row->regular_price}}</b></p>
+															<b>₹ {{$row->sales_price}}</b></p>
 																@endif
 		
 															</div><!--/ .clearfix.product_info-->
@@ -133,7 +135,7 @@
 		
 														<a href="#" class="button_dark_grey middle_btn quick_view" data-modal-url="/quick-view/{{$product_today[0]->id}}">Quick View</a>
 		
-															<a href="#" class="button_blue middle_btn add_to_cart">Add to Cart</a>
+														
 		
 														</div><!--/ .centered_buttons -->
 		

@@ -82,7 +82,7 @@ $(document).ready(function(){
         success: function(data)
         {
             var x =0;
-            console.log(data);
+            // console.log(data);
             //$('#cart-item').html(data);
             var card_data = '';
             $.each( data, function( key, value ) {
@@ -155,7 +155,7 @@ $(document).ready(function(){
 
         var newCoords = current_loc + e.lngLat.lng+','+e.lngLat.lat;
         getMatch(newCoords);
-       console.log(e.lngLat.lat+','+e.lngLat.lng);
+    //    console.log(e.lngLat.lat+','+e.lngLat.lng);
         // document.getElementById("lat").value = e.lngLat.lat;
         // document.getElementById("lng").value = e.lngLat.lng;
     
@@ -174,7 +174,7 @@ $(document).ready(function(){
             var steps = jsonResponse.routes[0].legs[0].steps;
             var coords = jsonResponse.routes[0].geometry;
           //  console.log(steps);
-        console.log(coords);
+        // console.log(coords);
          //  console.log(distance);
           // console.log(duration);
 
@@ -184,7 +184,7 @@ $(document).ready(function(){
             });
             // get distance and duration
            // instructions.insertAdjacentHTML('beforeend', '<p>' +  'Distance: ' + distance.toFixed(2) + ' km<br>Duration: ' + duration.toFixed(2) + ' minutes' + '</p>');
-            console.log('Distance: ' + distance.toFixed(2) + ' km<br>Duration: ' + duration.toFixed(2) + ' minutes');
+            // console.log('Distance: ' + distance.toFixed(2) + ' km<br>Duration: ' + duration.toFixed(2) + ' minutes');
             transportData.distance = distance.toFixed(2);
             $('.distance_price').text(distance.toFixed(2)+' km');
             var calculateRate = Math.round(transportData.price * distance.toFixed(2));
@@ -229,17 +229,26 @@ $(document).ready(function(){
         var lngLat = marker.getLngLat();
         document.getElementById("lat").value = lngLat.lat;
         document.getElementById("lng").value = lngLat.lng;
-        console.log('lng: ' + lngLat.lng + '<br />lat: ' + lngLat.lat);
+        // console.log('lng: ' + lngLat.lng + '<br />lat: ' + lngLat.lat);
     }
     document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
 
     $('#gotoShipping').click(function(){
         var cartItem  = $('#cartItem').val();
         if(cartItem != null){
-            // transportData.cart_item = cartItem;
+            $.each( cartItem, function( key, value ) {
+                transportDataFinal.cart_item.push(value);
+            });
+            transportData.cart_item = cartItem;
+            var dataFinal ={
+            'selected_id':transportData.transport_id,
+            'selected_data':transportData
+            };
             // console.log(transportData);
-            // transportDataFFinal.selected_id = transportData;
-            // transportSuccess();
+            transportDataFinal.data.push(dataFinal);
+            //transportSuccess(transportData.transport_id);
+            goToCheckOut();
+            $('#close_button').trigger('click');
         }else{
             alert("Please Select Shipping Cart Item");
         }
@@ -257,7 +266,7 @@ $(document).ready(function(){
             'selected_id':transportData.transport_id,
             'selected_data':transportData
             };
-            console.log(transportData);
+            // console.log(transportData);
             transportDataFinal.data.push(dataFinal);
             transportSuccess(transportData.transport_id);
             $('#close_button').trigger('click');

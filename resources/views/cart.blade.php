@@ -44,7 +44,6 @@ function getCartPage(){
         success: function(data)
         {
             $('#shopping_table').html(data);
-            $('.couponLabel').addClass('couponLabelHide');
         }
     });
 }
@@ -56,10 +55,39 @@ var cartQty = $('#cartQty'+id).val();
         success: function(data)
         {
             getCartPage();
+            CartMenuUpdate();
         }
     });
 }
-                
+function cleanCart(){
+	$.ajax({        
+		url : '/clean-cart',
+		type: "GET",
+		success: function(data)
+		{
+			   
+			getCartPage();
+            CartMenuUpdate();
+		   
+		}
+	});
+}
+function removeItemCart(id){
+	var route = $('#routes').val();
+	$.ajax({        
+        url : '/remove-cart/'+id,
+        type: "GET",
+        success: function(data)
+        {
+			//if(route == 'cart'){
+			
+			//}
+            getCartPage();
+			CartMenuUpdate();
+			
+        }
+   });
+}         
 </script>
 
 @endsection

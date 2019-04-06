@@ -199,6 +199,10 @@
                                   <a class="nav-link" id="baseVerticalLeft2-tab5" data-toggle="tab" aria-controls="tabVerticalLeft25"
                                   href="#tabVerticalLeft25" aria-expanded="false"><i class="la la-send-o"></i> Attributes</a>
                                 </li>
+                                <li class="nav-item">
+                                  <a class="nav-link" id="baseVerticalLeft2-tab7" data-toggle="tab" aria-controls="tabVerticalLeft27"
+                                  href="#tabVerticalLeft27" aria-expanded="false"><i class="la la-bank"></i> TAX</a>
+                                </li>
                                
                               
                                 <li class="nav-item">
@@ -297,8 +301,23 @@
    
                                 {{-- </form> --}}
                                 </div>
-
-
+                                <div class="tab-pane" id="tabVerticalLeft27" aria-labelledby="baseVerticalLeft2-tab7">
+                                    <div class="form-group">
+                                        <label for="projectinput6">Tax Type</label>
+                                      
+                                          <select name="tax_type" id="tax_type" class="form-control" >
+                                          <option value="" selected disabled>Select The Tax Type</option>
+                                           
+                                            <option value="in">Inclusive</option>
+                                            <option value="out">Exclusive</option>
+                                         
+                                          </select>
+                                        </div>
+                                    <div class="form-group">
+                                        <label for="projectinput1">TAX Percentage (%)</label>
+                                        <input type="text" class="form-control" name="tax" id="tax">
+                                      </div>
+                                  </div>
                                 <div class="tab-pane" id="tabVerticalLeft26" aria-labelledby="baseVerticalLeft2-tab6">
                                     <div class="dropdown-item">
                                         <input type="checkbox" name="featured" id="featured" class="switchery-xs" />

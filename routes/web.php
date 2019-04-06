@@ -30,7 +30,9 @@ Route::get('/product-advance-filter/{product}/{attr}/{terms}','categoryControlle
 Route::get('/wishlist','pageController@wishlist'); 
 Route::get('/add-wishlist/{id}','pageController@addWishlist');
 Route::get('/remove-wish/{id}','pageController@removewish');
-Route::get('/transports','pageController@transport'); 
+Route::get('/transports','AccountController@transport'); 
+Route::get('/own-transport','AccountController@ownTransport'); 
+Route::get('//edit-transport','AccountController@editTransport'); 
 Route::get('/get-transport-data/{id}','pageController@getTransportData'); 
 Route::get('/sms-demo', function () {
    try{
@@ -222,7 +224,6 @@ Route::get('/get-cart', function () {
 });
 Route::get('/clean-cart', function () {
     Cart::clear();
-    Session::forget('coupon');
 });
 Route::get('/cart-qty-minus/{id}', function ($id) {
     Cart::update($id, array(
@@ -283,7 +284,7 @@ $output .='<div class="animated_item">
 </div>
 <div class="animated_item">
     <a href="/cart" class="button_grey">View Cart</a>
-    <a href="/checkout" class="button_blue">Checkout</a>
+    <a href="/transports" class="button_blue">Checkout</a>
 </div>';
 echo $output;
 });
@@ -347,7 +348,7 @@ Route::get('/cart-data', function(){
     </td>
 
     <td class="subtotal" data-title="Price">
-       '.$cartData->price.'
+    ₹ '.$cartData->price.'
     </td>
 
     <td data-title="Quantity">
@@ -362,11 +363,11 @@ Route::get('/cart-data', function(){
     </td>
 
     <td class="total" data-title="Total">
-        '.$amount.'
+    ₹ '.$amount.'
     </td>
 
     <td data-title="Action">
-        <a href="javascript:void(null)" onclick="removeCartItem('.$cartData->id.')" class="button_dark_grey icon_btn remove_product"><i class="icon-cancel-2"></i></a>
+        <a href="javascript:void(null)" onclick="removeItemCart('.$cartData->id.')" class="button_dark_grey icon_btn remove_product"><i class="icon-cancel-2"></i></a>
     </td>
 
 </tr>';
@@ -402,13 +403,13 @@ Route::get('/cart-data', function(){
                   
                  $output .='   <tr class="total">
                         <td>Total</td>
-                        <td>AED '.$total.'</td>
+                        <td>₹ '.$total.'</td>
                     </tr>
                 </tfoot>
             </table>
         </div>
         <footer class="bottom_box text-center">
-            <a class="button_blue middle_btn" href="/checkout">Proceed to Checkout</a>
+            <a class="button_blue middle_btn" href="/transports">Proceed to Checkout</a>
             <div class="single_link_wrap">
                
             </div>

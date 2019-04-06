@@ -198,7 +198,10 @@
                                 <li class="nav-item">
                                     <a class="nav-link" id="baseVerticalLeft2-tab5" data-toggle="tab" aria-controls="tabVerticalLeft25" href="#tabVerticalLeft25" aria-expanded="false"><i class="la la-send-o"></i> Attributes</a>
                                 </li>
-
+                                <li class="nav-item">
+                                        <a class="nav-link" id="baseVerticalLeft2-tab7" data-toggle="tab" aria-controls="tabVerticalLeft27"
+                                        href="#tabVerticalLeft27" aria-expanded="false"><i class="la la-bank"></i> TAX</a>
+                                      </li>
 
                                 <li class="nav-item">
                                     <a class="nav-link" id="baseVerticalLeft2-tab6" data-toggle="tab" aria-controls="tabVerticalLeft26" href="#tabVerticalLeft26" aria-expanded="false"><i class="la la-gear"></i> Advanced</a>
@@ -301,7 +304,22 @@
    
                                 {{-- </form> --}}
                                 </div>
-
+                                <div class="tab-pane" id="tabVerticalLeft27" aria-labelledby="baseVerticalLeft2-tab7">
+                                        <div class="form-group">
+                                            <label for="projectinput6">Tax Type</label>
+                                          
+                                              <select name="tax_type" id="tax_type" class="form-control">
+                                                    <option value="">Select The Tax Type</option>
+                                                <option value="in" <?php echo $product_find->tax_type == 'in' ? 'selected' : '' ?>>Inclusive</option>
+                                                <option value="out" <?php echo $product_find->tax_type == 'out' ? 'selected' : '' ?>>Exclusive</option>
+                                             
+                                              </select>
+                                            </div>
+                                        <div class="form-group">
+                                            <label for="projectinput1">TAX Percentage (%)</label>
+                                        <input type="text" class="form-control" name="tax" id="tax" value="{{$product_find->tax}}">
+                                          </div>
+                                      </div>
 
                                 <div class="tab-pane" id="tabVerticalLeft26" aria-labelledby="baseVerticalLeft2-tab6">
                                     <div class="dropdown-item">

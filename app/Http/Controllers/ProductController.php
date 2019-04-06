@@ -356,7 +356,6 @@ class ProductController extends Controller
         $request->validate([
             'imgInp'=>'required',
             'category'=>'required',
-            'group'=>'required',
             'product_name'=>'required|unique:products',
             // 'sku'=>'required|unique:product_datas',
         ]);
@@ -388,6 +387,8 @@ class ProductController extends Controller
         $product->length = $request->length;
         $product->width = $request->width;
         $product->height = $request->height;
+        $product->tax = $request->tax;
+        $product->tax_type = $request->tax_type;
         $product->shipping_type = $request->shipping_type;
         $product->shipping_amount = $request->shipping_amount;
         $product->related_product = collect($request->related_product)->implode(',');
@@ -429,7 +430,6 @@ class ProductController extends Controller
         $request->validate([
            // 'imgInp'=>'required',
             'category'=>'required',
-            'group'=>'required',
             //'product_name'=>'required|unique:products',
             // 'sku'=>'required|unique:product_datas',
         ]);
@@ -458,6 +458,8 @@ class ProductController extends Controller
         $product->length = $request->length;
         $product->width = $request->width;
         $product->height = $request->height;
+        $product->tax = $request->tax;
+        $product->tax_type = $request->tax_type;
         $product->shipping_type = $request->shipping_type;
         $product->shipping_amount = $request->shipping_amount;
         $product->related_product = collect($request->related_product)->implode(',');

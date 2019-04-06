@@ -177,7 +177,7 @@ display: none !important;
 
 									<div class="table_cell">
 
-										<a href="#" class="button_blue middle_btn hide_transport" id="own_tran_button">Continue</a>
+										<a href="javascript:void(null)" class="button_blue middle_btn hide_transport" id="own_tran_button">Continue</a>
 
 									</div><!--/ .table_cell -->
 
@@ -235,7 +235,7 @@ var transportData = {
 function transportSuccess(tran_id){
   $('#transportSelect'+tran_id).addClass('button_dark_grey ');
   $('#transportSelect'+tran_id).attr('disabled', true);
-  console.log(transportDataFinal);
+//   console.log(transportDataFinal);
   transportData = {
     'cart_item':'',
     'price':'',
@@ -246,8 +246,8 @@ function transportSuccess(tran_id){
     'lng':'',
     'total':''
 }
-console.log(cardItemCount);
-console.log(transportDataFinal.cart_item.length);
+// console.log(cardItemCount);
+// console.log(transportDataFinal.cart_item.length);
 if(cardItemCount == transportDataFinal.cart_item.length){
     $('#gotoNext').removeClass('hide_transport');
 }
@@ -276,11 +276,38 @@ if(cardItemCount == transportDataFinal.cart_item.length){
                 dataType: "JSON",
                 success: function(data)
                 {    
-                    console.log(data);
+                    window.location.href = "/checkout";
                 }
 
         });
 
     });
+
+    function goToCheckOut(){
+        $.ajax({
+                url : '/transportDetails-save',
+                type: "POST",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "datas": transportDataFinal
+                    },
+                dataType: "JSON",
+                success: function(data)
+                {    
+                    window.location.href = "/checkout";
+                }
+
+        });
+    }
+    $('#own_tran_button').click(function(){
+        $.ajax({        
+        url : '/own-transport',
+        type: "GET",
+        success: function(data)
+        {
+            window.location.href = "/checkout";
+        }
+        });
+    })
 </script>
 @endsection
