@@ -19,6 +19,7 @@ class CreateTransportsTable extends Migration
             $table->string('vehicle_image')->nullable();
             $table->string('price')->nullable();
             $table->string('other')->nullable();
+            $table->string('active')->default(0);
             $table->timestamps();
         });
     }

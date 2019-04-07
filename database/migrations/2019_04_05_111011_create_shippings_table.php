@@ -25,6 +25,7 @@ class CreateShippingsTable extends Migration
             $table->string('zip');
             $table->string('country');
             $table->string('telephone');
+            $table->string('active')->default(0);
             $table->timestamps();
         });
     }

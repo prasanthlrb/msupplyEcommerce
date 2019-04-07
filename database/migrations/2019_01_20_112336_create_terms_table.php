@@ -17,6 +17,7 @@ class CreateTermsTable extends Migration
             $table->increments('id');
             $table->string('terms_name');
             $table->string('attribute_id');
+            $table->string('active')->default(0);
             $table->timestamps();
         });
     }
