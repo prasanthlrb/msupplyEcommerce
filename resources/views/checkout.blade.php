@@ -221,84 +221,30 @@
 								</thead>
 
 								<tbody>
-									<?php $shipping_charge=0;?>
-								@foreach($getCart as $getCarts)
-								
-									<tr>
-										<td colspan="2" data-title="Product Name">
-											
-											<a href="#" class="product_title">{{$getCarts->name}}</a>
-											<ul class="sc_product_info">
-											@if(count($getCarts->attributes)>0)
-											@foreach($getCarts->attributes as $key=>$value)
-											@foreach($value as $field => $row)
-												<li><?php echo $field.' : '.$row.'<br>'?></li>
-											@endforeach
-											@endforeach
-											@endif 
-											
-											</ul>
-											
-										</td>
-
-										<td data-title="Price" class="subtotal">₹ {{$getCarts->price}}</td>
-
-										<td data-title="Quantity">{{$getCarts->quantity}}</td>
-
-										<td data-title="Total" class="total">₹ {{$getCarts->quantity * $getCarts->price}}</td>
-
-									</tr>
-								@endforeach
+									<?php echo $result?>
 								</tbody>
-								<?php 
-								$total=0;
-								$subTotal=0;
-								$tax=0;
-								foreach($getCart as $tot){
-									$total += $tot->quantity * $tot->price;
-									$tax = round($total*5/105,2);
-									$subTotal =  $total - $tax;
-								}
-								$total = $total+$shipping_charge;
-								?>
+								
 								<tfoot>
-									<tr>
-										<td colspan="4" class="bold">Subtotal</td>
-										<td class="total">₹ {{$subTotal}}</td>
+								<tr>
+										<td colspan="5" class="bold">Subtotal</td>
+										<td class="total">₹ </td>
 									</tr>
 									<tr>
-										<td colspan="4" class="bold">Tax 5%( price inclusive of VAT )</td>
-										<td class="total">₹ {{$tax}}</td>
+										<td colspan="5" class="bold">Tax 5%( price inclusive of VAT )</td>
+										<td class="total">₹ </td>
 									</tr>
-									<tr>
-										<td colspan="4" class="bold">Transport
-										<tr>
-										<td>Transport </td>	
-										<td>Transport </td>	
-										</tr>	
-										</td>
-										<td class="total">₹ {{$shipping_charge}}</td>
-									</tr>
-									<?php
-            $coupon_data = Session::get('coupon');
-                            if(!empty($coupon_data)){
-?>
-                            <tr class="couponLabel"><td colspan="4">Coupon Discount({{$coupon_data[0]['name']}}) </td>
-                            <td style="color:#6db108">₹ -{{$coupon_data[0]['value']}}</td></tr>
-                       <?php     $total = $total - $coupon_data[0]['value'];
-                            }
-                          ?>
+								
                        
 									<tr>
-										<td colspan="4" class="grandtotal">Grand Total</td>
-										<td class="grandtotal">₹ {{$total}}</td>
+										<td colspan="5" class="grandtotal">Grand Total</td>
+										<td class="grandtotal">₹ </td>
 									</tr>
 
 								</tfoot>
 
 							</table>
 
-						</div><!--/ .table_wrap -->
+						</div>
 
 						<footer class="bottom_box on_the_sides">
 

@@ -174,37 +174,37 @@ class AccountController extends Controller
                     
 
                 }
-                // $product_data = product::all();
-                // if(Session::has('transport')){
-                //     $output = '<ul class="simple_vertical_list row">';
-                //     $transport_exits = Session::get('transport');
-                //     foreach($transport_exits[0] as $row){
-                //         $transport = transport::find($row['selected_data']['transport_id']);
-                //         $output .='<div class="col-sm-3 transport_style">
-                //         <li>Vehicle Name : <b>₹'.$transport->vehicle_name.'</b></li>
-                //         <li>Km Price : ₹'.$row['selected_data']['price'].'</li>
-                //         <li>Distance : '.$row['selected_data']['distance'].' Km</li>
-                //         <li>Other : ₹'.$row['selected_data']['other'].'</li>
-                //         <li>Total Price :<b>₹ '.$row['selected_data']['total'].'</b></li>
-                //         ';
-                //         $product = product::whereIn('id',$row['selected_data']['cart_item'])->get();
-                //         $output .='<br>';
-                //         $output .='<h5>Product List</h5>';
+                $product_data = product::all();
+                if(Session::has('transport')){
+                    $output = '<ul class="simple_vertical_list row">';
+                    $transport_exits = Session::get('transport');
+                    foreach($transport_exits[0] as $row){
+                        $transport = transport::find($row['selected_data']['transport_id']);
+                        $output .='<div class="col-sm-3 transport_style">
+                        <li>Vehicle Name : <b>₹'.$transport->vehicle_name.'</b></li>
+                        <li>Km Price : ₹'.$row['selected_data']['price'].'</li>
+                        <li>Distance : '.$row['selected_data']['distance'].' Km</li>
+                        <li>Other : ₹'.$row['selected_data']['other'].'</li>
+                        <li>Total Price :<b>₹ '.$row['selected_data']['total'].'</b></li>
+                        ';
+                        $product = product::whereIn('id',$row['selected_data']['cart_item'])->get();
+                        $output .='<br>';
+                        $output .='<h5>Product List</h5>';
                     
-                //         $x =1;
-                //         foreach($product as $data){
-                //             $output .='<li>'.$x.' '.$data->product_name.'</li>';
-                //             $x++;
-                //         }
-                //         $output .='</div>';
-                //     }
-                //     $output .='</ul>';
-                // }else{
-				// $output = '<h5 class="button_grey">Own Transport</h5>';
-                // }
-               // return view('checkout', compact('getCart', 'product_data', 'shipping', 'billing','output'));
+                        $x =1;
+                        foreach($product as $data){
+                            $output .='<li>'.$x.' '.$data->product_name.'</li>';
+                            $x++;
+                        }
+                        $output .='</div>';
+                    }
+                    $output .='</ul>';
+                }else{
+				$output = '<h5 class="button_grey">Own Transport</h5>';
+                }
+               return view('checkout', compact('getCart', 'product_data', 'shipping', 'billing','output', 'result'));
                 //return response()->json($products); 
-                print $result;
+                //print $result;
             } 
      else {
             return redirect('/shipping');

@@ -9,8 +9,7 @@
 <div class="content-wrapper">
 
     <div class="content-body">
-     
-   
+
 <section id="column-selectors">
     <div class="row">
 
@@ -24,12 +23,12 @@
             <form method="post" id="adform1">
               {{csrf_field()}}
               <input type="hidden" name="id" value="1" id="form1">
-            <img class="img-fluid" src="/ads/{{$ads[0]->ad_name}}" alt="Card image cap" id="firstImage">
+            <img class="img-fluid" src="/ads/{{count($ads) > 0 ? $ads[0]->ad_name : ''}}" alt="Card image cap" id="firstImage">
             <input type="file" type="hidden" name="firstInputImage" id="firstInputImage" style="display: none;">
             <div class="card-body">
                     <div class="form-group">
                             <label for="donationinput1" class="sr-only">URL</label>
-                            <input type="text" class="form-control" placeholder="http://" name="url" value="{{$ads[0]->url}}">
+                            <input type="text" class="form-control" placeholder="http://" name="url" value="{{count($ads) > 0 ? $ads[0]->url : ''}}">
                           </div>
                           <button type="button" onclick="updateSide(1)" class="btn btn-primary">Update <i class="ft-thumbs-up position-right"></i></button>
             </div>
@@ -48,12 +47,12 @@
             <form method="post" id="adform2">
                 {{csrf_field()}}
                 <input type="hidden" name="id" value="2" id="form2">
-            <img class="img-fluid" src="/ads/{{$ads[1]->ad_name}}" alt="Card image cap" id="firstImage1">
+            <img class="img-fluid" src="/ads/{{count($ads) > 0 ? $ads[1]->ad_name : ''}}" alt="Card image cap" id="firstImage1">
             <input type="file" type="hidden" name="firstInputImage" id="firstInputImage1" style="display: none;">
             <div class="card-body">
                     <div class="form-group">
                             <label for="donationinput1" class="sr-only">URL</label>
-                            <input type="text" class="form-control" placeholder="http://" name="url" value="{{$ads[1]->url}}">
+                            <input type="text" class="form-control" placeholder="http://" name="url" value="{{count($ads) > 0 ? $ads[1]->url : ''}}">
                           </div>
                           <button type="button" onclick="updateSide(2)" class="btn btn-primary">Update <i class="ft-thumbs-up position-right"></i></button>
             </div>
@@ -62,7 +61,7 @@
           </div>
         </div>
       </div>
-   
+ 
     <div class="col-xl-4 col-md-6 col-sm-12">
         <div class="card">
           <div class="card-content">
@@ -72,12 +71,12 @@
             <form method="post" id="adform3">
                 {{csrf_field()}}
                 <input type="hidden" name="id" value="3" id="form3">
-            <img class="img-fluid" src="/ads/{{$ads[2]->ad_name}}" alt="Card image cap" id="firstImage2">
+            <img class="img-fluid" src="/ads/{{count($ads) > 0 ? $ads[2]->ad_name : ''}}" alt="Card image cap" id="firstImage2">
             <input type="file" type="hidden" name="firstInputImage" id="firstInputImage2" style="display: none;">
             <div class="card-body">
                     <div class="form-group">
                             <label for="donationinput1" class="sr-only">URL</label>
-                            <input type="text" class="form-control" placeholder="http://" name="url" value="{{$ads[2]->url}}">
+                            <input type="text" class="form-control" placeholder="http://" name="url" value="{{count($ads) > 0 ? $ads[2]->url : ''}}">
                           </div>
                           <button type="button" onclick="updateSide(3)" class="btn btn-primary">Update <i class="ft-thumbs-up position-right"></i></button>
             </div>
@@ -89,8 +88,8 @@
   
   
     </div>
-  
-    </section> 
+  </section> 
+
 </div>
     </div>
   </div>
