@@ -437,3 +437,4 @@ Route::get('/billing', 'AccountController@billing');
 Route::post('createShipping', 'AccountController@createShipping');
 Route::post('createBilling', 'AccountController@createBilling');
 Route::get('menu-data', 'pageController@menuData');
+Route::get('order-placed/{id}/{ship}/{bill}', 'AccountController@orderPlaced');

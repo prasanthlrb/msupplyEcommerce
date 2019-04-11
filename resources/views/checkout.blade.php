@@ -165,27 +165,7 @@
 		
 									</div>
 							<br>
-							<h3>Payment Information</h3>
-
-					
-
-							<ul class="simple_vertical_list">
-
-								<li>
-									<input value="cod" type="radio" checked name="payment_type" id="payment_type">
-									<label for="payment_type">Pay Pal</label>
-								</li>
-
-								
-
-							</ul>
-
-					
-						<br>
-						<br>
-					
-						<br>
-						<br>
+							
 							<h3>Transport </h3>
 
 							<?php echo $output; ?>
@@ -200,7 +180,32 @@
 							</div>
 							<br>
 						<br>
-						
+						<h3>Select Payment Type</h3>
+							<ul class="simple_vertical_list">
+													
+									<li>
+
+										<input value="cod" type="radio" checked name="payment_type" id="radio_button_1">
+										<label for="radio_button_1">Cash on Delivery</label>
+
+									</li>
+
+									<li>
+
+										<input value="online" type="radio" name="payment_type" id="radio_button_2">
+										<label for="radio_button_2">Pay Online</label>
+
+									</li>
+
+								</ul>
+				
+
+					
+						<br>
+						<br>
+						<br>
+					
+				
 						<h3>Order Review</h3>
 
 						
@@ -214,7 +219,7 @@
 										<th colspan="2" class="product_title_col">Product Name</th>
 										<th class="product_price_col">Price</th>
 										<th class="product_qty_col">Quantity</th>
-										<th class="product_qty_col">TAX(GST)</th>
+										<th class="product_qty_col" style="width:15% !important">TAX(GST)</th>
 										{{-- <th class="product_qty_col">Sub Total</th> --}}
 										<th class="product_total_col">Total</th>
 									</tr>
@@ -225,19 +230,23 @@
 								</tbody>
 								
 								<tfoot>
+									@if(Session::has('transport'))
 								<tr>
-										<td colspan="5" class="bold">Subtotal</td>
-										<td class="total">₹ </td>
+										<td colspan="5" class="bold">Transport </td>
+								<td class="total" style="text-align:center">₹ {{$transport_Price}}</td>
 									</tr>
-									<tr>
-										<td colspan="5" class="bold">Tax 5%( price inclusive of VAT )</td>
+									<?php $totalPrice+=$transport_Price?>
+									@endif
+									{{-- <tr>
+										<td colspan="5" class="bold"> Exclusive Tax (GST)</td>
+									
 										<td class="total">₹ </td>
-									</tr>
+									</tr> --}}
 								
                        
 									<tr>
 										<td colspan="5" class="grandtotal">Grand Total</td>
-										<td class="grandtotal">₹ </td>
+										<td class="grandtotal" style="text-align:center">₹ {{$totalPrice}}</td>
 									</tr>
 
 								</tfoot>
@@ -258,7 +267,7 @@
 
 							<div class="right_side">
 
-								<button type="submit" class="button_blue middle_btn">PROCEED TO PAY</button>
+								<button type="button" class="button_blue middle_btn" id="order_button">PLACE TO ORDER</button>
 
 							</div>
 
@@ -272,5 +281,25 @@
 				</div><!--/ .container-->
 
 			</div><!--/ .page_wrapper-->
+			@section('extra-js')
+			<script>
+				var pay_type = 1;
+			$('#radio_button_1').click(function(){
+				pay_type = 1;
+				$('#order_button').text('PLACE TO ORDER')
+			});
+			$('#radio_button_2').click(function(){
+				pay_type = 2;
+				$('#order_button').text('PROCEED TO PAY')
+			});
 
+		$('#order_button').click(function(){
+			var shipping = $('input[name=ship]:checked').val();
+			var billing = $('input[name=billing]:checked').val();
+      window.location.href = '/order-placed/'+pay_type+'/'+shipping+'/'+billing;
+               
+			})
+
+			</script>
+			@endsection
 @endsection

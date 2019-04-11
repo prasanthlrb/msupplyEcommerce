@@ -259,38 +259,53 @@
 												<!-- - - - - - - - - - - - - - Mega menu - - - - - - - - - - - - - - - - -->
 
 												<div id='cssmenu' class="animated_item">
-													<ul>
-													   <li><a href='#'><span>Home</span></a></li>
-													   <li class='has-sub has-new-sub'><a href='#'><span>Products</span></a>
-														  <ul class="first-child"><!-- over all child bro -->
-															 <li class='has-sub has-new-sub'><a href='#'><span>Product 1</span></a>
-																<ul class="second-child">
-																   <li class="has-sub has-new-sub"><a href='#'class='has-sub has-new-sub'><span>Sub Product</span></a>
-																		 <ul class="second-child">
-																			<li><a href='#'><span>Sub Product</span></a></li>
-																			<li class='last'><a href='#'><span>Sub Product</span></a></li>
-																			<li class='last'><a href='#'><span>Sub Product</span></a></li>
-																			<li class='last'><a href='#'><span>Sub Product</span></a></li>
-																			<li class='last'><a href='#'><span>Sub Product</span></a></li>                                               
-																		 </ul><!-- inner product menu -->
-																   </li>
-																   <li class='last'><a href='#'><span>Sub Product</span></a></li>
-																</ul>
-															 </li><!-- 2nd level menu end here -->
-															 <li class='has-sub has-new-sub'><a href='#'><span>Product 2</span></a>
-																<ul class="second-child">
-																   <li><a href='#'><span>Sub Product</span></a></li>
-																   <li class='last'><a href='#'><span>Sub Product</span></a></li>
-																</ul>
-															 </li>
-															 <li><a href='#'><span>Product 3</span></a></li>
-														  </ul>
-													   </li>
-													   <li><a href='#'><span>About</span></a></li>
-													   <li class='last'><a href='#'><span>Contact</span></a></li>
-													</ul>
-													</div>
 
+		<ul>
+				<!-- First Menu start -->
+				@foreach(App\category::with('childs')->where('parent_id',0)->get() as $item)
+				@if($item->childs->count() > 0)
+				<li class='active has-sub has-new-sub'><a href='#'><span>{{$item->category_name}}</span></a>
+					<!-- second Menu start -->
+					<ul class="first-child">
+					@foreach($item->childs as $item2)
+						@if($item2->childs->count() > 0)
+						<li class='has-sub has-new-sub'><a href='#'><span>{{$item2->category_name}}</span></a>
+							<ul class="second-child">
+							@foreach($item2->childs as $item3)
+							@if($item3->childs->count() > 0)
+							<li class="has-sub has-new-sub"><a href='#'class='has-sub has-new-sub'><span>{{$item3->category_name}}</span></a>
+								<ul class="second-child">
+								@foreach($item3->childs as $item4)
+								@if($item4->childs->count() > 0)
+								<li class='has-sub has-new-sub'><a href='#' class='has-sub has-new-sub'><span>{{$item4->category_name}}</span></a>
+								@else
+								<li class='last'><a href='#'><span>{{$item4->category_name}}</span></a></li>
+								@endif
+								@endforeach
+							</ul>
+							</li>
+							@else
+							<li class='last'><a href='#'><span>{{$item3->category_name}}</span></a></li>
+							@endif
+							@endforeach
+						</ul>
+							</li>
+						@else
+						<li class='last'><a href='#'><span>{{$item2->category_name}}</span></a></li>
+						@endif
+						@endforeach
+					</ul>
+					<!-- second Menu end -->
+				</li>
+				@else
+		<li><a href='#'><span>{{$item->category_name}}</span></a></li>
+				@endif
+		   
+			 @endforeach
+			 <!-- First Menu End -->
+		</ul>
+	</li>
+	</div>
 												<!-- - - - - - - - - - - - - - End of mega menu - - - - - - - - - - - - - - - - -->
 
                                          

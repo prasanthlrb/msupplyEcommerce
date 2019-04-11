@@ -91,7 +91,7 @@
 											<select style="width:100%" name="city" id="city" class="select2 form-control col-md-12" placeholder="search for Category">
 												
 												@foreach($citys as $data)
-												<option value="{{$data}}">{{$data}}</option>
+												<option value="{{$data}}" {{$data == "Madurai" ? 'selected' : '' }}>{{$data}}</option>
 												@endforeach
 										
 											

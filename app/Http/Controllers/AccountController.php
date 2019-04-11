@@ -143,9 +143,12 @@ class AccountController extends Controller
                     $product_id[] =$item->id;
                 }
                 $products = product::whereIn('id',$product_id)->get();
-                $result = '<tr>
-                ';
+                $result = '';
+                $exTax=0;
+                $totalPrice = 0;
+                $transport_Price = 0;
                 foreach($products as $row){
+                    $result .= '<tr>';
                     $result .='<td colspan="2" data-title="Product Name"><a href="#" class="product_title">'.$row->product_name.'</a>';
                     $product_attribute = product_attribute::where('product_id',$row->id)->get();
                     $cart_qty = Cart::get($row->id);
@@ -156,22 +159,25 @@ class AccountController extends Controller
                     }
                     $result .='<td data-title="Price" class="subtotal">₹ '.$row->sales_price.'</td>
 
-                    <td data-title="Quantity">'.$cart_qty->quantity.'</td>';
+                    <td data-title="Quantity" style="text-align:center">'.$cart_qty->quantity.'</td>';
                     $item_total = $cart_qty->quantity * $row->sales_price;
                     if($row->tax_type == "in"){
                         $tax = round($item_total*$row->tax/(100+$row->tax),2);
                         //$subTotal =  $item_total - $tax;
                         $result .='<td data-title="TAX">Inclusive Tax <br>₹ '.$tax.'('.$row->tax.' %)</td>';
-                        $result .='<td data-title="Total" class="total">₹ '.$item_total.'</td>';
+                        $result .='<td data-title="Total" class="total" style="text-align:center">₹ '.$item_total.'</td>';
+                        $totalPrice+=$item_total;
                     }else{
                         $tax=$item_total * $row->tax/100;
                         $total=$item_total+$tax;
                         $result .='<td data-title="TAX"> Exclusive Tax <br>₹ '.$tax.'('.$row->tax.' %)</td>';
-                        $result .='<td data-title="Total" class="total">₹ '.$total.'</td>';
+                        $result .='<td data-title="Total" class="total" style="text-align:center">₹ '.$total.'</td>';
+                        $exTax+=$tax;
+                        $totalPrice+=$total;
                     }
-                   
-
                     
+
+                    $result .= '</tr>';
 
                 }
                 $product_data = product::all();
@@ -181,12 +187,15 @@ class AccountController extends Controller
                     foreach($transport_exits[0] as $row){
                         $transport = transport::find($row['selected_data']['transport_id']);
                         $output .='<div class="col-sm-3 transport_style">
-                        <li>Vehicle Name : <b>₹'.$transport->vehicle_name.'</b></li>
-                        <li>Km Price : ₹'.$row['selected_data']['price'].'</li>
-                        <li>Distance : '.$row['selected_data']['distance'].' Km</li>
-                        <li>Other : ₹'.$row['selected_data']['other'].'</li>
-                        <li>Total Price :<b>₹ '.$row['selected_data']['total'].'</b></li>
+                        <div class="row">
+                        <li><div class="col-sm-6">Vehicle Name </div><div class="col-sm-6">: '.$transport->vehicle_name.'</div></li>
+                        <li><div class="col-sm-6">Km Price </div><div class="col-sm-6">: ₹'.$row['selected_data']['price'].'</div></li>
+                        <li><div class="col-sm-6">Distance </div><div class="col-sm-6">: '.$row['selected_data']['distance'].' Km</div></li>
+                        <li><div class="col-sm-6">Other </div><div class="col-sm-6">: ₹'.$row['selected_data']['other'].'</div></li>
+                        <li><div class="col-sm-6">Total Price </div><div class="col-sm-6">: ₹ '.$row['selected_data']['total'].'</div></li>
+                        </div>
                         ';
+                        $transport_Price+=$row['selected_data']['total'];
                         $product = product::whereIn('id',$row['selected_data']['cart_item'])->get();
                         $output .='<br>';
                         $output .='<h5>Product List</h5>';
@@ -202,8 +211,8 @@ class AccountController extends Controller
                 }else{
 				$output = '<h5 class="button_grey">Own Transport</h5>';
                 }
-               return view('checkout', compact('getCart', 'product_data', 'shipping', 'billing','output', 'result'));
-                //return response()->json($products); 
+               return view('checkout', compact('getCart', 'product_data', 'shipping', 'billing','output', 'result','totalPrice','transport_Price'));
+                //return response()->json($result); 
                 //print $result;
             } 
      else {
@@ -232,6 +241,10 @@ class AccountController extends Controller
         public function ownTransport(){
             Session::forget('transport');
             return response()->json(Session::get('transport'));
+        }
+
+        public function orderPlaced($id,$ship,$bill){
+            echo $bill;
         }
 
 }
