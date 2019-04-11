@@ -226,6 +226,13 @@
 								<section class="section_offset animated transparent" data-animation="fadeInDown">
 						
 									<h3>Categories</h3>
+									<?php 
+									 $category = App\categories::with('childs')
+       ->where('parent_id',0)
+	   ->get(); 
+	 print_r($category);  
+	 
+	   ?>
 						
 								
 <div id='cssmenu'>

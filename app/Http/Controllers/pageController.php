@@ -581,4 +581,63 @@ public function transportDetails(Request $request){
     return response()->json(Session::get('transport'));
 }
 
+public function menuData(){
+    // $category = category::where('parent_id',0)->get();
+     $output ='';
+
+       // return response()->json($category);
+       $category = category::with('childs')
+       ->where('parent_id',0)
+       ->get();
+       //first menu item
+        foreach ($category as $row) {
+            if($row->childs->count() > 0){
+                $output .= '<li><a href=""><h4>'.$row->category_name.'</h4></a>'; 
+                //second menu item
+                foreach($row->childs as $item){
+                    $output .= '<ul>';
+                    if($item->childs->count() >0){
+                        $output .= '<li><a href=""><h4>' . $item->category_name . '</h4></a>';
+                        //third menu item
+                        foreach($item->childs as $item1) {
+                            $output .= '<ul>';
+                            if ($item1->childs->count() > 0) {
+                                $output .= '<li><a href=""><h4>' . $item1->category_name . '</h4></a>';
+                                //fourth menu item
+                                foreach ($item1->childs as $item2) {
+                                    $output .= '<ul>';
+                                    if ($item2->childs->count() > 0) {
+                                        $output .= '<li><a href=""><h4>' . $item2->category_name . '</h4></a>'; 
+                                    }else{
+                                        $output .= '<li><a href=""><h4>' . $item2->category_name . '</h4></a></li>'; 
+                                    }
+
+                                    $output .= ' </ul>'; 
+                                }
+                                 $output .= '</li>';
+                            }else{
+                                $output .= '<li><a href=""><h4>' . $item1->category_name . '</h4></a></li>';
+                            }
+                            $output .= ' </ul>';  
+                        }
+                        $output .= '</li>';
+                    }else{
+
+                        $output .= '<li><a href=""><h4>'.$item->category_name. '</h4></a></li>';
+                    }
+                   $output .= ' </ul>';  
+                }
+                $output .= '</li>';
+            }else{
+                $output .= '<li><a href=""><h4>' . $row->category_name . '</h4></a></li>'; 
+            }
+            //$output .= '';
+        }
+     echo $output;
+}
+
+// public function getMenuData($id){
+
+// }
+
 }

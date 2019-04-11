@@ -436,3 +436,4 @@ Route::get('/shipping', 'AccountController@shipping');
 Route::get('/billing', 'AccountController@billing');
 Route::post('createShipping', 'AccountController@createShipping');
 Route::post('createBilling', 'AccountController@createBilling');
+Route::get('menu-data', 'pageController@menuData');
