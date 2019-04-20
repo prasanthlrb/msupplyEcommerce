@@ -27,9 +27,9 @@ Route::get('/quick-view/{id}','pageController@quickModel');
 Route::get('/product-advance-filter/{product}/{attr}/{terms}','categoryController@advanceFilter');
 
 
-Route::get('/wishlist','pageController@wishlist'); 
-Route::get('/add-wishlist/{id}','pageController@addWishlist');
-Route::get('/remove-wish/{id}','pageController@removewish');
+//Route::get('/wishlist','pageController@wishlist'); 
+// Route::get('/add-wishlist/{id}','pageController@addWishlist');
+// Route::get('/remove-wish/{id}','pageController@removewish');
 Route::get('/transports','AccountController@transport'); 
 Route::get('/own-transport','AccountController@ownTransport'); 
 Route::get('//edit-transport','AccountController@editTransport'); 
@@ -65,10 +65,22 @@ Route::get('/transport-popup/{id}','pageController@transportPopup');
 Auth::routes(); 
 Auth::routes(['verify' => true]);
 Route::group(['prefix' => 'admin'],function(){
-    Route::get('/login', function () {
-        return view('admin/app');
-    });
 
+   
+    // Route::get('/login', function () {
+    //     return view('admin/login');
+    // })->name('admin.login');
+    Route::get('/login', 'Admin\LoginController@showLoginForm')->name('admin.login');
+    Route::post('/login', 'Admin\LoginController@login');
+    Route::post('/logout', 'Admin\LoginController@logout')->name('admin.logout');
+
+
+    Route::get('/dashboard','userController@dashboard');
+    Route::get('/user','userController@user');
+    Route::get('/edit-employee/{id}','userController@editEmployee');
+    Route::get('/delete-employee/{id}','userController@deleteEmployee');
+    Route::post('/employee-save','userController@saveEmployee');
+    Route::post('/employee-update','userController@updateEmployee');
 //brands
 Route::get('/brand','productController@viewBrand');
 Route::get('/edit_brand/{id}','productController@editBrand');
@@ -172,24 +184,51 @@ Route::get('/edit-transport/{id}','transportController@editTransport');
 Route::get('/delete-transport/{id}','transportController@deleteTransport');
 Route::post('/save-transport','transportController@saveTransport');
 Route::post('/update-transport','transportController@updateTransport'); 
+
+//order
+Route::get('/order','orderController@order');
+//Route::get('/all-order','orderController@allOrder')->name('admin.all-order');
+Route::get('/order-item/{id}','orderController@orderItem');
+Route::get('/all-order/{filter}','orderController@allOrder');
+Route::get('/order-action','orderController@orderAction')->name('order.action');
+Route::get('/order-item-action','orderController@orderItemAction')->name('orderitem.action');
+
+
+//order Transport
+Route::get('/order-transport','orderController@orderTransport');
+Route::get('/transport-order/{filter}','orderController@orderTransportGet');
+Route::get('/order-transport-action','orderController@orderTransportAction')->name('ordertransport.action');
+Route::get('/order-transport-details/{id}','orderController@orderTransportDetails');
+Route::get('/order-Transport-item-action','orderController@orderTransportItemAction')->name('orderTransportItem.action');
+
+//customer
+Route::get('/customer','customerController@customer');
+Route::get('/get-customer/{id}','customerController@getCustomer');
+Route::get('/profile/{id}','customerController@profile');
+Route::get('/customer-order/{id}','customerController@customerOrder');
+Route::get('/customer-transport/{id}','customerController@customerTransport');
 });
 
 Auth::routes();
-
+Route::get('/add-wishlist/{id}','AccountController@addWishlist');
+Route::get('/removewish/{id}','AccountController@removewish');
 Route::get('/home', 'HomeController@index')->name('home');
 Route::group(['prefix' => 'account'],function( ){ 
     Route::get('/review','AccountController@review');
-    Route::get('/dashboard','AccountController@dashboard');
+    Route::get('/dashboard','AccountController@dashboard')->middleware('utype');
     Route::get('/wishlist','AccountController@wishlist');
-    Route::get('/address','AccountController@address');
-    Route::get('/orders','AccountController@orders');
-    Route::get('/editCustomer/{id}','AccountController@editCustomer');
-    Route::get('/editAddress/{id}','AccountController@editAddress');
-    Route::post('/updateCustomer','AccountController@updateCustomer');
-    Route::post('/userchangePassword','AccountController@userchangePassword');
-    Route::post('/updateAddress','AccountController@updateAddress');
-    Route::get('/vieworders/{id}','AccountController@vieworders');
+    Route::get('/address','AccountController@address')->middleware('utype');
+    Route::get('/orders','AccountController@orders')->middleware('utype');
+    Route::get('/editCustomer/{id}','AccountController@editCustomer')->middleware('utype');
+    Route::get('/editAddress/{id}','AccountController@editAddress')->middleware('utype');
+    Route::post('/updateCustomer','AccountController@updateCustomer')->middleware('utype');
+    Route::post('/userchangePassword','AccountController@userchangePassword')->middleware('utype');
+    Route::post('/updateAddress','AccountController@updateAddress')->middleware('utype');
+    Route::get('/vieworders/{id}','AccountController@vieworders')->middleware('utype');
+    Route::get('/company','AccountController@company');
+    Route::get('/company-verify','AccountController@companyVerify');
 });
+Route::post('/submit-company','AccountController@submitCompany')->name('submit.company');
 Route::get('/get-compare','pageController@compare');
 Route::get('/add-compare/{id}','pageController@addCompare');
 Route::get('/remove-compare/{id}','pageController@removeCompare');
@@ -206,11 +245,21 @@ Route::get('/compare',function(){
 //Cart Management
 Route::get('/add-cart/{id}/{qty}', function ($id, $qty) {
     $product = product::find($id);
+    $product_attribute = App\product_attribute::where('product_id','=',$id)->get();
+    $data=array();
+     
+            foreach($product_attribute as $attributes){
+                $attribute = App\attribute::find($attributes->attribute); 
+                $data[] = array(
+                    $attribute->name => $attributes->terms,
+                );
+            }
     Cart::add(array(
         'id' => $id,
         'name' => $product->product_name,
         'price' => $product->sales_price,
         'quantity' => $qty,
+        'attributes' =>$data,
     ));
     $total = Cart::getTotal();
     $quantity = count(Cart::getContent());
@@ -342,6 +391,14 @@ Route::get('/cart-data', function(){
         <a href="/product/'.$cartData->id.'" class="product_title">'.$cartData->name.'</a>
 
         <ul class="sc_product_info">';
+        if(count($cartData->attributes)>0){
+                  
+            foreach($cartData->attributes as $key=>$value) {
+                foreach($value as $field => $row) { 
+                    $output .='<li>'.$field.' : '.$row.'</li>';
+                }
+            }
+          }
    
         $output .='  </ul>
 

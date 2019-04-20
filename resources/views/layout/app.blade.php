@@ -333,7 +333,7 @@
 
 												<li class="home_menu"><a href="/">Home</a></li>
 											
-												<li class="account_menu"><a href="/">My Account</a></li>
+												<li class="account_menu"><a href="/account/dashboard">My Account</a></li>
 												<li class="cart_menu"><a href="/cart">Shopping Cart</a></li>
 												<li class="checkout_menu"><a href="/transports">Checkout</a></li>
 												<li class="contact_menu"><a href="/contact">Contact Us</a></li>

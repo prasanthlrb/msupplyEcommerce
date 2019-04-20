@@ -14,12 +14,19 @@ use Cart;
 use Session;
 use App\transport;
 use App\product_attribute;
+use App\attribute;
+use App\order;
+use App\order_item;
+use App\order_transport;
+use App\order_attribute;
+use App\wishlist;
+use App\company;
 class AccountController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
-    }
+     }
     public function dashboard(){
         return view('customer.dashboard');
     }
@@ -152,11 +159,18 @@ class AccountController extends Controller
                     $result .='<td colspan="2" data-title="Product Name"><a href="#" class="product_title">'.$row->product_name.'</a>';
                     $product_attribute = product_attribute::where('product_id',$row->id)->get();
                     $cart_qty = Cart::get($row->id);
-                    if(count($product_attribute) > 0){
-                        $result .='	<ul class="sc_product_info">
-                        
-                        </ul>';
-                    }
+                  
+                        $result .='	<ul class="sc_product_info">';
+                        if(count($product_attribute)>0){
+                  
+                            foreach($product_attribute as $attr) {
+                                $attr_name =attribute::find($attr->attribute);
+                                    $result .='<li>'.$attr_name->name.' : '.$attr->terms.'</li>';
+                               
+                            }
+                          }
+                        $result .='</ul>';
+                  
                     $result .='<td data-title="Price" class="subtotal">₹ '.$row->sales_price.'</td>
 
                     <td data-title="Quantity" style="text-align:center">'.$cart_qty->quantity.'</td>';
@@ -243,8 +257,169 @@ class AccountController extends Controller
             return response()->json(Session::get('transport'));
         }
 
+        //order to be placed
         public function orderPlaced($id,$ship,$bill){
-            echo $bill;
+            $getCart = Cart::getContent();
+            foreach($getCart as $item){
+                $product_id[] =$item->id;
+            }
+            $products = product::whereIn('id',$product_id)->get();
+            foreach($products as $row){
+                $order = new order;//order create
+                $order_item = new order_item;//order item create
+            $cart_qty = Cart::get($row->id);
+            $item_total = $cart_qty->quantity * $row->sales_price;
+            if($row->tax_type == "in"){
+                $tax = round($item_total*$row->tax/(100+$row->tax),2);
+                $order_item->tax_type = "inclusive";
+                $order_item->tax = $tax;
+                $order_item->total_price = $item_total;
+                $order->total_amount = $item_total;
+            }else{
+                $tax=$item_total * $row->tax/100;
+                $total=$item_total+$tax;
+                $order_item->tax_type = "exclusive";
+                $order_item->tax = $tax;
+                $order_item->total_price = $total;
+                $order->total_amount = $total;
+            }
+           
+            if(Session::has('transport')){
+                $transport_exits = Session::get('transport');
+                foreach($transport_exits[0] as $trans){
+                    if(in_array($row->id,$trans['selected_data']['cart_item'])){
+                        $transport_type = 1;
+                        $order->transport_id = $trans['selected_data']['transport_id'];
+                         break;
+                    }else{
+                        $transport_type = 2;
+                    }
+                }
+              
+            }else{
+             $transport_type = 2;
+            }
+
+            //order store
+           $order->user_id = Auth::user()->id;
+           $order->billing = $bill;
+           $order->shipping = $ship;
+           $order->payment_type = $id;
+           $order->transport_type = $transport_type;
+           $order->save();
+           //order item store
+           $order_item->product_name = $row->product_name;
+           $order_item->sales_price = $row->sales_price;
+           $order_item->product_id = $row->id;
+           $order_item->order_id = $order->id;
+           $order_item->qty = $cart_qty->quantity;
+           $order_item->user_id = Auth::user()->id;
+           $order_item->save();
+            //product Attribute
+            $product_attribute = product_attribute::where('product_id',$row->id)->get();
+            if(count($product_attribute) > 0){
+                foreach($product_attribute as $attr) {
+                    $attr_name =attribute::find($attr->attribute);
+                        $order_attribute = new order_attribute;
+                        $order_attribute->attr_name = $attr_name->name;
+                        $order_attribute->terms = $attr->term;
+                        $order_attribute->order_item_id = $order_item->id;
+                        $order_attribute->save();
+                }
+            }
+        }
+        if(Session::has('transport')){
+        $transport_exits = Session::get('transport');
+        foreach($transport_exits[0] as $row){
+            $transport = transport::find($row['selected_data']['transport_id']);
+        $order_transport = new order_transport;
+        $order_transport->vehicle_name = $transport->vehicle_name;
+        $order_transport->user_id = Auth::user()->id;
+        $order_transport->other= $transport->other;
+        $order_transport->price = $transport->price;
+        $order_transport->distance = $row['selected_data']['distance'];
+        $order_transport->lat = $row['selected_data']['lat'];
+        $order_transport->lng = $row['selected_data']['lng'];
+        $order_transport->transport_id = $transport->id;
+        $order_transport->order_item = collect($trans['selected_data']['cart_item'])->implode(',');
+        $order_transport->total = ($row['selected_data']['distance'] * $transport->price) + $transport->other;
+        $order_transport->shipping = $ship;
+        $order_transport->payment_type = $id;
+        $order_transport->save();
+    }
+}
+return redirect('account/dashboard');
+
+        }
+
+        public function orders(){
+            $orders =DB::table('orders as o')
+            ->join('shippings as s','o.shipping','=','s.id')
+            ->select('o.id','o.created_at','o.order_status','o.total_amount','s.first_name','s.last_name','s.email','s.telephone','s.address','s.zip')
+            ->orderBy('o.id','desc')->paginate(1);
+            return view('customer/orders',compact('orders'));
+        }
+
+        //WishList Screening
+        public function wishlist(){
+            $id=Auth::user()->id;
+            $wish = DB::table('wishlists')
+                ->where('user','=',$id)
+                ->get(); 
+                $arraydata=array();
+            foreach($wish as $wish1){
+                $arraydata[]=$wish1->product_id;
+            }
+            $product = product::whereIn('id', $arraydata)
+                ->orderBy('created_at','desc')
+                ->paginate(6); 
+            //return response($product);
+            return view('customer.wishlist',compact('product'));
+        }
+
+        public function removewish($id){
+            $wishlist = wishlist::where('product_id', $id)->where('user', Auth::user()->id)->delete();
+            return response()->json(['message'=>'Successfully Delete'],200); 
+        }
+    
+        public function addWishlist($id){
+        $wishlist = wishlist::where('product_id', $id)->where('user', Auth::user()->id)->get();
+    
+            if(count($wishlist) == 0){
+                $wish = new wishlist;
+                $wish->product_id = $id;
+                $wish->user = Auth::user()->id;
+                $wish->save();
+            }
+            return redirect('wishlist');
+            //return response()->json($wishlist); 
+        }
+        public function company(){
+            return view('customer.company');
+        }
+        public function companyVerify(){
+           return view('customer.companyVerify');
+        }
+        public function submitCompany(Request $request){
+            $request->validate([
+                'company'=>'required',
+                'gst'=>'required',
+                'gst_doc'=>'required | mimes:jpeg,bmp,png',
+            ]);
+            $fileName = null;
+           // if($request->file('gst_doc')!=""){
+            $image = $request->gst_doc;
+            $fileName = rand() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('gst_doc/'), $fileName);
+           // }
+            $company = new company;
+            $company->company = $request->company;
+            $company->user_id = Auth::user()->id;
+            $company->gst = $request->gst;
+            $company->gst_doc = $fileName;
+            $company->save();
+            //return response()->json($request->hasFile('gst_doc')); 
+            return redirect('/account/company-verify');
         }
 
 }

@@ -104,7 +104,7 @@
 												
 												
 										<?php if($product1->product_image != ""){ ?>
-	                                        <img src="{{asset('upload_single_product/').'/'.$product1->product_image}}" alt="">
+	                                        <img src="{{asset('/product_img').'/'.$product1->product_image}}" alt="">
                                         <?php } else{ ?>
 	                                        <a href="#"><img src="images/product_thumb_4.jpg" alt=""></a>
                                         <?php } ?> 
@@ -119,7 +119,7 @@
 												<a href="/product-view/{{$product1->product_id}}" class="product_title">{{$product1->product_name}}</a>
 												<!-- <a href="#">Beauty Clearance</a> -->
 											</td>
-											<td data-title="Price" class="total">AED{{$product1->sales_price}}</td>
+											<td data-title="Price" class="total">{{$product1->sales_price}}</td>
 										<form method="post" id="termsData">
 											{{csrf_field()}}
 											<!-- <td data-title="Quantity">
@@ -133,10 +133,10 @@
 											<td data-title="Action">
 												<ul class="buttons_col">
 													<li>
-														<a onclick="addCart({{$product1->product_id}})" href="#" class="button_blue">Add to Cart</a>
+														<a onclick="addCart({{$product1->id}})" href="#" class="button_blue">Add to Cart</a>
 													</li>
 													<li>
-														<a href="#" onclick="removewish({{$product1->product_id}})" class="button_dark_grey">Remove</a>
+														<a href="#" onclick="removewish({{$product1->id}})" class="button_dark_grey">Remove</a>
 													</li>
 												</ul>
 											</td>

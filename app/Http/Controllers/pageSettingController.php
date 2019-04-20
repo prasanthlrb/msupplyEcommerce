@@ -10,7 +10,10 @@ use App\category;
 use App\product;
 class pageSettingController extends Controller
 {
-
+    public function __construct()
+    {
+        $this->middleware('auth:admin');
+    }
     public function homeAd(){
 
         $ads= adModel::all();

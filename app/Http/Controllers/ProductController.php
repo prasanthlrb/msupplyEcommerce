@@ -16,7 +16,10 @@ use DB;
 class ProductController extends Controller
 {
     //Brand Edit Delete View Update Process Function Start Here
-
+    public function __construct()
+    {
+        $this->middleware('auth:admin');
+    }
     public function viewBrand(){
         $data = brand::all();
        // return response()->json($data);

@@ -26,37 +26,12 @@
 
 							<header class="top_box on_the_sides">
 
-								<div class="left_side v_centered">
-
-									<p class="visible_pages">Showing 1 to 10 of 30 (3 pages)</p>
-
-									<span>Show:</span> 
-
-									<div class="custom_select">
-
-										<select name="">
-
-											<option value="10">10</option>
-											<option value="9">9</option>
-											<option value="8">8</option>
-											<option value="7">7</option>
-											<option value="6">6</option>
-											<option value="5">5</option>
-											<option value="4">4</option>
-											<option value="3">3</option>
-											<option value="2">2</option>
-											<option value="1">1</option>
-
-										</select>
-
-									</div>
-
-								</div>
+									
 
 								<div class="right_side">
-								
+										{{$orders->links()}}
 									<ul class="pags">
-
+											
 										<li><a href="#"></a></li>
 										<li class="active"><a href="#">1</a></li>
 										<li><a href="#">2</a></li>
@@ -91,9 +66,14 @@
 									<tbody>
 									@foreach($orders as $order)
 										<tr>
-											<td data-title="Order Number"><a href="#">{{$order->invoice}}</a></td>
+											<td data-title="Order Number"><a href="#">{{$order->id}}</a></td>
 											<td data-title="Order Date">{{date('Y-m-d', strtotime($order->created_at))}}</td>
-											<td data-title="Ship To">{{$order->first_name}}</td>
+											<td data-title="Ship To">
+												<p>{{$order->first_name}} - {{$order->last_name}}</p>
+												<p>{{$order->telephone}}</p>
+												<p>{{$order->address}}</p>
+												<p>{{$order->zip}}</p>
+											</td>
 											<td data-title="Order Status">
 												@if($order->order_status == 1)
 												Processing
@@ -107,11 +87,11 @@
 												Failed
 												@endif
 											</td>
-											<td data-title="Total" class="total">AED {{$order->total}}</td>
+											<td data-title="Total" class="total">₹ {{$order->total_amount}}</td>
 											<td data-title="Action">
 												<ul class="buttons_col">
 													<li>
-														<a href="/account/vieworders/{{$order->order_id}}" class="button_grey">View Order</a>
+														<a href="/account/vieworders/{{$order->id}}" class="button_grey">View Order</a>
 													</li>
 													<!-- <li>
 														<a href="#" class="button_grey">Reorder</a>
@@ -125,12 +105,6 @@
 								</table>
 
 							</div>
-
-							<footer class="bottom_box">
-
-								<a href="#" class="button_grey middle_btn">Back</a>
-
-							</footer><!--/ .bottom_box -->
 
 						</main><!--/ [col]-->
 					</div><!--/ .row-->

@@ -67,6 +67,7 @@
 
                         </li>
 
+
                         <li class="row">
 
                                 <div class="col-xs-12">
@@ -92,7 +93,7 @@
 
                         <div class="">
 
-                            <a href="/register" >Create Your Account</span>
+                            <a href="/register" class="button_blue middle_btn">Create Your Account</a>
 
                         </div>
                        

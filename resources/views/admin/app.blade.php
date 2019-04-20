@@ -66,21 +66,23 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
             <li class="dropdown dropdown-user nav-item">
               <a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
                 <span class="mr-1">Hello,
-                  <span class="user-name text-bold-700">Prasanth</span>
+                  <span class="user-name text-bold-700">{{ Auth::guard('admin')->user()->emp_name }}</span>
                 </span>
                 {{--  <span class="avatar avatar-online">
                   <img src="{{ asset('app-assets/images/portrait/small/avatar-s-19.png')}}" alt="avatar"><i></i></span>  --}}
-              </a>
-              <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="#"><i class="ft-user"></i> Edit Profile</a>
-               
-                <div class="dropdown-divider"></div><a class="dropdown-item" onclick="event.preventDefault();
-                document.getElementById('logout-form').submit();"><i class="ft-power"></i> Logout</a>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="#"><i class="ft-user"></i> Edit Profile</a>
+                 
+                 
                 
-              
-              </div>
-              
-          
-            </li>
+              <div class="dropdown-divider"></div><a class="dropdown-item" href="{{ route('admin.logout') }}" onclick="event.preventDefault();
+                  document.getElementById('logout-form').submit();"><i class="ft-power"></i> Logout</a>
+                  
+                  <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    @csrf
+                  </form>
+                </div>
+              </li>
             
             <li class="dropdown dropdown-notification nav-item">
               <a class="nav-link nav-link-label" href="#" data-toggle="dropdown"><i class="ficon ft-bell"></i>
@@ -239,7 +241,7 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
   <div class="main-menu menu-fixed menu-dark menu-accordion menu-shadow" data-scroll-to-active="true">
     <div class="main-menu-content">
       <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-            <li class=" nav-item"><a href="#"><i class="la la-support"></i><span class="menu-title">Dashboard</span></a>
+            <li class=" nav-item"><a href="/admin/dashboard"><i class="la la-support"></i><span class="menu-title">Dashboard</span></a>
             </li>
            
 
@@ -256,7 +258,7 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
           <ul class="menu-content">
             <li><a class="menu-item" href="/admin/role" data-i18n="nav.dash.ecommerce">Role</a>
             </li>
-            <li><a class="menu-item" href="/admin/customuser">User</a>
+            <li><a class="menu-item" href="/admin/user">User</a>
             </li>
           </ul>
         </li>     
@@ -272,9 +274,13 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
           </ul>
         </li>
         
-        <li class=" nav-item"><a href="#"><i class="ft-shopping-cart"></i><span class="menu-title">Order</span><span class="badge badge badge-info badge-pill float-right mr-2">3</span></a>
+        <li class=" nav-item"><a href="#"><i class="ft-shopping-cart"></i><span class="menu-title">Order</span><span class="badge badge badge-info badge-pill float-right mr-2">
+          {{count(App\order::where('order_status',0)->get())}}
+          </span></a>
           <ul class="menu-content">
             <li><a class="menu-item" href="/admin/order" data-i18n="nav.dash.ecommerce">Orders</a>
+            </li>
+            <li><a class="menu-item" href="/admin/order-transport" data-i18n="nav.dash.ecommerce">KAS Transport</a>
             </li>
           
             

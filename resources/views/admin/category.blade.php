@@ -192,7 +192,7 @@
                     $("#Category_form")[0].reset();
                      $('#attribute_model').modal('hide');
                      $('.zero-configuration').load(location.href+' .zero-configuration');
-                     toastr.success('Attribute Store Successfully', 'Successfully Save');
+                     toastr.success('Category Store Successfully', 'Successfully Save');
                 },error: function (data, errorThrown) {
                 var errorData = data.responseJSON.errors;
                   $.each(errorData, function(i, obj) {
@@ -215,7 +215,7 @@
               $("#Category_form")[0].reset();
                $('#attribute_model').modal('hide');
                $('.zero-configuration').load(location.href+' .zero-configuration');
-               toastr.success('Attribute Update Successfully', 'Successfully Update');
+               toastr.success('Category Update Successfully', 'Successfully Update');
           },error: function (data, errorThrown) {
             var errorData = data.responseJSON.errors;
             $.each(errorData, function(i, obj) {
@@ -255,7 +255,7 @@
         dataType: "JSON",
         success: function(data)
         {
-          toastr.success('Attribute Delete Successfully', 'Successfully Delete');
+          toastr.success('Category Delete Successfully', 'Successfully Delete');
           $('.zero-configuration').load(location.href+' .zero-configuration');
         }
       });
