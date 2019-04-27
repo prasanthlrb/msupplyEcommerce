@@ -205,8 +205,14 @@ Route::get('/order-Transport-item-action','orderController@orderTransportItemAct
 Route::get('/customer','customerController@customer');
 Route::get('/get-customer/{id}','customerController@getCustomer');
 Route::get('/profile/{id}','customerController@profile');
+Route::get('/verify-company/{id}','customerController@profile');
 Route::get('/customer-order/{id}','customerController@customerOrder');
 Route::get('/customer-transport/{id}','customerController@customerTransport');
+
+
+//un verify company
+Route::get('/verify-company','customerController@unverifyCompany');
+Route::get('/verify-company/{id}','customerController@verifyCompany');
 });
 
 Auth::routes();
@@ -220,13 +226,27 @@ Route::group(['prefix' => 'account'],function( ){
     Route::get('/address','AccountController@address')->middleware('utype');
     Route::get('/orders','AccountController@orders')->middleware('utype');
     Route::get('/editCustomer/{id}','AccountController@editCustomer')->middleware('utype');
-    Route::get('/editAddress/{id}','AccountController@editAddress')->middleware('utype');
+    Route::get('/edit-shipping/{id}','AccountController@editShipping')->middleware('utype');
+    Route::get('/edit-billing/{id}','AccountController@editBilling')->middleware('utype');
     Route::post('/updateCustomer','AccountController@updateCustomer')->middleware('utype');
     Route::post('/userchangePassword','AccountController@userchangePassword')->middleware('utype');
     Route::post('/updateAddress','AccountController@updateAddress')->middleware('utype');
     Route::get('/vieworders/{id}','AccountController@vieworders')->middleware('utype');
     Route::get('/company','AccountController@company');
     Route::get('/company-verify','AccountController@companyVerify');
+    
+    Route::post('/change-account-info','AccountController@changeAccountInfo');
+    Route::post('/change-account-info','AccountController@changeAccountInfo');
+    Route::post('/update-billing','AccountController@updateBilling');
+    Route::post('/update-shipping','AccountController@updateShipping');
+
+    Route::get('/delete-shipping/{id}','AccountController@deleteShipping');
+    Route::get('/delete-billing/{id}','AccountController@deleteBilling');
+
+Route::get('/shipping', 'AccountController@accShipping');
+Route::get('/billing', 'AccountController@accBilling');
+Route::post('createShipping', 'AccountController@accCreateShipping');
+Route::post('createBilling', 'AccountController@accCreateBilling');
 });
 Route::post('/submit-company','AccountController@submitCompany')->name('submit.company');
 Route::get('/get-compare','pageController@compare');

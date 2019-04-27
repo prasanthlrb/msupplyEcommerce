@@ -1,4 +1,85 @@
 @extends('layout.app')
+@section('extra-css')
+<style>
+ul.pagination {
+	list-style: none;
+}
+.pagination > li{ float: left; }
+
+		.pagination > li:first-child > a{ border-radius: 3px 0 0 3px; }
+
+		.pagination > li:first-child > a::before,
+		.pagination > li:last-child > a::before{
+			display: inline-block;
+			position: relative;
+			top: -1px;
+			font-size: 13px;
+			font-family: 'fontello';	
+		}
+
+		.pagination > li:first-child > a::before{ content: '\eab8'; }
+		.pagination > li:last-child > a::before{ content: '\eab9'; }
+
+		.pagination > li:last-child > a{ border-radius: 0 3px 3px 0; }
+
+		.pagination > li:not(:last-child) > a{ border-right: none; }
+
+		.pagination > li > a{
+			position: relative;
+			display: block;
+			width: 30px;
+			height: 30px;
+			text-align: center;
+			font-size: 14px;
+			line-height: 30px;
+			border: 1px solid #eaeaea;
+			background: #fff;
+		}
+		.pagination > li > span{
+			position: relative;
+			display: block;
+			width: 30px;
+			height: 30px;
+			text-align: center;
+			font-size: 14px;
+			line-height: 30px;
+			border: 1px solid #eaeaea;
+			background: #fff;
+		}
+
+		.pagination > li:not(:last-child) > a::after{
+			content: "";
+			position: absolute;
+			z-index: 1;
+			right: -1px;
+			top: -1px;
+			bottom: -1px;
+			display: block;
+			width: 1px;
+			background: #ff4557;
+			opacity: 0;
+
+			-webkit-transition: opacity .7s ease;
+					transition: opacity .7s ease;
+		}
+
+		.pagination > li.active:not(:last-child) > a::after,
+		.pagination > li:not(:last-child) > a:hover::after{
+			opacity: 1;
+
+			-webkit-transition: opacity .1s ease;
+					transition: opacity .1s ease;
+		}
+
+		.pagination > li.active > span,
+		.pagination > li > a:hover{
+			color: #fff;
+			background: #ff4557;
+			border-color: #ff4557;
+		}
+
+</style>
+@endsection
 @section('content')
 			<!-- - - - - - - - - - - - - - Page Wrapper - - - - - - - - - - - - - - - - -->
 
@@ -30,7 +111,7 @@
 
 								<div class="right_side">
 										{{$orders->links()}}
-									<ul class="pags">
+									{{-- <ul class="pags">
 											
 										<li><a href="#"></a></li>
 										<li class="active"><a href="#">1</a></li>
@@ -38,7 +119,7 @@
 										<li><a href="#">3</a></li>
 										<li><a href="#"></a></li>
 
-									</ul>
+									</ul> --}}
 
 								</div>
 

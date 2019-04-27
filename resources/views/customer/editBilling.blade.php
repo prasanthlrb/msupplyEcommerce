@@ -15,11 +15,11 @@
 					<ul class="breadcrumbs">
 
 						<li><a href="/">Home</a></li>
-						<li>Edit Shipping</li>
+						<li>Edit Billing</li>
 
 					</ul>
 
-					<h1 class="page_title">Edit Shipping Address</h1>
+					<h1 class="page_title">Edit Billing Address</h1>
 
 
 					<!-- - - - - - - - - - - - - - Billing information - - - - - - - - - - - - - - - - -->
@@ -32,20 +32,20 @@
 
 							<a class="icon_btn button_dark_grey edit_button" href="#"><i class="icon-pencil"></i></a>
 
-						<form action="/account/update-shipping" method="post" class="type_2">
-						{{ csrf_field() }}
-						<input type="hidden" name="id" value="{{$shipping->id}}">
+						<form action="/account/update-billing" method="post" class="type_2">
+                        {{ csrf_field() }}
+                        <input type="hidden" name="id" value="{{$billing->id}}">
 							<ul>
 							
 								<li class="row">
 									<div class="col-sm-6">
 										<label for="first_name" class="required">First Name</label>
-										<input value="<?php echo $shipping->first_name ?>" type="text" name="first_name" id="first_name">
+										<input value="<?php echo $billing->first_name ?>" type="text" name="first_name" id="first_name">
 										<label style="color:red;"><?php echo $errors->first('first_name'); ?></label>
 									</div>
 									<div class="col-sm-6">
 										<label for="last_name" class="required">Last Name</label>
-										<input value="<?php echo $shipping->last_name ?>" type="text" name="last_name" id="last_name">
+										<input value="<?php echo $billing->last_name ?>" type="text" name="last_name" id="last_name">
 										<label style="color:red;"><?php echo $errors->first('last_name'); ?></label>
 									</div>
 								</li>
@@ -55,14 +55,14 @@
 										<div class="col-sm-6">
 											
 											<label for="email" class="required">Email Address</label>
-											<input value="<?php echo $shipping->email ?>" type="email" name="email" id="email">
+											<input value="<?php echo $billing->email ?>" type="email" name="email" id="email">
 											<label style="color:red;"><?php echo $errors->first('email'); ?></label>
 
 										</div>
 										<div class="col-sm-6">
 
 											<label for="telephone" class="required">Telephone</label>
-											<input value="<?php echo $shipping->telephone ?>" type="text" name="telephone" id="telephone">
+											<input value="<?php echo $billing->telephone ?>" type="text" name="telephone" id="telephone">
 											<label style="color:red;"><?php echo $errors->first('telephone'); ?></label>
 
 										</div>
@@ -74,7 +74,7 @@
 										<div class="col-xs-12">
 
 											<label for="address" class="required">Address</label>
-											<textarea id="address" name="address"><?php echo $shipping->address ?></textarea>
+											<textarea id="address" name="address"><?php echo $billing->address ?></textarea>
 											<label style="color:red;"><?php echo $errors->first('address'); ?></label>
 
 										</div>
@@ -91,7 +91,7 @@
 												<select style="width:100%" name="city" id="city" class="select2 form-control col-md-12" placeholder="search for Category">
 												
 														@foreach($citys as $data)
-														<option value="{{$data}}" {{$data == $shipping->city ? 'selected' : '' }}>{{$data}}</option>
+														<option value="{{$data}}" {{$data == $billing->city ? 'selected' : '' }}>{{$data}}</option>
 														@endforeach
 												
 													
@@ -112,8 +112,8 @@
 												@if (old('state') != "")
 												<option value="<?php echo old('state'); ?>"><?php echo old('state'); ?></option>
 												@else
-													<option value="Tamil Nadu" <?php echo $shipping->state == "Tamil Nadu"? 'selected' : '' ?>>Tamil Nadu</option>
-													<option value="Other state" <?php echo $shipping->state == "Other state"? 'selected' : '' ?>>Other state</option>
+													<option value="Tamil Nadu" <?php echo $billing->state == "Tamil Nadu"? 'selected' : '' ?>>Tamil Nadu</option>
+													<option value="Other state" <?php echo $billing->state == "Other state"? 'selected' : '' ?>>Other state</option>
 											
 												@endif
 												</select>
@@ -130,7 +130,7 @@
 										<div class="col-sm-6">
 
 											<label for="zip" class="required">Zip/Postal Code</label>
-											<input value="<?php echo $shipping->zip ?>" type="text" name="zip" id="zip">
+											<input value="<?php echo $billing->zip ?>" type="text" name="zip" id="zip">
 											<label style="color:red;"><?php echo $errors->first('zip'); ?></label>
 
 										</div><!--/ [col] -->
@@ -143,7 +143,7 @@
 												
 												<select name="country" id="country">
 												@if (old('country') != "")
-												<option value="<?php echo $shipping->country ?>"><?php echo old('country'); ?></option>
+												<option value="<?php echo $billing->country ?>"><?php echo old('country'); ?></option>
 												@else
 												<option value="India">India</option>
 												@endif

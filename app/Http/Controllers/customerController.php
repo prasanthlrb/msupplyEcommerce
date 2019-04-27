@@ -76,7 +76,7 @@ class customerController extends Controller
     ->rawColumns(['action','customer','user_type'])
     ->make(true);
    }
-
+   
    public function profile($id){
        $user = User::find($id);
        $output ='<div class="form-group row">
@@ -147,4 +147,65 @@ class customerController extends Controller
     ->orderBy('t.id','desc')->get();
        return view('admin.customerTransport',compact('transport'));
    }
+
+   public function unverifyCompany(){
+     $company = DB::table('companies as c')
+     ->where('status',0)
+     ->join('users as u', 'c.user_id', '=', 'u.id')
+     ->get();
+     return view('admin.verifyCompany',compact('company'));
+     //return response()->json($company);
+   }
+   public function verifyCompany($id){
+    $user = User::find($id);
+    $output ='<div class="form-group row">
+    <input type="hidden" name="id" value="'.$user->id.'">
+    <label class="col-md-3 label-control" for="projectinput1">First Name</label>
+    <div class="col-md-9">
+      <input type="text" id="projectinput1" class="form-control" placeholder="First Name"
+      name="name" value="'.$user->name.'">
+    </div>
+  </div>
+ 
+  <div class="form-group row">
+    <label class="col-md-3 label-control" for="projectinput3">E-mail</label>
+    <div class="col-md-9">
+      <input type="text" id="projectinput3" class="form-control" placeholder="E-mail" name="email" value="'.$user->email.'">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="col-md-3 label-control" for="projectinput4">Contact Number</label>
+    <div class="col-md-9">
+      <input type="text" id="projectinput4" class="form-control" placeholder="Phone" name="phone" value="'.$user->phone.'">
+    </div>
+  </div>
+ ';
+    if($user->user_type == "company"){
+        $company = company::where('user_id',$user->id)->first();
+        $output .='
+        
+        <h4 class="form-section"><i class="ft-clipboard"></i> Company Details</h4>
+        <div class="form-group row">
+          <label class="col-md-3 label-control" for="projectinput5">Company</label>
+          <div class="col-md-9">
+            <input type="text" id="projectinput5" class="form-control" placeholder="Company Name"
+            name="company" value="'.$company->company.'">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-3 label-control" for="projectinput5">GST</label>
+          <div class="col-md-9">
+            <input type="text" id="projectinput5" class="form-control" placeholder="Company GST No"
+            name="gst" value="'.$company->gst.'">
+          </div>
+        </div>
+        <figure class="col-lg-3 col-md-6 col-12" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
+          <a href="/gst_doc/'.$company->gst_doc.'" itemprop="contentUrl" data-size="480x360">
+            <img class="img-thumbnail img-fluid" src="/gst_doc/'.$company->gst_doc.'"
+            itemprop="thumbnail" alt="Image description" />
+          </a>
+        </figure>';
+    }
+    return view('admin.doVerifyCompany',compact('output'));
+}
 }

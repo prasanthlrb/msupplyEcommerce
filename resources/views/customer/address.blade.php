@@ -25,7 +25,8 @@
 
 						<main class="col-md-9 col-sm-8">
 
-							<h1>Managing Shipping Address</h1>
+							<h1>Managing Shipping & Billing
+								 Address</h1>
 							<section class="theme_box">
 
 								
@@ -36,33 +37,73 @@
 		
 											<!-- - - - - - - - - - - - - - Table v2 - - - - - - - - - - - - - - - - -->
 		
-											<table class="table">
+											<div class="col-sm-6">
+												<h4 style="padding:10px">Shipping Address</h4>
+											<table class="table" id="shippingTable">
 		
 												<tbody>
-												@foreach($address as $address1)
+												@foreach($shipping as $address1)
 													<tr>
-														<td>
-															@if($address1->address_type == 1)
-															<a href="#" class="button_dark_grey">Home</a>
-															@else 
-															<a href="#" class="button_dark_grey">Work</a>
-															@endif
+															<td>
 															
-															<a href="/account/editAddress/{{$address1->shipping}}" class="button_dark_grey pull-right">Edit</a>
-																<div style="padding-bottom:10px"></div>
+												
+															
                               <h5>{{$address1->first_name}}  {{$address1->last_name}}</h5>
                             
                               <p>{{$address1->email}} - {{$address1->telephone}}</p>
                               <p>{{$address1->city}} - {{$address1->state}}</p>
                             
 															<p>{{$address1->address}}</p>
+															<div style="padding-bottom:10px"></div>
+															<a href="javascript:void(null)" onclick="deleteShipping({{$address1->id}})" class="button_dark_grey">Delete</a>
+							
+															<a href="/account/edit-shipping/{{$address1->id}}" class="button_dark_grey pull-right">Edit</a>
 														</td>
 													</tr>
 												@endforeach
-												</tbody>
+											</tbody>
+											
+											
+										</table>
+										<div class="left_side" style="padding:20px">
+
+												<a href="/account/shipping" class="button_blue middle_btn">Create Shipping</a>
+				
+											</div>
+									</div>
+											<div class="col-sm-6">
+													<h4 style="padding:10px">billing Address</h4>
+												
+											<table class="table" id="billingTable">
 		
-		
-											</table>
+												<tbody>
+												@foreach($billing as $address1)
+													<tr>
+														<td>
+														
+                              <h5>{{$address1->first_name}}  {{$address1->last_name}}</h5>
+                            
+                              <p>{{$address1->email}} - {{$address1->telephone}}</p>
+                              <p>{{$address1->city}} - {{$address1->state}}</p>
+                            
+															<p>{{$address1->address}}</p>
+															<div style="padding-bottom:10px"></div>
+															<a href="javascript:void(null)" onclick="deleteBilling({{$address1->id}})" class="button_dark_grey">Delete</a>
+							
+															<a href="/account/edit-shipping/{{$address1->id}}" class="button_dark_grey pull-right">Edit</a>
+														</td>
+													</tr>
+												@endforeach
+											</tbody>
+											
+											
+										</table>
+										<div class="right_side" style="padding:20px">
+
+												<a href="/account/billing" class="button_blue middle_btn">Create Billing</a>
+				
+											</div>
+									</div>
 		
 											<!-- - - - - - - - - - - - - - End of table v2 - - - - - - - - - - - - - - - - -->
 		
@@ -112,30 +153,31 @@
       
     }
 
-    function Edit(id){
+    function deleteShipping(id){
+			if (confirm('Are you sure you want to Delete this Address?')) {
       $.ajax({
-        url : '/account/editAddress/'+id,
+        url : '/account/delete-shipping/'+id,
         type: "GET",
         dataType: "JSON",
         success: function(data)
         {
-          console.log(data);
-          $('#myModalLabel8').text('Update Info');
-          $('#save').text('Save Change');
-          $('input[name=first_name]').val(data.first_name);
-          $('input[name=last_name]').val(data.last_name);
-          $('input[name=email]').val(data.email);
-          $('input[name=telephone]').val(data.telephone);
-		  $('textarea[name=address]').val(data.address);
-		  $('input[name=city]').val(data.city);
-		  $('select[name=state]').val(data.state);
-		  $('input[name=postal_code]').val(data.zip);
-		  $('select[name=country]').val(data.country);
-          $('input[name=id]').val(data.id);
-          $('#account_model').modal('show');
-          action_type = 2;
+          $('#shippingTable').load(location.href+' #shippingTable');
         }
       });
+			}
+    }
+    function deleteBilling(id){
+			if (confirm('Are you sure you want to Delete this Address?')) {
+      $.ajax({
+        url : '/account/delete-billing/'+id,
+        type: "GET",
+        dataType: "JSON",
+        success: function(data)
+        {
+          $('#billingTable').load(location.href+' #billingTable');
+        }
+      });
+			}
     }
 
 

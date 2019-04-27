@@ -246,9 +246,13 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
            
 
 
-        <li class="nav-item"><a href="#"><i class="la la-user-plus"></i><span class="menu-title">Customer</span></a>
+        <li class="nav-item"><a href="#"><i class="la la-user-plus"></i><span class="menu-title">Customer<span class="badge badge badge-info badge-pill float-right mr-2">
+            {{count(App\company::where('status',0)->get())}}
+            </span></a>
           <ul class="menu-content">
             <li><a class="menu-item" href="/admin/customer" data-i18n="nav.dash.ecommerce">Customer List</a>
+            </li>
+            <li><a class="menu-item" href="/admin/verify-company" data-i18n="nav.dash.ecommerce">Unverify Company</a>
             </li>
           </ul>
         </li>

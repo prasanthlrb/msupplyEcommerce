@@ -98,6 +98,74 @@ class AccountController extends Controller
         ];
         return view('billing',compact('citys'));
     }
+    public function accShipping(){
+        $citys =[
+            'Chennai',
+            'Coimbatore',
+            'Madurai',
+            'Tiruchirappalli',
+            'Salem',
+            'Tiruppur',
+            'Erode',
+            'Tirunelveli',
+            'Vellore',
+            'Thoothukkudi',
+            'Dindigul',
+            'Thanjavur',
+            'Karur',
+            'Sivakasi',
+            'Ranipet',
+            'Udhagamandalam',
+            'Hosur',
+            'Nagercoil',
+            'Kanchipuram',
+            'Namakkal',
+            'Sivaganga',
+            'Neyveli',
+            'Cuddalore',
+            'Kumbakonam',
+            'Tiruvannamalai',
+            'Pollachi',
+            'Virudunagar',
+            'Pudukottai',
+            'Nagapattinam'
+        ];
+        return view('customer.shipping',compact('citys'));
+    }
+    public function accBilling(){
+        $citys =[
+            'Chennai',
+            'Coimbatore',
+            'Madurai',
+            'Tiruchirappalli',
+            'Salem',
+            'Tiruppur',
+            'Erode',
+            'Tirunelveli',
+            'Vellore',
+            'Thoothukkudi',
+            'Dindigul',
+            'Thanjavur',
+            'Karur',
+            'Sivakasi',
+            'Ranipet',
+            'Udhagamandalam',
+            'Hosur',
+            'Nagercoil',
+            'Kanchipuram',
+            'Namakkal',
+            'Sivaganga',
+            'Neyveli',
+            'Cuddalore',
+            'Kumbakonam',
+            'Tiruvannamalai',
+            'Pollachi',
+            'Virudunagar',
+            'Pudukottai',
+            'Nagapattinam'
+        ];
+        return view('customer.billing',compact('citys'));
+    }
      public function createShipping(Request $request){
         $request->validate([
             'first_name'=>'required',
@@ -138,6 +206,44 @@ class AccountController extends Controller
         $order_detail->country = $request->country;
         $order_detail->save();
         return redirect('/checkout');
+     }
+     public function accCreateShipping(Request $request){
+        $request->validate([
+            'first_name'=>'required',
+            'telephone'=>'required',
+            'address'=>'required',
+            'zip'=>'required',
+        ]);
+        $order_detail = new shipping;
+        $order_detail->customer_id = Auth::user()->id;
+        $order_detail->first_name = $request->first_name;
+        $order_detail->last_name = $request->last_name;
+        $order_detail->email = $request->email;
+        $order_detail->telephone = $request->telephone;
+        $order_detail->address = $request->address;
+        $order_detail->city = $request->city;
+        $order_detail->state = $request->state;
+        $order_detail->zip = $request->zip;
+        $order_detail->country = $request->country;
+       $order_detail->save();
+       
+            return redirect('/account/address');
+       
+     }
+     public function accCreateBilling(Request $request){
+        $order_detail = new billing;
+        $order_detail->customer_id = Auth::user()->id;
+        $order_detail->first_name = $request->first_name;
+        $order_detail->last_name = $request->last_name;
+        $order_detail->email = $request->email;
+        $order_detail->telephone = $request->telephone;
+        $order_detail->address = $request->address;
+        $order_detail->city = $request->city;
+        $order_detail->state = $request->state;
+        $order_detail->zip = $request->zip;
+        $order_detail->country = $request->country;
+        $order_detail->save();
+        return redirect('/account/address');
      }
 
     public function checkout()
@@ -353,10 +459,16 @@ return redirect('account/dashboard');
         }
 
         public function orders(){
-            $orders =DB::table('orders as o')
+            // $orders =DB::table('orders as o')
+            // ->join('shippings as s','o.shipping','=','s.id')
+            // ->select('o.id','o.created_at','o.order_status','o.total_amount','s.first_name','s.last_name','s.email','s.telephone','s.address','s.zip')
+            // ->orderBy('o.id','desc')->paginate(1);
+            $orders = $orders =DB::table('orders as o')
+            ->where('user_id',Auth::user()->id)
             ->join('shippings as s','o.shipping','=','s.id')
-            ->select('o.id','o.created_at','o.order_status','o.total_amount','s.first_name','s.last_name','s.email','s.telephone','s.address','s.zip')
-            ->orderBy('o.id','desc')->paginate(1);
+            ->orderBy('o.id','desc')
+            ->paginate(3);
+            //return response()->json($orders);
             return view('customer/orders',compact('orders'));
         }
 
@@ -422,4 +534,209 @@ return redirect('account/dashboard');
             return redirect('/account/company-verify');
         }
 
+        public function editCustomer($id){
+            $user = User::find($id);
+            return response()->json($user); 
+        }
+
+        public function editShipping($id){
+            $citys =[
+                'Chennai',
+                'Coimbatore',
+                'Madurai',
+                'Tiruchirappalli',
+                'Salem',
+                'Tiruppur',
+                'Erode',
+                'Tirunelveli',
+                'Vellore',
+                'Thoothukkudi',
+                'Dindigul',
+                'Thanjavur',
+                'Karur',
+                'Sivakasi',
+                'Ranipet',
+                'Udhagamandalam',
+                'Hosur',
+                'Nagercoil',
+                'Kanchipuram',
+                'Namakkal',
+                'Sivaganga',
+                'Neyveli',
+                'Cuddalore',
+                'Kumbakonam',
+                'Tiruvannamalai',
+                'Pollachi',
+                'Virudunagar',
+                'Pudukottai',
+                'Nagapattinam'
+            ];
+            $shipping = shipping::find($id);
+            return view('customer.editShipping',compact('shipping','citys'));  
+        }
+        public function editBilling($id){
+            $citys =[
+                'Chennai',
+                'Coimbatore',
+                'Madurai',
+                'Tiruchirappalli',
+                'Salem',
+                'Tiruppur',
+                'Erode',
+                'Tirunelveli',
+                'Vellore',
+                'Thoothukkudi',
+                'Dindigul',
+                'Thanjavur',
+                'Karur',
+                'Sivakasi',
+                'Ranipet',
+                'Udhagamandalam',
+                'Hosur',
+                'Nagercoil',
+                'Kanchipuram',
+                'Namakkal',
+                'Sivaganga',
+                'Neyveli',
+                'Cuddalore',
+                'Kumbakonam',
+                'Tiruvannamalai',
+                'Pollachi',
+                'Virudunagar',
+                'Pudukottai',
+                'Nagapattinam'
+            ];
+            $billing = billing::find($id);
+            return view('customer.editBilling',compact('billing','citys'));  
+        }
+        public function deleteAddress($id){
+            $order_detail = order_detail::find($id);
+            //return view('customer.editShipping'); 
+            $order_detail->delete();
+            return back()->withInput();
+           
+        }
+        // public function updateCustomer(Request $request){
+        //     $request->validate([
+        //         'phone'=>'required|unique:Users,phone,'.$request->id,
+        //         'email'=>'required|unique:Users,email,'.$request->id,
+        //         'name'=>'required'
+        //     ]);
+        //     $User = User::find($request->id);
+        //     $User->name = $request->name;
+        //     $User->phone = $request->phone;
+        //     $User->email = $request->email;
+        //     $User->save();
+        //     return response()->json($User);
+        // }
+    
+        public function userchangePassword(Request $request){
+            $request->validate([
+                'password' => 'min:6|required_with:password_confirmation|same:password_confirmation',
+                'password_confirmation' => 'min:6'
+            ]);
+    
+            $User = User::find(Auth::user()->id);
+            $User->password = Hash::make($request->get('password'));
+            $User->remember_token = $request->get('_token');
+            $User->save();
+    
+            Auth::logout();
+            $request->session()->flush();
+            $request->session()->regenerate();
+            return redirect('/login');
+        }
+    
+        public function updateAddress(Request $request){
+            $request->validate([
+                'first_name'=>'required',
+                'last_name'=>'required',
+                'telephone'=>'required|unique:order_details,telephone,'.$request->id,
+                'email'=>'required|unique:order_details,email,'.$request->id,
+                'address'=>'required',
+                'city'=>'required',
+                'country'=>'required',
+                'zip'=>'required',
+                'state'=>'required'
+            ]);
+            $order_detail = order_detail::find($request->id);
+            $order_detail->first_name = $request->first_name;
+            $order_detail->last_name = $request->last_name;
+            $order_detail->telephone = $request->telephone;
+            $order_detail->email = $request->email;
+            $order_detail->address = $request->address;
+            $order_detail->city = $request->city;
+            $order_detail->country = $request->country;
+            $order_detail->zip = $request->zip;
+            $order_detail->state = $request->state;
+            $order_detail->save();
+            return redirect('/account/address');
+        }
+        public function address(){
+
+            // $address = DB::table('orders')
+            //     ->where('orders.customer_id',Auth::user()->id)
+            //     ->join('order_details', 'orders.shipping', '=', 'order_details.id')
+            //     ->select('*')
+            //     ->orderBy('order_details.created_at','desc')
+            //     ->get();
+         $shipping = shipping::where('customer_id', Auth::user()->id)->get();
+         $billing = billing::where('customer_id', Auth::user()->id)->get();
+        return view('customer.address',compact('shipping','billing'));
+        }
+
+        public function changeAccountInfo(Request $request){
+            $request->validate([
+                'name'=>'required',
+                'email'=>'required|unique:users,email,'.Auth::user()->id,
+                'phone'=>'required|unique:users,phone,'.Auth::user()->id,
+            ]);
+            $user = User::find(Auth::user()->id);
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->phone = $request->phone;
+            $user->save();
+            return redirect('/account/dashboard');
+            //return response()->json($user);
+        }
+
+
+        public function updateShipping(Request $request){
+            $shipping = shipping::find($request->id);
+            $shipping->customer_id = Auth::user()->id;
+            $shipping->first_name = $request->first_name;
+            $shipping->last_name = $request->last_name;
+            $shipping->email = $request->email;
+            $shipping->telephone = $request->telephone;
+            $shipping->address = $request->address;
+            $shipping->city = $request->city;
+            $shipping->state = $request->state;
+            $shipping->zip = $request->zip;
+            $shipping->country = $request->country;
+            $shipping->save();
+            return redirect('/account/address');
+        }
+        public function updateBilling(Request $request){
+            $billing = billing::find($request->id);
+            $billing->customer_id = Auth::user()->id;
+            $billing->first_name = $request->first_name;
+            $billing->last_name = $request->last_name;
+            $billing->email = $request->email;
+            $billing->telephone = $request->telephone;
+            $billing->address = $request->address;
+            $billing->city = $request->city;
+            $billing->state = $request->state;
+            $billing->zip = $request->zip;
+            $billing->country = $request->country;
+            $billing->save();
+            return redirect('/account/address');
+        }
+        public function deleteShipping($id){
+            shipping::find($id)->delete();
+            return response()->json("200");
+        }
+        public function deleteBilling($id){
+            billing::find($id)->delete();
+            return response()->json("200");
+        }
 }
