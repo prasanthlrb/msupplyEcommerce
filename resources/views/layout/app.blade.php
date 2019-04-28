@@ -26,6 +26,10 @@
 		<link rel="stylesheet" href="{{ asset('css/animate.css')}}">
 		<link rel="stylesheet" href="{{ asset('css/fontello.css')}}">
 		<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css')}}">
+			<!-- Toast alert CSS
+		============================================ -->
+		 <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/plugins/extensions/toastr.css')}}">
+  		 <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/extensions/toastr.css')}}">
 		
 		<!-- Theme CSS
 		============================================ -->
@@ -350,9 +354,11 @@
 									<!-- - - - - - - - - - - - - - Navigation item - - - - - - - - - - - - - - - - -->
 
 									<div class="nav_item size_4">
-
-										<a href="/account/wishlist" class="wishlist_button" data-amount="{{count(Cart::getContent())}}"></a>
-									
+										@if(Auth::user())	
+										<a href="/account/wishlist" class="wishlist_button" data-amount="{{count(App\wishlist::where('user',Auth::user()->id)->get())}}"></a>
+										@else
+										<a href="/account/wishlist" class="wishlist_button" data-amount="0"></a>
+										@endif
 									</div><!--/ .nav_item-->
 
 									
@@ -368,7 +374,7 @@
 									<!-- - - - - - - - - - - - - - Navigation item - - - - - - - - - - - - - - - - -->
 									<div class="nav_item size_3">
 
-										<button id="open_shopping_cart" class="open_button" data-amount="3">
+										<button id="open_shopping_cart" class="open_button" data-amount="0">
 											<b class="title">My Cart</b>
 											<b class="total_price">₹ 0.00</b>
 										</button>
@@ -589,11 +595,11 @@
 
 									<ul class="list_of_links">
 
-										<li><a href="#">My Account</a></li>
-										<li><a href="#">Order History</a></li>
-										<li><a href="#">Returns</a></li>
-										<li><a href="#">Wish List</a></li>
-										<li><a href="#">Newsletter</a></li>
+										<li><a href="/account/dashboard">Profile Information</a></li>
+										<li><a href="/account/orders">Order History</a></li>
+										<li><a href="/account/address">Manage Address</a></li>
+										<li><a href="/account/wishlist">Wish List</a></li>
+										<li><a href="/account/review">Reviews & Ratings</a></li>
 
 									</ul>
 
@@ -670,28 +676,6 @@
 
 			<!-- - - - - - - - - - - - - - Facebook - - - - - - - - - - - - - - - - -->
 
-			<li>
-
-				<button class="icon_btn middle_btn social_facebook open_"><i class="icon-facebook-1"></i></button>
-
-				
-				<section class="dropdown">
-
-					<div class="animated_item">
-
-						<h3 class="title">Join Us on Facebook</h3>
-
-					</div><!--/ .animated_item-->
-
-					<div class="animated_item">
-						@if(isset($social))
-					<iframe src="{{$social->facebook}}" style="border:none; overflow:hidden; width:235px; height:345px;"></iframe>
-						@endif
-					</div><!--/ .animated_item-->
-
-				</section><!--/ .dropdown-->
-
-			</li>
 
 			<!-- - - - - - - - - - - - - - End of Facebook - - - - - - - - - - - - - - - - -->
 
@@ -847,6 +831,10 @@
 		============================================ -->
 		<script src="{{asset('js/theme.plugins.js')}}"></script>
 		<script src="{{asset('js/theme.core.js')}}"></script>
+		<!-- Toast Alert Js files
+		============================================ -->
+		<script src="{{ asset('app-assets/js/scripts/extensions/toastr.js')}}" type="text/javascript"></script>
+		<script src="{{ asset('app-assets/vendors/js/extensions/toastr.min.js')}}" type="text/javascript"></script>
 		
 	</body>
 	@yield('extra-js')
@@ -890,15 +878,41 @@
    });
 }
 function addCompare(id){
-	alert(id);
 	$.ajax({        
 			url : '/add-compare/'+id,
 			type: "GET",
 			success: function(data)
 			{
-				console.log(data);
-				$('#compare_button').attr("data-amount",data);
+				if(data[0] ==1){
+
+					toastr.success('Successfully', 'Product Added to Compare');
+				}else{
+					toastr.error('Exists', 'This Product Already Added');
+				}
+				$('#compare_button').attr("data-amount",data[1]);
 			}
+	   });
+}
+function addWishlist(id){
+	$.ajax({        
+			url : '/add-wishlist/'+id,
+			type: "GET",
+			success: function(data)
+			{
+				
+				if(data[0] ==1){
+
+					toastr.success('Successfully', 'Product Added to Wishlist');
+				}else{
+					toastr.error('Exists', 'This Product Already Added');
+				}
+				$('.wishlist_button').attr("data-amount",data[1]);
+				
+			}error: function (data) {
+               
+                    toastr.error('', 'Please Login to Access');
+                  
+                }
 	   });
 }
 function addCart(id){

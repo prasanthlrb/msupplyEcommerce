@@ -10,7 +10,7 @@
 
             <li><a href="/account/dashboard" class="dashboard"><i class="fas fa-address-card"></i> Profile Information</a></li>
             <li><a href="/account/orders" class="orders"><i class="fas fa-shopping-cart"></i> Orders</a></li>
-            <!-- <li><a href="/account/wishlist" class="wishlist"><i class="fas fa-clipboard-list"></i> Wishlist</a></li> -->
+            <li><a href="/account/wishlist" class="wishlist"><i class="fas fa-clipboard-list"></i> Wishlist</a></li>
             
             <li><a href="/account/address" class="address"><i class="fas fa-address-book"></i> Manage Address</a></li>
             <li><a href="/account/review" class="rating-rev"><i class="fas fa-comments"></i> My Reviews & Ratings</a></li>
