@@ -147,7 +147,7 @@ ul.pagination {
 									<tbody>
 									@foreach($orders as $order)
 										<tr>
-											<td data-title="Order Number"><a href="#">{{$order->id}}</a></td>
+											<td data-title="Order Number"><a href="/account/vieworders/{{$order->id}}" style="color: #ff4557;">#{{$order->id}}</a></td>
 											<td data-title="Order Date">{{date('Y-m-d', strtotime($order->created_at))}}</td>
 											<td data-title="Ship To">
 												<p>{{$order->first_name}} - {{$order->last_name}}</p>
@@ -155,16 +155,21 @@ ul.pagination {
 												<p>{{$order->address}}</p>
 												<p>{{$order->zip}}</p>
 											</td>
+											
 											<td data-title="Order Status">
-												@if($order->order_status == 1)
+
+												@if($order->order_status == 0)
+												Pending
+												@elseif($order->order_status == 1)
+											
 												Processing
 												@elseif($order->order_status == 2)
-												Completed
+												Shipping
 												@elseif($order->order_status == 3)
-												On hold
-												@elseid($order->order_status == 4)
-												Cancelled
-												@elseid($order->order_status == 5)
+												Delivered
+												@elseif($order->order_status == 4)
+												on-hold
+												@elseif($order->order_status == 5)
 												Failed
 												@endif
 											</td>

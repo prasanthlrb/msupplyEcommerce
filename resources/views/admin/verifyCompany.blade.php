@@ -55,7 +55,7 @@
           
             <td class="text-center">
                
-            <a href="/admin/verify-company/{{$row->user_id}}" class="btn btn-success round btn-glow px-2">open</a>
+            <a href="/admin/verifyed-company/{{$row->user_id}}" class="btn btn-success round btn-glow px-2">open</a>
                
                
                 </td>

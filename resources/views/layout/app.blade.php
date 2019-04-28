@@ -894,6 +894,8 @@ function addCompare(id){
 	   });
 }
 function addWishlist(id){
+	try{
+
 	$.ajax({        
 			url : '/add-wishlist/'+id,
 			type: "GET",
@@ -908,12 +910,15 @@ function addWishlist(id){
 				}
 				$('.wishlist_button').attr("data-amount",data[1]);
 				
-			}error: function (data) {
+			},error: function (data) {
                
                     toastr.error('', 'Please Login to Access');
                   
                 }
 	   });
+	}catch(e){
+		alert(e.message)
+	}
 }
 function addCart(id){
                 var qty  = $('#button_qty').val();

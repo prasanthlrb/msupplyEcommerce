@@ -471,9 +471,10 @@ class AccountController extends Controller
         // ->join('shippings as s','o.shipping','=','s.id')
         // ->select('o.id','o.created_at','o.order_status','o.total_amount','s.first_name','s.last_name','s.email','s.telephone','s.address','s.zip')
         // ->orderBy('o.id','desc')->paginate(1);
-        $orders = $orders = DB::table('orders as o')
-            ->where('user_id', Auth::user()->id)
+         $orders = DB::table('orders as o')
+            ->where('o.user_id', Auth::user()->id)
             ->join('shippings as s', 'o.shipping', '=', 's.id')
+            ->select('o.*','s.first_name','s.last_name','s.email','s.address','s.city','s.state','s.zip','s.country','s.telephone')
             ->orderBy('o.id', 'desc')
             ->paginate(3);
         //return response()->json($orders);
@@ -766,4 +767,14 @@ class AccountController extends Controller
         billing::find($id)->delete();
         return response()->json("200");
     }
+
+    public function vieworders($id){
+        $order = order::find($id);
+        $order_items = order_item::where('order_id', $id)->get();
+        $shipping = shipping::where('id', $order->shipping)->get();
+        $billing = billing::where('id', $order->billing)->get();
+        //return response()->json($order_items);
+        return view('customer.singleOrder',compact('order','order_items','billing','shipping'));
+    }
+
 }

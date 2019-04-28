@@ -34,6 +34,8 @@ Route::get('/transports','AccountController@transport');
 Route::get('/own-transport','AccountController@ownTransport'); 
 Route::get('//edit-transport','AccountController@editTransport'); 
 Route::get('/get-transport-data/{id}','pageController@getTransportData'); 
+
+Route::get('/removewish/{id}','AccountController@removewish');
 Route::get('/sms-demo', function () {
    try{
 $requestParams = array(
@@ -212,7 +214,9 @@ Route::get('/customer-transport/{id}','customerController@customerTransport');
 
 //un verify company
 Route::get('/verify-company','customerController@unverifyCompany');
-Route::get('/verify-company/{id}','customerController@verifyCompany');
+Route::get('/verifyed-company/{id}','customerController@verifyCompany');
+Route::get('/reject/{id}','customerController@reject');
+Route::get('/approval/{id}','customerController@approval');
 });
 
 Auth::routes();

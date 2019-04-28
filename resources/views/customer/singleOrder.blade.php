@@ -12,6 +12,7 @@
         <ul class="breadcrumbs">
 
             <li><a href="index.html">Home</a></li>
+            <li><a href="/account/orders">Orders</a></li>
             <li>manage address</li>
 
         </ul>
@@ -22,18 +23,22 @@
 
             @include('include.accountSidebar')
             <main class="col-md-9 col-sm-8">
-                @foreach($orders as $order)
-                    <h1>Order #{{$order->invoice}} - @if($order->order_status == 1)
-                        Processing
-                        @elseif($order->order_status == 2)
-                        Completed
-                        @elseif($order->order_status == 3)
-                        On hold
-                        @elseid($order->order_status == 4)
-                        Cancelled
-                        @elseid($order->order_status == 5)
-                        Failed
-					@endif</h1>
+              
+                    <h1>Order #{{$order->id}} - Status :
+                            @if($order->order_status == 0)
+                            Pending
+                            @elseif($order->order_status == 1)
+                        
+                            Processing
+                            @elseif($order->order_status == 2)
+                            Shipping
+                            @elseif($order->order_status == 3)
+                            Delivered
+                            @elseif($order->order_status == 4)
+                            on-hold
+                            @elseif($order->order_status == 5)
+                            Failed
+                            @endif</h1>
 
                     <!-- - - - - - - - - - - - - - Order table - - - - - - - - - - - - - - - - -->
 
@@ -59,7 +64,7 @@
                                     <tr>
                                         <th>Order Number</th>
 
-                                        <td><a href="#">{{$order->invoice}}</a></td>
+                                        <td><a href="#">{{$order->id}}</a></td>
                                     </tr>
                                     <tr>
                                         <th>Order Date</th>
@@ -68,17 +73,20 @@
 
                                     <tr>
                                         <th>Product Status</th>
-                                        <td>@if($order->order_status == 1)
-												Processing
-												@elseif($order->order_status == 2)
-												Completed
-												@elseif($order->order_status == 3)
-												On hold
-												@elseid($order->order_status == 4)
-												Cancelled
-												@elseid($order->order_status == 5)
-												Failed
-												@endif</td>
+                                        <td>@if($order->order_status == 0)
+                                                Pending
+                                                @elseif($order->order_status == 1)
+                                            
+                                                Processing
+                                                @elseif($order->order_status == 2)
+                                                Shipping
+                                                @elseif($order->order_status == 3)
+                                                Delivered
+                                                @elseif($order->order_status == 4)
+                                                on-hold
+                                                @elseif($order->order_status == 5)
+                                                Failed
+                                                @endif</td>
                                     </tr>
 
                                     <!-- <tr>
@@ -90,8 +98,10 @@
                                         
                                         <th>Payment</th>
 
-                                        <td>@if($order->payment_type == 'cod')
-												Cash On Delivery
+                                        <td>@if($order->payment_type == '1')
+                                                Cash On Delivery
+                                                @else
+                                                Online Payment
 												@endif</td>
 
                                     </tr>
@@ -100,7 +110,7 @@
 
                                         <th>Total</th>
 
-                                        <td class="total">AED {{$order->total}}</td>
+                                        <td class="total">₹ {{$order->total_amount}}</td>
 
                                     </tr>
 
@@ -239,7 +249,7 @@
                         </div><!--/ .row -->
 
                     </div><!--/ .section_offset -->
-                    @endforeach
+                 
 
                     <!-- - - - - - - - - - - - - - Items ordered - - - - - - - - - - - - - - - - -->
 
@@ -274,49 +284,39 @@
                                     <tr>
                                         <td data-title="Product Name">
                                             <a href="#" class="product_title">
-                                                @foreach($product as $product1)
-                                                    @if($product1->id == $order_item->product_id)
-                                                    {{$product1->product_name}}
-                                                    @endif
-                                                @endforeach                                  
+                                              
+                                                    {{$order_item->product_name}}
+                                                                                   
                                             </a>
                                             <!-- <ul class="sc_product_info">
                                                 <li>Size: Big</li>
                                                 <li>Color: Red</li>
                                             </ul> -->
                                         </td>
-                                        <td data-title="Price" class="subtotal">AED {{$order_item->price}}</td>
+                                        <td data-title="Price" class="subtotal">₹ {{$order_item->sales_price}}</td>
                                         <td data-title="Quantity">{{$order_item->qty}}</td>
-                                        <td data-title="Total" class="total">AED {{$order_item->price * $order_item->qty}}</td>
+                                        <td data-title="Total" class="total">₹ {{$order_item->sales_price * $order_item->qty}}</td>
                                     </tr>
-                                    <?php 
-                                    $sub+=($order_item->price * $order_item->qty);
-                                    $total+=($order_item->price * $order_item->qty)+$order_item->shipping_amount;
-                                    $shipping += $order_item->shipping_amount;
-                                    ?>
+                                   
                                 @endforeach
                                 </tbody>
 
                                 <tfoot>
-
-                                    <tr>
+                                        <tr>
                                         
-                                        <td colspan="3" class="bold">Subtotal</td>
-                                        <td class="total">AED {{$sub}}</td>
+                                                <td colspan="3" class="bold">Tax ({{$order_item->tax_type}}) </td>
+                                                <td class="total">₹ {{$order_item->tax}}</td>
+        
+                                            </tr>
 
-                                    </tr>
+                                   
 
-                                    <tr>
-                                        
-                                        <td colspan="3" class="bold">Shipping &amp; Charge</td>
-                                        <td class="total">AED {{$shipping}}</td>
-
-                                    </tr>
+                                   
 
                                     <tr>
                                         
                                         <td colspan="3" class="grandtotal">Grand Total</td>
-                                        <td class="grandtotal">AED {{$total}}</td>
+                                        <td class="grandtotal">₹ {{$order_item->total_price}}</td>
 
                                     </tr>
 
@@ -336,135 +336,7 @@
 
                     <!-- - - - - - - - - - - - - - End of items ordered - - - - - - - - - - - - - - - - -->
 
-                            @if(empty($review[0]))
-                                <section class="section_offset">
-                                    <h3>Write Your Own Review</h3>
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <p>You're reviewing: <a href="#">Metus nulla facilisi, Original 24 fl oz</a><br>How do you rate this product? *</p>
-                                            <div class="table_wrap rate_table">
-                                                <table>
-                                                    <thead>
-                                                        <tr>
-                                                            <th></th>
-                                                            <th>1 Star</th>
-                                                            <th>2 Stars</th>
-                                                            <th>3 Stars</th>
-                                                            <th>4 Stars</th>
-                                                            <th>5 Stars</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>Price</td>
-                                                            <td>
-                                                                <input value="1" checked type="radio" name="price_rate" id="rate_1">
-                                                                <label for="rate_1"></label>
-                                                            </td>
-                                                            <td>
-                                                                <input value="2" type="radio" name="price_rate" id="rate_2">
-                                                                <label for="rate_2"></label>
-                                                            </td>
-                                                            <td>
-                                                                <input value="3" type="radio" name="price_rate" id="rate_3">
-                                                                <label for="rate_3"></label>
-                                                            </td>
-                                                            <td>
-                                                                <input value="4" type="radio" name="price_rate" id="rate_4">
-                                                                <label for="rate_4"></label>
-                                                            </td>
-                                                            <td>
-                                                                <input value="5" type="radio" name="price_rate" id="rate_5">
-                                                                <label for="rate_5"></label>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Value</td>
-                                                            <td>
-                                                                <input value="1" checked type="radio" name="value_rate" id="rate_6">
-                                                                <label for="rate_6"></label>
-                                                            </td>
-                                                            <td>
-                                                                <input value="2" type="radio" name="value_rate" id="rate_7">
-                                                                <label for="rate_7"></label>
-                                                            </td>
-                                                            <td>
-                                                                <input value="3" type="radio" name="value_rate" id="rate_8">
-                                                                <label for="rate_8"></label>
-                                                            </td>
-                                                            <td>
-                                                                <input value="4" type="radio" name="value_rate" id="rate_9">
-                                                                <label for="rate_9"></label>
-                                                            </td>
-                                                            <td>
-                                                                <input value="5" type="radio" name="value_rate" id="rate_10">
-                                                                <label for="rate_10"></label>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Quality</td>
-                                                            <td>
-                                                                <input value="1" checked type="radio" name="quality_rate" id="rate_11">
-                                                                <label for="rate_11"></label>
-                                                            </td>
-                                                            <td>
-                                                                <input value="2" type="radio" name="quality_rate" id="rate_12">
-                                                                <label for="rate_12"></label>
-                                                            </td>
-                                                            <td>
-                                                                <input value="3" type="radio" name="quality_rate" id="rate_13">
-                                                                <label for="rate_13"></label>
-                                                            </td>
-                                                            <td>
-                                                                <input value="4" type="radio" name="quality_rate" id="rate_14">
-                                                                <label for="rate_14"></label>
-                                                            </td>
-                                                            <td>
-                                                                <input value="5" type="radio" name="quality_rate" id="rate_15">
-                                                                <label for="rate_15"></label>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-6">
-                                            <p class="subcaption">All fields are required.</p>
-                                            <form method="post" id="form" class="type_2">
-                                                {{csrf_field()}}
-                                                <ul>
-                                                    <li class="row">
-                                                        <div class="col-sm-6">
-                                                            <input value="{{$product1->id}}" type="hidden" name="product_id" id="product_id">
-                                                            <label for="nickname">Nickname</label>
-                                                            <input type="text" name="nickname" id="nickname">
-                                                        </div>
-                                                        <div class="col-sm-6">
-                                                            
-                                                            <label for="summary">Summary of Your Review</label>
-                                                            <input type="text" name="summary" id="summary">
-                                                        </div>
-                                                    </li>
-                                                    <li class="row">
-                                                        <div class="col-xs-12">
-                                                            <label for="review_message">Review</label>
-                                                            <textarea rows="5" name="review_message" id="review_message"></textarea>
-                                                        </div>
-                                                    </li>
-                                                    <li class="row">
-                                                        <div class="col-xs-12">
-                                                            <button type="button" onclick="Review()" class="button_dark_grey middle_btn">Submit Review</button>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </form>
-                                        </div>
-
-                                    </div>
-
-                                </section>
-                            @endif
+                           
 
                 </main>
         </div>

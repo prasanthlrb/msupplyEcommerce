@@ -133,7 +133,8 @@
 											<td data-title="Action">
 												<ul class="buttons_col">
 													<li>
-														<a onclick="addCart({{$product1->id}})" href="#" class="button_blue">Add to Cart</a>
+															<a href="/product/{{$product1->id}}" class="button_blue">See Product Details</a>
+					
 													</li>
 													<li>
 														<a href="#" onclick="removewish({{$product1->id}})" class="button_dark_grey">Remove</a>
@@ -219,5 +220,23 @@
 			@section('extra-js')
 <script>
 	$('.wishlist').addClass('accSidebarActive');
+	
+function removewish(id){
+    var r = confirm("Are you sure");
+    if (r == true) {
+    $.ajax({
+        url : '/removewish/'+id,
+        type: "GET",
+        dataType: "JSON",
+        success: function(data)
+        {
+          //toastr.success('Wishlist Delete Successfully', 'Successfully Delete');
+		  //$('.table').load(location.href+' .table');
+		  location.reload();
+        }
+      });
+    } 
+}
+
 </script>
 @endsection

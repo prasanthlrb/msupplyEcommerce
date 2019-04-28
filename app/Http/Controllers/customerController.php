@@ -206,6 +206,16 @@ class customerController extends Controller
           </a>
         </figure>';
     }
-    return view('admin.doVerifyCompany',compact('output'));
+    return view('admin.doVerifyCompany',compact('output','company'));
 }
+  public function reject($id){
+    $company = company::find($id)->delete();
+    return response()->json($company);
+  }
+  public function approval($id){
+    $company = company::find($id);
+    $company->status = 1;
+    $company->save();
+    return response()->json($company);
+  }
 }
