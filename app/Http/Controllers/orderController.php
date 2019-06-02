@@ -13,6 +13,9 @@ use App\product;
 use App\order_transport;
 use Yajra\DataTables\Facades\DataTables;
 use DB;
+use Auth;
+use App\role;
+use App\order_log;
 class orderController extends Controller
 {
     // public function __construct()
@@ -23,8 +26,9 @@ class orderController extends Controller
     public function order(){
         // $order = order::all();
         // $order_transport = order_transport::all();
-        // return response()->json($order); 
-        return view('admin.order');
+        // return response()->json($order);
+        $role = role::find(Auth::guard('admin')->user()->role_id);
+        return view('admin.order',compact('role'));
     }
 
     public function allOrder($filter){
@@ -36,7 +40,7 @@ class orderController extends Controller
             ->select('o.id','o.created_at','o.order_status','o.payment_type','o.total_amount','o.transport_type','u.name','u.email','u.phone','u.user_type',
             'i.product_name','i.qty','i.order_id')
             ->orderBy('o.id','desc')->get();
-     
+
     }else{
         $order = DB::table('orders as o')
         ->join('users as u', 'o.user_id', '=', 'u.id')
@@ -71,7 +75,7 @@ class orderController extends Controller
     </td>';
    })
    ->addColumn('order_status', function($order){
-   
+
     if($order->order_status == 0){
         $status ='<b>Pending</b>';
     }
@@ -87,14 +91,14 @@ class orderController extends Controller
     else if($order->order_status == 4){
         $status ='<b>on-hold</b>';
     }
-    
+
     else{
         $status ='<b>failed</b>';
     }
     return '<td>
     '.$status.'
     </td>';
-    
+
     })
 //    ->addColumn('transport_type', function($order){
 //     return '<td>
@@ -107,7 +111,7 @@ class orderController extends Controller
     <p>'.$order->phone.'</p>
     </td>';
     })
-  
+
          ->rawColumns(['order_id','order_details','payment_type','order_status','customer_details','checkbox'])
            ->make(true);
 
@@ -119,6 +123,30 @@ class orderController extends Controller
             foreach($order as $row){
                $row->order_status = $request->status;
                $row->save();
+               if($request->status == 0){
+                $status ='<b>Pending</b>';
+            }
+            else if($request->status == 1){
+                $status ='<b>Processing</b>';
+            }
+            else if($request->status == 2){
+                $status ='<b>Shipping</b>';
+            }
+            else if($request->status == 3){
+                $status ='<b>Delivered</b>';
+            }
+            else if($request->status == 4){
+                $status ='<b>on-hold</b>';
+            }
+
+            else{
+                $status ='<b>failed</b>';
+            }
+               $order_log = new order_log;
+               $order_log->order_id  = $row->id;
+               $order_log->change_status = $status;
+               $order_log->employee_name = Auth::guard('admin')->user()->emp_name;
+               $order_log->save();
             }
         }
         return response()->json(["Successfully Update"],200);
@@ -127,6 +155,30 @@ class orderController extends Controller
         $orderChange = order::find($request->id);
         $orderChange->order_status = $request->status;
         $orderChange->save();
+        if($request->status == 0){
+            $status ='<b>Pending</b>';
+        }
+        else if($request->status == 1){
+            $status ='<b>Processing</b>';
+        }
+        else if($request->status == 2){
+            $status ='<b>Shipping</b>';
+        }
+        else if($request->status == 3){
+            $status ='<b>Delivered</b>';
+        }
+        else if($request->status == 4){
+            $status ='<b>on-hold</b>';
+        }
+
+        else{
+            $status ='<b>failed</b>';
+        }
+           $order_log = new order_log;
+           $order_log->order_id  = $orderChange->id;
+           $order_log->change_status = $status;
+           $order_log->employee_name = Auth::guard('admin')->user()->emp_name;
+           $order_log->save();
         return response()->json(["Successfully Update"],200);
     }
 
@@ -139,16 +191,16 @@ class orderController extends Controller
         $output ='<tr>
         <th scope="row">1</th>';
 
-        $output .=' 
+        $output .='
         <td>';
         foreach($items as $item){
             $product = product::find($item->product_id);
             $output .=' <p>'.$item->product_name.'</p>';
-          $attr = order_attribute::where('order_item_id',$item->id)->get(); 
+          $attr = order_attribute::where('order_item_id',$item->id)->get();
            foreach($attr as $arr){
             $output .=' <p>'.$arr->attr_name.' : '.$arr->terms.'</p>';
            }
-           $output .=' 
+           $output .='
            <td class="text-right">₹ '.$item->sales_price.'</td>
            <td class="text-right">'.$item->qty.'</td>
            <td class="text-right">₹ '.$item->sales_price * $item->qty.'</td>
@@ -170,13 +222,14 @@ class orderController extends Controller
 
 
         }
-        $output .=' 
+        $output .='
       </tr>';
         return view('admin.orderItem',compact('order','shipping','billing','user','output','result'));
     }
 
     public function orderTransport(){
-        return view('admin.orderTransport');
+        $role = role::find(Auth::guard('admin')->user()->role_id);
+        return view('admin.orderTransport',compact('role'));
     }
 
     public function orderTransportGet($filter){
@@ -186,7 +239,7 @@ class orderController extends Controller
             ->join('users as u', 't.user_id', '=', 'u.id')
             ->select('t.*','u.name','u.email','u.phone','u.user_type')
             ->orderBy('t.id','desc')->get();
-            
+
             //order_transport::where('status',$filter)->orderBy('id','desc')->get();
         }
         else{
@@ -227,7 +280,7 @@ class orderController extends Controller
                     else if($transport->status == 2){
                         $status ='<b>Cancel</b>';
                     }
-                    
+
                     else{
                         $status ='<b>failed</b>';
                     }
@@ -265,5 +318,17 @@ class orderController extends Controller
         $orderChange->status = $request->status;
         $orderChange->save();
         return response()->json(["Successfully Update"],200);
+    }
+    public function orderMail($id){
+        //$all = $request->all();
+        // Mail::send('mail',compact('all'),function($message) use($all){
+        //     $message->to('prasanthbca7@gmail.com','To LRB')->subject($all['cf_order_number']);
+        //     $message->from('prasanthats@gmail.com','To Prasanth');
+        // });
+        //  $orderData = $request->all();
+        // Mail::to($contactData['cf_email'])->send(new OrderMailable($orderData));
+        //return 'Email was sent';
+        return response()->json(['message'=>'Successfully Send'],200);
+        //return response()->json($contactData['cf_email']);
     }
 }

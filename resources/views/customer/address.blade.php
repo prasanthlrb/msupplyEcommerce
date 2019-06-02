@@ -184,6 +184,6 @@
 
 </script>
 <script>
-	$('.address').addClass('accSidebarActive');
+	$('.accAddress').addClass('current');
 </script>
 @endsection

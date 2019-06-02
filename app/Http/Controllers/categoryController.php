@@ -10,20 +10,39 @@ use App\product;
 use App\adModel;
 use App\product_attribute;
 use App\attribute;
+use DB;
+use App\review;
+use App\rating;
+
 class categoryController extends Controller
 {
     public function categoryProduct($id){
+        $category  = category::find($id);
         $adModel = adModel::all();
-        $product = product::where('category','LIKE',"%{$id}%")->paginate(6);
+        $product = product::where('category','LIKE',"%{$id}%")->paginate(9);
         $brand = brand::all();
        // return response()->json($product);
-        return view('category',compact('product','brand','adModel'));
+        return view('category',compact('product','brand','adModel','category'));
     }
     
     public function getProduct($id){
         $product1 = product::find($id);
         $Upload = Upload::where('product_id','=',$id)->get(); 
         $brand = brand::all();
+        $reviews = review::where('item_id',$id)->get();
+        // $review = DB::table('reviews as re')
+        // ->where('re.item_id',$id)
+        // ->join('rating as ra','re.order_item_id','=','ra.order_item_id')
+        
+    $review = DB::table('reviews as r')
+    ->where('r.item_id',$id)
+    ->where('r.status',1)
+    ->join('ratings as ra','r.order_item_id','=','ra.order_item_id')
+    ->join('users as u','r.user_id','=','u.id')
+    ->select('r.review','r.updated_at','u.name','ra.rating')
+    ->paginate(6);
+  
+        $rating = rating::where('item_id',$id)->get();
         $related_product = [];
         if($product1->related_product){
             $related_product = product::whereIn('id', explode(',',$product1->related_product))->get();
@@ -32,8 +51,8 @@ class categoryController extends Controller
         $breadcrumbs = category::find($category_id[0]);
         $product_attribute = product_attribute::where('group_id','=',$product1->group)->get();
         $attribute = attribute::all(); 
-        //return response()->json($related_product);
-        return view('product',compact('product1','brand','Upload','related_product','breadcrumbs','product_attribute','attribute'));
+        //return response()->json($review);
+        return view('product',compact('product1','brand','Upload','related_product','breadcrumbs','product_attribute','attribute','review','reviews','rating'));
 
     }
 
@@ -72,4 +91,13 @@ class categoryController extends Controller
     //return $this->getProduct($redirectPage);
     }
     
+    public function filterBrand($id){
+        $brandid = brand::find($id);
+        $adModel = adModel::all();
+        $product = product::where('brand_name',$id)->paginate(9);
+        $brand = brand::all();
+       // return response()->json($product);
+        return view('brandView',compact('product','brand','adModel','brandid'));
+     }
+
 }

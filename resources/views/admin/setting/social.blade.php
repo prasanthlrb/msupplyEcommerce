@@ -112,3 +112,9 @@
 </div>
 
 @endsection
+
+@section('extra-js')
+<script>
+ $('.smm').addClass('active');
+</script>
+@endsection

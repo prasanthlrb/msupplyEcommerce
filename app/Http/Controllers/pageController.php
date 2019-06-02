@@ -13,8 +13,15 @@ use App\product;
 use App\upload;
 use Session;
 use App\transport;
+use DB;
+use App\brand;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendMailable;
 use Illuminate\Http\Request;
-
+use App\rating;
+use App\product_attribute;
+use App\attribute;
+use Cart;
 class pageController extends Controller
 {
 
@@ -103,8 +110,54 @@ class pageController extends Controller
             <div class="label_hot">Hot</div>
             <div class="description">
             <a href="/product/' . $row->id . '">' . $row->product_name . '</a>
-            <div class="clearfix product_info">
-            <p class="product_price alignleft">';
+            <div class="clearfix product_info">';
+           
+            $getRating = rating::where('item_id',$row->id)->get();
+            $rating_count=0;
+            if(count($getRating) > 0){ 
+            $total=0;
+            foreach($getRating as $rows){
+                $total +=$rows->rating;
+            }
+            $rating_count = $total/count($getRating);
+            
+                $output .= '<ul class="rating alignright">
+
+                            <li class="active"></li>
+
+                            <li class="';
+                            if($rating_count >= 2){
+
+                                $output .= 'active';
+                            }
+                            $output .= '"></li>
+
+                            <li class="';
+                            if($rating_count >= 3){
+
+                                $output .= 'active';
+                            }
+                            $output .= '"></li>
+
+                            <li class="';
+                            if($rating_count >= 4){
+
+                                $output .= 'active';
+                            }
+                            $output .= '"></li>
+
+                            <li class="';
+                            if($rating_count >= 5){
+
+                                $output .= 'active';
+                            }
+                            $output .= '"></li>
+
+
+                        </ul>';
+                       
+            }
+                        $output .= '<p class="product_price alignleft">';
 
                                 if ($row->sales_price != null) {
                                     $output .= ' <s>₹ ' . $row->regular_price . '</s>
@@ -155,7 +208,54 @@ class pageController extends Controller
                     </div>
                     <div class="description">
                     <a href="#">' . $row->product_name . '</a>
-                        <div class="clearfix product_info"> <p class="product_price alignleft">';
+                        <div class="clearfix product_info"> ';
+
+                        $getRating = rating::where('item_id',$row->id)->get();
+            $rating_count=0;
+            if(count($getRating) > 0){ 
+            $total=0;
+            foreach($getRating as $rows){
+                $total +=$rows->rating;
+            }
+            $rating_count = $total/count($getRating);
+            
+                $output .= '<ul class="rating alignright">
+
+                            <li class="active"></li>
+
+                            <li class="';
+                            if($rating_count >= 2){
+
+                                $output .= 'active';
+                            }
+                            $output .= '"></li>
+
+                            <li class="';
+                            if($rating_count >= 3){
+
+                                $output .= 'active';
+                            }
+                            $output .= '"></li>
+
+                            <li class="';
+                            if($rating_count >= 4){
+
+                                $output .= 'active';
+                            }
+                            $output .= '"></li>
+
+                            <li class="';
+                            if($rating_count >= 5){
+
+                                $output .= 'active';
+                            }
+                            $output .= '"></li>
+
+
+                        </ul>';
+                       
+            }
+                       $output.=' <p class="product_price alignleft">';
 
                         if ($row->sales_price != null) {
                             $output .= ' <s>₹ ' . $row->regular_price . '</s>
@@ -593,5 +693,77 @@ class pageController extends Controller
         Session::push('transport', $request->datas['data']);
         //return response()->json($transport);
         return response()->json(Session::get('transport'));
+    }
+
+    public function filter(Request $request){
+        $brand = brand::all();
+        $search = $request->search;
+        $category = $request->category;
+        if($search != "" && $category !="All Categories"){
+            $product = DB::table('products')
+            ->where('products.category', 'like', '%' . $category . '%')      
+            ->orWhere('product_name', 'like', '%' . $search . '%')      
+            ->orderBy('created_at','desc')
+            ->paginate(9);
+        }else if($search == "" && $category =="All Categories"){
+            $product = [];
+        }else if($search != "" && $category =="All Categories"){
+            $product = DB::table('products')   
+            ->where('product_name', 'like', '%' . $search . '%')      
+            ->orderBy('created_at','desc')
+            ->paginate(9);
+        }else{
+            $product = DB::table('products')
+            ->where('products.category', 'like', '%' . $category . '%')      
+            ->orderBy('created_at','desc')
+            ->paginate(9);
+        }
+        return view('filterView',compact('product','brand'))->withInput(['search' => $search]);
+    }
+
+    //public function contactMail(){
+    public function contactMail(Request $request){
+        //$all = $request->all();
+        // Mail::send('mail',compact('all'),function($message) use($all){
+        //     $message->to('prasanthbca7@gmail.com','To LRB')->subject($all['cf_order_number']);
+        //     $message->from('prasanthats@gmail.com','To Prasanth');
+        // });
+         $contactData = $request->all();
+        Mail::to($contactData['cf_email'])->send(new SendMailable($contactData));
+        //return 'Email was sent';
+        return response()->json(['message'=>'Successfully Send'],200); 
+        //return response()->json($contactData['cf_email']); 
+    }
+
+    public function addToCart($id, $qty){
+        $cart_qty = Cart::get($id);
+        $product = product::find($id);
+        $totalQty = $cart_qty['quantity'] + $qty;
+        if($product->stock_quantity >= $totalQty){
+            $product_attribute = product_attribute::where('product_id','=',$id)->get();
+            $data=array();
+             
+                    foreach($product_attribute as $attributes){
+                        $attribute = attribute::find($attributes->attribute); 
+                        $data[] = array(
+                            $attribute->name => $attributes->terms,
+                        );
+                    }
+            Cart::add(array(
+                'id' => $id,
+                'name' => $product->product_name,
+                'price' => $product->sales_price,
+                'quantity' => $qty,
+                'attributes' =>$data,
+            ));
+            $status =0;
+        }else{
+            $status =1;
+        }
+
+    $total = Cart::getTotal();
+    $quantity = count(Cart::getContent());
+     return response()->json(array($status,$total,$quantity)); 
+   // return response()->json($totalQty);
     }
 }

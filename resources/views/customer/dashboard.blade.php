@@ -163,35 +163,25 @@
 			
 			<!-- - - - - - - - - - - - - - End Page Wrapper - - - - - - - - - - - - - - - - -->
 
-
-
-
-
-
- 
-
-
   <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/plugins/extensions/toastr.css')}}">
   {{-- <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/extensions/toastr.css')}}"> --}}
   <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
   <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-
 <script src="{{ asset('app-assets/js/scripts/extensions/toastr.js')}}" type="text/javascript"></script>
 <script src="{{ asset('app-assets/vendors/js/extensions/toastr.min.js')}}" type="text/javascript"></script>
 <script>
-	$('.dashboard').addClass('accSidebarActive');
+$('.profileInformation').addClass('current');
 
 //Account Info
 $('#show_account_info').click(function(){
   $('#account_info').removeClass('display_hide');
   $('#show_account_info').addClass('display_hide');
-  toastr.success('Data Update Successfully', 'Successfully Update');
+// toastr.success('Data Update Successfully', 'Successfully Update');
 });
 $('#close_account_info').click(function(){
   $('#account_info').addClass('display_hide');
   $('#show_account_info').removeClass('display_hide');
 });
-
 //password change
 $('#show_password').click(function(){
   $('.change_pass').removeClass('display_hide');

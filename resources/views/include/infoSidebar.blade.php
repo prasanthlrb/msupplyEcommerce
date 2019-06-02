@@ -11,7 +11,7 @@
             <li class="aboutus"><a href="/about">About Us</a></li>
             <li class="ppolicy"><a href="/privacy">Privacy Policy</a></li>
             <li class="tconditions"><a href="/terms">Terms &amp; Conditions</a></li>
-            <li class="contactus"><a href="/contact">Contact Us</a></li>
+            <li class="contact_menu"><a href="/contact">Contact Us</a></li>
             <li class="faqMenu"><a href="/faq">FAQ</a></li>
             <li class="sdetails"><a href="/shipping_details">Shipping Details</a></li>
 

@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\transport;
 use File; 
+use Auth;
+use App\role;
 class transportController extends Controller
 {
    public function viewTransport(){
        $transport = transport::all();
-       return view('admin.transport',compact('transport'));
+       $role = role::find(Auth::guard('admin')->user()->role_id);
+       return view('admin.transport',compact('transport','role'));
    }
 
    public function saveTransport(Request $request){

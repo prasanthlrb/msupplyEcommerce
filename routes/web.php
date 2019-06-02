@@ -11,6 +11,13 @@
 |
 */
 use App\product;
+Route::get('/order-email', function () {
+return view('email.order');
+});
+
+Route::get('/event', 'PayController@index');
+ Route::post('/pay', 'PayController@pay');
+ Route::get('/pay-success', 'PayController@success');
 
 Route::get('/','pageController@home');
 //pages route
@@ -27,15 +34,21 @@ Route::get('/quick-view/{id}','pageController@quickModel');
 Route::get('/product-advance-filter/{product}/{attr}/{terms}','categoryController@advanceFilter');
 
 
-//Route::get('/wishlist','pageController@wishlist'); 
+//Route::get('/wishlist','pageController@wishlist');
 // Route::get('/add-wishlist/{id}','pageController@addWishlist');
 // Route::get('/remove-wish/{id}','pageController@removewish');
-Route::get('/transports','AccountController@transport'); 
-Route::get('/own-transport','AccountController@ownTransport'); 
-Route::get('//edit-transport','AccountController@editTransport'); 
-Route::get('/get-transport-data/{id}','pageController@getTransportData'); 
-
+Route::get('/transports','AccountController@transport');
+Route::get('/own-transport','AccountController@ownTransport');
+Route::get('//edit-transport','AccountController@editTransport');
+Route::get('/get-transport-data/{id}','pageController@getTransportData');
 Route::get('/removewish/{id}','AccountController@removewish');
+Route::get('/filter-brand/{id}','categoryController@filterBrand');
+//product search
+Route::post('/filter','pageController@filter');
+
+//mail
+Route::post('/contact-mail/','pageController@contactMail');
+
 Route::get('/sms-demo', function () {
    try{
 $requestParams = array(
@@ -64,11 +77,11 @@ curl_close($ch);
    }
 });
 Route::get('/transport-popup/{id}','pageController@transportPopup');
-Auth::routes(); 
+Auth::routes();
 Auth::routes(['verify' => true]);
 Route::group(['prefix' => 'admin'],function(){
 
-   
+
     // Route::get('/login', function () {
     //     return view('admin/login');
     // })->name('admin.login');
@@ -91,14 +104,14 @@ Route::post('/add-brand','productController@brandStore');
 Route::post('/update-brand','productController@brandUpdate');
 
 // Attribute Management
-Route::get('/attribute','productController@viewAttribute'); 
+Route::get('/attribute','productController@viewAttribute');
 Route::post('/attributeSave','productController@attributeSave');
 Route::post('/attributeUpdate','productController@attributeUpdate');
 Route::get('/attributeEdit/{id}','productController@attributeEdit');
 Route::get('/attributeDelete/{id}','productController@attributeDelete');
 
-// Terms Management 
-Route::get('/terms/{id}','productController@viewTerms'); 
+// Terms Management
+Route::get('/terms/{id}','productController@viewTerms');
 Route::post('/termsSave','productController@termsSave');
 Route::post('/termsUpdate','productController@termsUpdate');
 Route::get('/termsEdit/{id}','productController@termsEdit');
@@ -106,32 +119,33 @@ Route::get('/termsDelete/{id}','productController@termsDelete');
 
 
 // Product Group Management
-Route::get('/product-group','productController@productGroup'); 
+Route::get('/product-group','productController@productGroup');
 Route::post('/saveGroup','productController@saveGroup');
 Route::post('/updateGroup','productController@updateGroup');
 Route::get('/editGroup/{id}','productController@editGroup');
 Route::get('/deleteGroup/{id}','productController@deleteGroup');
 
 // Category Management
-//Route::get('/category','productController@viewCategory'); 
-Route::get('/category/{id}','productController@viewCategoryId'); 
-Route::get('/edit-category/{id}','productController@EditCategory'); 
-Route::get('/delete-category/{id}','productController@DeleteCategory'); 
-Route::post('/category-save','productController@CategorySave'); 
-Route::post('/category-update','productController@CategoryUpdate'); 
+//Route::get('/category','productController@viewCategory');
+Route::get('/category/{id}','productController@viewCategoryId');
+Route::get('/edit-category/{id}','productController@EditCategory');
+Route::get('/delete-category/{id}','productController@DeleteCategory');
+Route::post('/category-save','productController@CategorySave');
+Route::post('/category-update','productController@CategoryUpdate');
 
 //Product Management
-Route::get('/create-product','productController@createProduct'); 
-Route::get('/get-category-tree','productController@categoryTree'); 
-Route::get('/get_terms/{id}','productController@get_terms'); 
+Route::get('/create-product','productController@createProduct');
+Route::get('/get-category-tree','productController@categoryTree');
+Route::get('/get_terms/{id}','productController@get_terms');
 Route::post('/productSave','productController@productSave');
 Route::post('/productUpdate','productController@productUpdate');
 Route::post('/images-save', 'UploadImagesController@store');
 Route::post('/images-delete', 'UploadImagesController@destroy');
-Route::get('/viewProduct','productController@viewProduct'); 
-Route::get('/productDelete/{id}','productController@productDelete'); 
-Route::get('/editProduct/{id}','productController@editProduct'); 
-Route::get('/get_edit_attribute/{id}','productController@getEditAttribute'); 
+Route::get('/viewProduct','productController@viewProduct');
+Route::get('/get-product','productController@getProduct');
+Route::get('/productDelete/{id}','productController@productDelete');
+Route::get('/editProduct/{id}','productController@editProduct');
+Route::get('/get_edit_attribute/{id}','productController@getEditAttribute');
 
 Route::get('server-images/{id}','productController@getServerImages');
 Route::post('/images-delete', 'UploadImagesController@destroy');
@@ -147,7 +161,7 @@ Route::post('/homeSettingshipping','settingController@homeSettingshipping');
 Route::post('/homeSettingterms','settingController@homeSettingterms');
 Route::post('/homeSetting-Privacy','settingController@homeSettingPrivacyPolice');
 
-   
+
 Route::get('/social-details','settingController@socialMedia');
 Route::post('/add-social','settingController@updatesocialMedia');
 
@@ -185,7 +199,7 @@ Route::get('/transport', 'transportController@viewTransport');
 Route::get('/edit-transport/{id}','transportController@editTransport');
 Route::get('/delete-transport/{id}','transportController@deleteTransport');
 Route::post('/save-transport','transportController@saveTransport');
-Route::post('/update-transport','transportController@updateTransport'); 
+Route::post('/update-transport','transportController@updateTransport');
 
 //order
 Route::get('/order','orderController@order');
@@ -217,13 +231,43 @@ Route::get('/verify-company','customerController@unverifyCompany');
 Route::get('/verifyed-company/{id}','customerController@verifyCompany');
 Route::get('/reject/{id}','customerController@reject');
 Route::get('/approval/{id}','customerController@approval');
+
+//review
+Route::get('/review/{id}','customerController@review');
+Route::get('/non-review','customerController@nonReview');
+Route::get('/review-status/{id}/{data}','customerController@reviewStatus');
+
+//Report
+Route::get('/order-report','reportController@order');
+Route::get('/transport-report','reportController@transport');
+Route::post('/report/orders','reportController@orderReport');
+Route::post('/report/transport','reportController@transportReport');
+Route::get('/report/get-order','reportController@getOrderReport')->name('report.getOrder');
+Route::get('/report/get-order-customer','reportController@getOrderCustomerReport')->name('report.getOrderCustomer');
+
+//role
+Route::get('/add-role','settingController@addRole');
+Route::get('/role','settingController@role');
+Route::post('/create-role','settingController@createRole');
+Route::post('/update-role','settingController@updateRole');
+Route::get('/role-edit/{id}','settingController@editRole');
+Route::get('/role-delete/{id}','settingController@deleteRole');
+
+//logs
+Route::get('/order-log','reportController@orderLog');
+Route::get('/get-order-log','reportController@getOrderLog');
+Route::get('/search-order-log/{date1}/{date2}','reportController@searchOrderLog');
+
+Route::get('/product-log','reportController@productLog');
+Route::get('/get-product-log','reportController@getProductLog');
+Route::get('/search-product-log/{date1}/{date2}','reportController@searchProductLog');
 });
 
 Auth::routes();
 Route::get('/add-wishlist/{id}','AccountController@addWishlist');
 Route::get('/removewish/{id}','AccountController@removewish');
 Route::get('/home', 'HomeController@index')->name('home');
-Route::group(['prefix' => 'account'],function( ){ 
+Route::group(['prefix' => 'account'],function( ){
     Route::get('/review','AccountController@review');
     Route::get('/dashboard','AccountController@dashboard')->middleware('utype');
     Route::get('/wishlist','AccountController@wishlist');
@@ -238,7 +282,7 @@ Route::group(['prefix' => 'account'],function( ){
     Route::get('/vieworders/{id}','AccountController@vieworders')->middleware('utype');
     Route::get('/company','AccountController@company');
     Route::get('/company-verify','AccountController@companyVerify');
-    
+
     Route::post('/change-account-info','AccountController@changeAccountInfo');
     Route::post('/change-account-info','AccountController@changeAccountInfo');
     Route::post('/update-billing','AccountController@updateBilling');
@@ -247,10 +291,18 @@ Route::group(['prefix' => 'account'],function( ){
     Route::get('/delete-shipping/{id}','AccountController@deleteShipping');
     Route::get('/delete-billing/{id}','AccountController@deleteBilling');
 
+    Route::get('/add-review','AccountController@addReview');
+    Route::get('/re-review','AccountController@reReview');
+
 Route::get('/shipping', 'AccountController@accShipping');
 Route::get('/billing', 'AccountController@accBilling');
 Route::post('createShipping', 'AccountController@accCreateShipping');
 Route::post('createBilling', 'AccountController@accCreateBilling');
+
+//order Cancel
+Route::get('order-cancel/{id}', 'AccountController@orderCancel');
+//order Print
+Route::get('order-print/{id}', 'AccountController@orderPrint');
 });
 Route::post('/submit-company','AccountController@submitCompany')->name('submit.company');
 Route::get('/get-compare','pageController@compare');
@@ -267,28 +319,7 @@ Route::get('/compare',function(){
 });
 
 //Cart Management
-Route::get('/add-cart/{id}/{qty}', function ($id, $qty) {
-    $product = product::find($id);
-    $product_attribute = App\product_attribute::where('product_id','=',$id)->get();
-    $data=array();
-     
-            foreach($product_attribute as $attributes){
-                $attribute = App\attribute::find($attributes->attribute); 
-                $data[] = array(
-                    $attribute->name => $attributes->terms,
-                );
-            }
-    Cart::add(array(
-        'id' => $id,
-        'name' => $product->product_name,
-        'price' => $product->sales_price,
-        'quantity' => $qty,
-        'attributes' =>$data,
-    ));
-    $total = Cart::getTotal();
-    $quantity = count(Cart::getContent());
-    return response()->json(array($total,$quantity)); 
-});
+Route::get('/add-cart/{id}/{qty}','pageController@addToCart');
 Route::get('/get-cart', function () {
     $total = Cart::getTotal();
     $cartTotalQuantity = count(Cart::getContent());
@@ -325,7 +356,7 @@ Route::get('/cart',function(){
 });
 Route::get('/cart-item',function(){
     $cartCollection = Cart::getContent();
-    
+
     return response()->json($cartCollection);
 });
 
@@ -339,7 +370,7 @@ Route::get('/cart-menu', function(){
           $amount = ($cartData->quantity * $cartData->price);
           $product = product::find($cartData->id);
 
-    $output .='            
+    $output .='
     <div class="animated_item">
     <div class="clearfix sc_product">
           <a href="/product/'.$cartData->id.'" class="product_thumb"><img src="'.asset('/product_img').'/'.$product->product_image.'" alt="" style="width:50px"></a>
@@ -368,7 +399,7 @@ Route::get('/cart-data', function(){
     if(!Cart::isEmpty()){
     $output='<div class="container">
     <ul class="breadcrumbs">
-    
+
         <li><a href="index.html">Home</a></li>
         <li>Shopping Cart</li>
 
@@ -389,7 +420,7 @@ Route::get('/cart-data', function(){
                     <tr>
                         <th class="product_image_col">Product Image</th>
                         <th class="product_title_col">Product Name</th>
-                       
+
                         <th>Price</th>
                         <th class="product_qty_col">Quantity</th>
                         <th>Total</th>
@@ -404,9 +435,9 @@ Route::get('/cart-data', function(){
           $product = product::find($cartData->id);
 
     $output .=' <tr>
-        
+
     <td class="product_image_col" data-title="Product Image">
-        
+
         <a href="/product/'.$cartData->id.'"><img src="/product_img/'.$product->product_image.'" alt=""></a>
 
     </td>
@@ -416,14 +447,14 @@ Route::get('/cart-data', function(){
 
         <ul class="sc_product_info">';
         if(count($cartData->attributes)>0){
-                  
+
             foreach($cartData->attributes as $key=>$value) {
-                foreach($value as $field => $row) { 
+                foreach($value as $field => $row) {
                     $output .='<li>'.$field.' : '.$row.'</li>';
                 }
             }
           }
-   
+
         $output .='  </ul>
 
     </td>
@@ -473,7 +504,7 @@ Route::get('/cart-data', function(){
 <div class="section_offset">
 <div class="row">
     <section class="col-sm-6">
-       
+
     </section>
     <section class="col-sm-6">
         <h3>Total</h3>
@@ -481,7 +512,7 @@ Route::get('/cart-data', function(){
             <table class="zebra">
                 <tfoot>
                     ';
-                  
+
                  $output .='   <tr class="total">
                         <td>Total</td>
                         <td>₹ '.$total.'</td>
@@ -492,7 +523,7 @@ Route::get('/cart-data', function(){
         <footer class="bottom_box text-center">
             <a class="button_blue middle_btn" href="/transports">Proceed to Checkout</a>
             <div class="single_link_wrap">
-               
+
             </div>
         </footer>
     </section>
@@ -512,7 +543,7 @@ Route::get('/cart-data', function(){
 }
 print $output;
 });
-Route::get('/checkout', 'AccountController@checkout'); 
+Route::get('/checkout', 'AccountController@checkout');
 Route::get('/shipping', 'AccountController@shipping');
 Route::get('/billing', 'AccountController@billing');
 Route::post('createShipping', 'AccountController@createShipping');

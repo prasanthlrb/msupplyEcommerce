@@ -26,6 +26,8 @@
 
 @section('extra-js')
 <script>
+    
+$('.cart_menu').addClass('current');
 $(document).ready(function(){
     $.ajax({        
         url : '/cart-data',

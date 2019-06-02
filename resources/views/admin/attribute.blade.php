@@ -17,9 +17,9 @@
         
         <div class="card">
           <div class="card-header">
-            
+              @if($role->attribute_create ==1)
                 <button id="open_model" data-backdrop="false" class="btn btn-success round btn-glow px-2" data-toggle="modal">Create Attribute</button>
-            
+            @endif
             <div class="heading-elements">
                
               <ul class="list-inline mb-0">
@@ -40,9 +40,15 @@
                     <th>S No</th>
                     <th>Name</th>
                     <th>Type</th>
+                    @if($role->attribute_terms ==1)
                     <th>Terms</th>
+                    @endif
+                    @if($role->attribute_edit ==1)
                     <th>Edit</th>
+                    @endif
+                    @if($role->attribute_delete ==1)
                     <th>Delete</th>
+                    @endif
                   </tr>
                 </thead>
                 <tbody>
@@ -59,6 +65,7 @@
                       label
                     <?php } ?>
                       </td>
+                      @if($role->attribute_terms ==1)
                     <td class="text-center"><a href="/admin/terms/{{$row->id}}"><i class="ft-bookmark"></i>
                       <?php $x=0;?>
                       @foreach($terms as $data)
@@ -66,10 +73,15 @@
                      <?php $x +=1;?>
                      @endif
                      @endforeach
+                     @endif
                     ({{$x}})
                     </a></td>
+                    @if($role->attribute_edit ==1)
                     <td class="text-center" onclick="Edit({{$row->id}})"><i class="ft-edit"></i></td>
+                    @endif
+                    @if($role->attribute_delete ==1)
                     <td class="text-center" onclick="Delete({{$row->id}})"><i class="ft-trash-2"></i></td>
+                    @endif
                   </tr>
                 @endforeach 
                 
@@ -80,9 +92,15 @@
                       <th>S No</th>
                       <th>Name</th>
                       <th>Type</th>
+                      @if($role->attribute_terms ==1)
                       <th>Terms</th>
+                      @endif
+                      @if($role->attribute_edit ==1)
                       <th>Edit</th>
+                      @endif
+                      @if($role->attribute_delete ==1)
                       <th>Delete</th>
+                      @endif
                   </tr>
                 </tfoot>
               </table>

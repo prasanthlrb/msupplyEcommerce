@@ -166,7 +166,7 @@
 
 									<!-- - - - - - - - - - - - - - Logo - - - - - - - - - - - - - - - - -->
 
-									<a href="index.html" class="logo">
+									<a href="/" class="logo">
 
 										<img src="/images/logo.png" alt="">
 
@@ -264,50 +264,50 @@
 
 												<div id='cssmenu' class="animated_item">
 
-		<ul>
-				<!-- First Menu start -->
-				@foreach(App\category::with('childs')->where('parent_id',0)->get() as $item)
-				@if($item->childs->count() > 0)
-				<li class='active has-sub has-new-sub'><a href='#'><span>{{$item->category_name}}</span></a>
-					<!-- second Menu start -->
-					<ul class="first-child">
-					@foreach($item->childs as $item2)
-						@if($item2->childs->count() > 0)
-						<li class='has-sub has-new-sub'><a href='#'><span>{{$item2->category_name}}</span></a>
-							<ul class="second-child">
-							@foreach($item2->childs as $item3)
-							@if($item3->childs->count() > 0)
-							<li class="has-sub has-new-sub"><a href='#'class='has-sub has-new-sub'><span>{{$item3->category_name}}</span></a>
-								<ul class="second-child">
-								@foreach($item3->childs as $item4)
-								@if($item4->childs->count() > 0)
-								<li class='has-sub has-new-sub'><a href='#' class='has-sub has-new-sub'><span>{{$item4->category_name}}</span></a>
-								@else
-								<li class='last'><a href='#'><span>{{$item4->category_name}}</span></a></li>
-								@endif
-								@endforeach
-							</ul>
-							</li>
-							@else
-							<li class='last'><a href='#'><span>{{$item3->category_name}}</span></a></li>
-							@endif
-							@endforeach
-						</ul>
-							</li>
-						@else
-						<li class='last'><a href='#'><span>{{$item2->category_name}}</span></a></li>
-						@endif
-						@endforeach
-					</ul>
-					<!-- second Menu end -->
-				</li>
-				@else
-		<li><a href='#'><span>{{$item->category_name}}</span></a></li>
-				@endif
-		   
-			 @endforeach
-			 <!-- First Menu End -->
-		</ul>
+														<ul>
+																<!-- First Menu start -->
+																@foreach(App\category::with('childs')->where('parent_id',0)->get() as $item)
+																@if($item->childs->count() > 0)
+																<li class='active has-sub has-new-sub'><a href='/category/{{$item->id}}'><span>{{$item->category_name}}</span></a>
+																	<!-- second Menu start -->
+																	<ul class="first-child">
+																	@foreach($item->childs as $item2)
+																		@if($item2->childs->count() > 0)
+																		<li class='has-sub has-new-sub'><a href='/category/{{$item2->id}}'><span>{{$item2->category_name}}</span></a>
+																			<ul class="second-child">
+																			@foreach($item2->childs as $item3)
+																			@if($item3->childs->count() > 0)
+																			<li class="has-sub has-new-sub"><a href='/category/{{$item3->id}}'class='has-sub has-new-sub'><span>{{$item3->category_name}}</span></a>
+																				<ul class="second-child">
+																				@foreach($item3->childs as $item4)
+																				@if($item4->childs->count() > 0)
+																				<li class='has-sub has-new-sub'><a href='/category/{{$item4->id}}' class='has-sub has-new-sub'><span>{{$item4->category_name}}</span></a>
+																				@else
+																				<li class='last'><a href='/category/{{$item4->id}}'><span>{{$item4->category_name}}</span></a></li>
+																				@endif
+																				@endforeach
+																			</ul>
+																			</li>
+																			@else
+																			<li class='last'><a href='/category/{{$item3->id}}'><span>{{$item3->category_name}}</span></a></li>
+																			@endif
+																			@endforeach
+																		</ul>
+																			</li>
+																		@else
+																		<li class='last'><a href='/category/{{$item2->id}}'><span>{{$item2->category_name}}</span></a></li>
+																		@endif
+																		@endforeach
+																	</ul>
+																	<!-- second Menu end -->
+																</li>
+																@else
+														<li><a href='/category/{{$item->id}}'><span>{{$item->category_name}}</span></a></li>
+																@endif
+															 
+															 @endforeach
+															 <!-- First Menu End -->
+														</ul>
 	</li>
 	</div>
 												<!-- - - - - - - - - - - - - - End of mega menu - - - - - - - - - - - - - - - - -->
@@ -699,8 +699,8 @@
 
 						{{-- <p class="form_caption">Lorem ipsum dolor sit amet, adipis mauris accumsan.</p> --}}
 
-						<form class="contactform" novalidate>
-
+						<form class="contactform" novalidate id="contact_side_form">
+								{{csrf_field()}}
 							<ul>
 
 								<li class="row">
@@ -717,7 +717,16 @@
 
 									<div class="col-xs-12">
 
-										<input type="email" required title="Email" name="cf_email" placeholder="Your address">
+										<input type="email" required title="Email" name="cf_email" placeholder="Your Email address">
+
+									</div>
+
+								</li>
+								<li class="row">
+
+									<div class="col-xs-12">
+
+										<input type="text" required title="Email" name="cf_order_number" placeholder="Your Order ID">
 
 									</div>
 
@@ -737,7 +746,7 @@
 
 									<div class="col-xs-12">
 
-										<button class="button_grey middle_btn">Send</button>
+										<button class="button_grey middle_btn" onclick="mailsend1()">Send</button>
 
 									</div>
 
@@ -928,11 +937,23 @@ function addCart(id){
             dataType: "JSON",
              success: function(data)
 				{
-				 $('.total_price').text(data[0]);
-					 $('#open_shopping_cart').attr("data-amount",data[1]);
+					if(data[0] == 0){
+						$('.total_price').text(data[1]);
+						$('#open_shopping_cart').attr("data-amount",data[2]);
+						CartMenuUpdate();
+					}else{
+						toastr.error('We Have a Limited Quantity, Please Enter Available Stock Only');
+					}
+					console.log(data);
+				//  $('.total_price').text(data[0]);
+				// 	 $('#open_shopping_cart').attr("data-amount",data[1]);
 					// window.location.href = "/cart";
-					CartMenuUpdate();
-				}
+					// CartMenuUpdate();
+				},error: function (data) {
+               
+							 toastr.error('We Have a Limited Quantity, Please Enter Available Stock Only');
+						 
+					 }
 			});
 	}
 	function CartMenuUpdate(){
@@ -947,5 +968,28 @@ function addCart(id){
 			}
 		});
 	}
+
+	function mailsend1(){
+  	var termsData = new FormData($('#contact_side_form')[0]);
+  	$.ajax({
+		url : '/contact-mail',
+		type: "POST",
+		data: termsData,
+		contentType: false,
+		processData: false,
+		dataType: "JSON",
+		success: function(data)
+		{          
+			 $("#contact_side_form")[0].reset();
+			 toastr.success('Mail Send Successfully', 'Successfully Send');
+		},
+		error: function (data, errorThrown) {
+          	var errorData = data.responseJSON.errors;
+        	$.each(errorData, function(i, obj) {
+            	toastr.error(obj[0]);
+          	});
+        }
+	});
+}
 	</script>
 </html>

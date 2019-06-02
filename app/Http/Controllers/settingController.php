@@ -6,7 +6,8 @@ use App\faq;
 use App\ContactInfo;
 use App\home_setting;
 use Illuminate\Http\Request;
-
+use App\role;
+use Auth;
 class settingController extends Controller
 {
     public function about(){
@@ -111,7 +112,8 @@ class settingController extends Controller
     }
     public function faq(){
         $data = faq::all();
-        return view('admin.setting.faq',compact('data'));
+        $role = role::find(Auth::guard('admin')->user()->role_id);
+        return view('admin.setting.faq',compact('data','role'));
     }
     public function faqStore(Request $request){
         $faq = new faq;
@@ -177,6 +179,63 @@ class settingController extends Controller
         return redirect('/admin/social-details');
     }
 
+    public function addRole(){
+        $role = new role;
+        $tb = $role->getTableColumns();
+        unset($tb[0],$tb[1]);
+        return view('admin.setting.addRole',compact('tb'));
+    }
 
+    public function createRole(Request $request){
+        //unset($request['_token']);
+        $role = new role;
+        $role->role_name = $request->role_name;
+        foreach($request->role as $row){
+           // $role[$row] = $row;
+           $role[$row] =1;
+        }
+       // role::create($request->all());
+         $role->save();
+         return redirect('/admin/role');
+    }
 
+    public function role()
+    {
+        $role = role::all();
+        $roles = role::find(Auth::guard('admin')->user()->role_id);
+        return view('admin.setting.role',compact('role','roles'));
+    }
+
+    public function editRole($id){
+        $role = new role;
+        $tb = $role->getTableColumns();
+        unset($tb[0],$tb[1]);
+        $editRole = role::find($id);
+        return view('admin.setting.editRole',compact('tb','editRole'));
+    }
+
+    public function updateRole(Request $request){
+        $role = new role;
+        $tb = $role->getTableColumns();
+        $editRole = role::find($request->role_id);
+        $editRole->role_name = $request->role_name;
+        unset($tb[0],$tb[1]);
+        foreach($tb as $row){
+       
+                if(in_array($row,$request->role)){
+                    $editRole[$row] =1;
+                }else{
+                    $editRole[$row] =null;
+                }
+          
+
+        }
+        $editRole->save();
+        return redirect('/admin/role');
+    }
+
+    public function deleteRole($id){
+      role::find($id)->delete();
+        return response()->json("200"); 
+    }
 }

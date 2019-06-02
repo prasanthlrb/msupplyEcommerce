@@ -16,9 +16,9 @@
         
         <div class="card">
           <div class="card-header">
-            
+              @if($role->attribute_set_create)
                 <button id="open_model" data-backdrop="false" class="btn btn-success round btn-glow px-2" data-toggle="modal">Create Group Product Name</button>
-            
+            @endif
             
           </div>
           <div class="card-content collapse show">
@@ -29,8 +29,12 @@
                   <tr>
                     <th>S No</th>
                     <th>Group Name</th>
+                    @if($role->attribute_set_edit)
                     <th>Edit</th>
+                    @endif
+                    @if($role->attribute_set_delete)
                     <th>Delete</th>
+                    @endif
                   </tr>
                 </thead>
                 <tbody>
@@ -38,9 +42,12 @@
                   <tr>
                     <td>{{$row->id}}</td>
                     <td>{{$row->group}}</td>
-                   
+                    @if($role->attribute_set_edit)
                     <td class="text-center" onclick="Edit({{$row->id}})"><i class="ft-edit"></i></td>
+                    @endif
+                    @if($role->attribute_set_delete)
                     <td class="text-center" onclick="Delete({{$row->id}})"><i class="ft-trash-2"></i></td>
+                    @endif
                   </tr>
                 @endforeach
                 </tbody>
@@ -48,8 +55,12 @@
                   <tr>
                         <th>S No</th>
                         <th>Group Name</th>
+                        @if($role->attribute_set_edit)
                         <th>Edit</th>
+                        @endif
+                        @if($role->attribute_set_delete)
                         <th>Delete</th>
+                        @endif
                   </tr>
                 </tfoot>
               </table>

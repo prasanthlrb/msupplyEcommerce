@@ -21,6 +21,11 @@ use App\order_transport;
 use App\order_attribute;
 use App\wishlist;
 use App\company;
+use App\review;
+use App\rating;
+use App\Mail\OrderMailable;
+use PDF;
+use App\Contactinfo;
 
 class AccountController extends Controller
 {
@@ -388,6 +393,7 @@ class AccountController extends Controller
                 $tax = round($item_total * $row->tax / (100 + $row->tax), 2);
                 $order_item->tax_type = "inclusive";
                 $order_item->tax = $tax;
+                $order_item->tax_percent = $row->tax;
                 $order_item->total_price = $item_total;
                 $order->total_amount = $item_total;
             } else {
@@ -395,6 +401,7 @@ class AccountController extends Controller
                 $total = $item_total + $tax;
                 $order_item->tax_type = "exclusive";
                 $order_item->tax = $tax;
+                $order_item->tax_percent = $row->tax;
                 $order_item->total_price = $total;
                 $order->total_amount = $total;
             }
@@ -773,8 +780,83 @@ class AccountController extends Controller
         $order_items = order_item::where('order_id', $id)->get();
         $shipping = shipping::where('id', $order->shipping)->get();
         $billing = billing::where('id', $order->billing)->get();
+        $product = product::find($order_items[0]->product_id);
+        $review = review::where('user_id',Auth::user()->id)->where('order_item_id',$order_items[0]->id)->first();
+        $rating = rating::where('user_id',Auth::user()->id)->where('order_item_id',$order_items[0]->id)->first();
         //return response()->json($order_items);
-        return view('customer.singleOrder',compact('order','order_items','billing','shipping'));
+        return view('customer.singleOrder',compact('order','order_items','billing','shipping','product','review','rating'));
+    }
+
+    //review 
+    public function review(){
+        $id=Auth::user()->id;
+        $review = DB::table('reviews')
+            ->where('customer_id','=',$id)
+            ->join('products', 'products.id', '=', 'reviews.product_id')
+            ->select('reviews.*','products.product_image')
+            ->get();
+        return view('customer.review',compact('review'));
+    }
+
+    public function addReview(Request $request){
+
+        $review = new review;
+        $review->item_id = $request->item_id;
+        $review->order_item_id = $request->order_item_id;
+        $review->user_id = Auth::user()->id;
+        $review->status = 0;
+        $review->review = $request->reviews;
+        $review->save();
+
+        $rating = new rating;
+        $rating->item_id = $request->item_id;
+        $rating->order_item_id = $request->order_item_id;
+        $rating->user_id = Auth::user()->id;
+        $rating->status = 0;
+        $rating->rating = $request->rating;
+        $rating->save();
+        return response()->json($request);
+    }
+    public function reReview(Request $request){
+        $review = review::find($request->review_old);
+        $review->review = $request->reviews;
+        $review->save();
+        if($request->rating !=0){
+            $rating = rating::find($request->rating_old);
+            $rating->rating = $request->rating;
+            $rating->save();
+        }
+        return response()->json($request);
+    }
+    public function orderMail(){
+        //$all = $request->all();
+        // Mail::send('mail',compact('all'),function($message) use($all){
+        //     $message->to('prasanthbca7@gmail.com','To LRB')->subject($all['cf_order_number']);
+        //     $message->from('prasanthats@gmail.com','To Prasanth');
+        // });
+        //  $orderData = $request->all();
+        // Mail::to($contactData['cf_email'])->send(new OrderMailable($orderData));
+        //return 'Email was sent';
+        return response()->json(['message'=>'Successfully Send'],200); 
+        //return response()->json($contactData['cf_email']); 
+    }
+
+    public function orderCancel($id){
+        $order = order::find($id);
+        $order->order_status = 5;
+        $order->save();
+        return redirect('/account/orders');
+    }
+
+    public function orderPrint($id){
+        $order = order::find($id);
+        $billing = billing::find($order->billing);
+        $info = Contactinfo::find(1);
+        $item = order_item::where('order_id',$order->id)->get();
+        $pdf = PDF::loadView('customer.printOrder', compact('order','billing','info','item'));
+        $pdf->setPaper('A4', 'portrait');
+        return $pdf->stream('order.pdf');
+        // return view('customer.printOrder',compact('order','billing'));
     }
 
 }

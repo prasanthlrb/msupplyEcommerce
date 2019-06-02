@@ -455,9 +455,11 @@
                               
                                
                                   <div class="form-actions">
+                                      @if($role->catalog_edit ==1)
                                     <button id="btnSave" onclick="Save_product()" type="button" class="btn btn-primary">
                                       <i class="la la-check-square-o"></i> Save & Publish
                                     </button>
+                                    @endif
                                   </div>
                                 
                               </div>

@@ -103,7 +103,9 @@
   <script src="../../../app-assets/js/scripts/tables/datatables/datatable-basic.js"
   type="text/javascript"></script>
 <script>
-  
+
+ $('.ads').addClass('active');
+
     function updateSide(id){
     
       var formData = new FormData($('#adform'+id)[0]);

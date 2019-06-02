@@ -6,9 +6,13 @@ use Illuminate\Http\Request;
 use App\User;
 use DB;
 use App\order;
+use App\role;
 use App\order_transport;
 use App\company;
 use Yajra\DataTables\Facades\DataTables;
+use App\review;
+use App\rating;
+use Auth;
 class customerController extends Controller
 {
   public function __construct()
@@ -16,7 +20,8 @@ class customerController extends Controller
       $this->middleware('auth:admin');
   }
    public function customer(){
-       return view('admin.customer');
+      $role = role::find(Auth::guard('admin')->user()->role_id);
+       return view('admin.customer',compact('role'));
    }
 
    public function getCustomer($id){
@@ -30,8 +35,8 @@ class customerController extends Controller
             ->select('u.name','u.email','u.phone','u.user_type','u.id','c.company')
             ->orderBy('u.id','desc')->get();
         }
-      
-        
+
+
         //order_transport::where('status',$filter)->orderBy('id','desc')->get();
     }
     else{
@@ -50,7 +55,7 @@ class customerController extends Controller
         return '<td>
        '.$row.'
         </td>';
-        }) 
+        })
     ->addColumn('user_type', function($customer){
         if($customer->user_type == "user"){
             $row = "Individual";
@@ -60,7 +65,7 @@ class customerController extends Controller
         return '<td>
        '.$row.'
         </td>';
-        }) 
+        })
         ->addColumn('action', function($customer){
             return ' <span class="dropdown">
             <button id="btnSearchDrop2" type="button" data-toggle="dropdown" aria-haspopup="true"
@@ -76,7 +81,7 @@ class customerController extends Controller
     ->rawColumns(['action','customer','user_type'])
     ->make(true);
    }
-   
+
    public function profile($id){
        $user = User::find($id);
        $output ='<div class="form-group row">
@@ -87,7 +92,7 @@ class customerController extends Controller
          name="name" value="'.$user->name.'">
        </div>
      </div>
-    
+
      <div class="form-group row">
        <label class="col-md-3 label-control" for="projectinput3">E-mail</label>
        <div class="col-md-9">
@@ -104,7 +109,7 @@ class customerController extends Controller
        if($user->user_type == "company"){
            $company = company::where('user_id',$user->id)->first();
            $output .='
-           
+
            <h4 class="form-section"><i class="ft-clipboard"></i> Company Details</h4>
            <div class="form-group row">
              <label class="col-md-3 label-control" for="projectinput5">Company</label>
@@ -166,7 +171,7 @@ class customerController extends Controller
       name="name" value="'.$user->name.'">
     </div>
   </div>
- 
+
   <div class="form-group row">
     <label class="col-md-3 label-control" for="projectinput3">E-mail</label>
     <div class="col-md-9">
@@ -183,7 +188,7 @@ class customerController extends Controller
     if($user->user_type == "company"){
         $company = company::where('user_id',$user->id)->first();
         $output .='
-        
+
         <h4 class="form-section"><i class="ft-clipboard"></i> Company Details</h4>
         <div class="form-group row">
           <label class="col-md-3 label-control" for="projectinput5">Company</label>
@@ -217,5 +222,52 @@ class customerController extends Controller
     $company->status = 1;
     $company->save();
     return response()->json($company);
+  }
+  public function review($id){
+    $review = DB::table('reviews as r')
+    ->where('r.status',$id)
+    ->join('ratings','ratings.order_item_id','=','r.order_item_id')
+    ->join('order_items as i','i.id','=','r.order_item_id')
+    ->select('r.*','i.product_name','i.order_id','ratings.rating')
+    ->get();
+    return Datatables::of($review)
+    ->addColumn('product_name', function($review){
+      return ''.$review->product_name.'';})
+    ->addColumn('order_id', function($review){
+      return '<a href="/admin/order-item/'.$review->order_id.'" >#'.$review->order_id.'</a>';})
+    ->addColumn('updated_at', function($review){
+        return ''.$review->updated_at.'';
+     })
+    ->addColumn('action', function($review){
+        return '<td>
+        <div class="default-star-rating" data-score="'.$review->rating.'"></div><br>
+        <i class="ft-eye" onclick="showReview('.$review->id.')" style="font-size:25px;cursor: pointer"></i></td>
+
+        <input type="hidden" id="review'.$review->id.'" value="'.$review->review.'">';
+     })
+     ->addIndexColumn()
+    ->rawColumns(['action','product_name','order_id','updated_at'])
+    ->make(true);
+  }
+  public function nonReview(){
+    $review = DB::table('reviews as r')
+              ->where('r.status',0)
+              ->join('order_items as i','i.id','=','r.order_item_id')
+              ->select('r.*','i.product_name','i.order_id')
+              ->get();
+              //return response()->json($review);
+    $role = role::find(Auth::guard('admin')->user()->role_id);
+    return view('admin.nonReview',compact('review','role'));
+  }
+  public function reviewStatus($id, $data){
+    $review = review::find($id);
+    $review->status = $data;
+    $review->save();
+    if($data == 1){
+      $msg = "Review Approval";
+    }else{
+      $msg = "Review Reject";
+    }
+    return response()->json($msg);
   }
 }

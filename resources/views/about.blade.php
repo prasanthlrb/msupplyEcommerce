@@ -1,7 +1,6 @@
 @extends('layout.app')
 @section('content')
 <!-- - - - - - - - - - - - - - Page Wrapper - - - - - - - - - - - - - - - - -->
-header('Content-Type: text/plain; charset=utf-8');
 <div class="secondary_page_wrapper">
 
     <div class="container">

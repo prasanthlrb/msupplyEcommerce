@@ -27,8 +27,8 @@ class CreateProductsTable extends Migration
             $table->string('regular_price')->nullable();
             $table->string('sales_price')->nullable();
             $table->string('sku')->nullable();
-            $table->string('stock_quantity')->nullable();
-            $table->string('low_stock')->nullable();
+            $table->integer('stock_quantity')->nullable();
+            $table->integer('low_stock')->nullable();
             $table->string('weight')->nullable();
             $table->string('length')->nullable();
             $table->string('width')->nullable();

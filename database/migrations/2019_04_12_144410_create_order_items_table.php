@@ -22,6 +22,7 @@ class CreateOrderItemsTable extends Migration
             $table->string('qty');
             $table->string('tax_type')->nullable();
             $table->string('tax')->nullable();
+            $table->string('tax_percent')->nullable();
             $table->string('total_price');
             $table->string('user_id');
             $table->string('commands')->nullable();

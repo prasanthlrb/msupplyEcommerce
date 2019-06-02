@@ -23,8 +23,10 @@
         
         <div class="card">
           <div class="card-header">
+            @if($role->cms_home_layout_create ==1)
                 <button id="open_model" data-backdrop="false" class="btn btn-success round btn-glow px-2" data-toggle="modal">Create Layouts</button>
-          </div>
+          @endif
+              </div>
        
         </div>
         <div class="col-lg-6">
@@ -32,8 +34,12 @@
             <ul class="list-group" id="list-group-tags">
                 @foreach($layout as $row)
               <li class="list-group-item" data-value="{{$row->id}}">
+                  @if($role->cms_home_layout_delete ==1)
                 <span class="badge badge-danger badge-pill float-right" onclick="Delete({{$row->id}})"><i class="ft-trash-2"></i></span>
+                @endif
+                @if($role->cms_home_layout_edit ==1)
                 <span class="badge badge-primary badge-pill float-right" onclick="Edit({{$row->id}})"><i class="ft-edit"></i></span>
+                @endif
                 {{$row->title}} - ({{$row->type}})
               </li>
               @endforeach
@@ -123,29 +129,9 @@
   <script src="../../../app-assets/vendors/js/extensions/dragula.min.js" type="text/javascript"></script>
   <!-- END PAGE VENDOR JS-->
 <script>
-//       dragula([document.getElementById('list-group-tags')],{
-//         revertOnSpill: true
-//       }).on('drop',function(el)
-// {
-//    var parentElId = $(el).parent().attr('id');
-//    var droppedElIndex = $(el).index();
-//    var droppedElId = $(el).attr('id');
-//   console.log(parentElId);
-//   console.log(droppedElIndex);
-//   console.log(droppedElId);
-// });
-//       function $(id) {
-//   return document.getElementById(id);
-// }
-// draggableElements.on('list-group-tags',function(el)
-// {
-//    var parentElId = $(el).parent().attr('id');
-//    var droppedElIndex = $(el).index();
-//    var droppedElId = $(el).attr('id');
-//   console.log(parentElId);
-//   console.log(droppedElIndex);
-//   console.log(droppedElId);
-// });
+
+ $('.home_layout').addClass('active');
+
 
 dragula([document.getElementById('list-group-tags')], {
   revertOnSpill: true

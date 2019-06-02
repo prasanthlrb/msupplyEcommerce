@@ -8,6 +8,8 @@ use App\homeSlider;
 use App\home_product_layout;
 use App\category;
 use App\product;
+use Auth;
+use App\role;
 class pageSettingController extends Controller
 {
     public function __construct()
@@ -52,6 +54,7 @@ class pageSettingController extends Controller
 
     public function showSlider(){
         $slider= homeSlider::orderBy('position', 'ASC')->get();
+        $role = role::find(Auth::guard('admin')->user()->role_id);
         return view('admin.setting.slider',compact('slider'));
     }
 
@@ -189,7 +192,8 @@ class pageSettingController extends Controller
         $layout = home_product_layout::orderBy('position', 'ASC')->get();
         $product = product::all();
         $category = category::all();
-        return view('admin.setting.layout',compact('layout','product','category'));
+        $role = role::find(Auth::guard('admin')->user()->role_id);
+        return view('admin.setting.layout',compact('layout','product','category','role'));
     }
     public function SaveLayout(Request $request){
         $layout = new home_product_layout;

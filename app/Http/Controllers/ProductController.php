@@ -10,9 +10,13 @@ use App\category;
 use App\product_group;
 use App\product;
 use App\upload;
-use File; 
+use File;
 use App\product_attribute;
 use DB;
+use Auth;
+use App\role;
+use Yajra\DataTables\Facades\DataTables;
+use App\product_log;
 class ProductController extends Controller
 {
     //Brand Edit Delete View Update Process Function Start Here
@@ -23,7 +27,8 @@ class ProductController extends Controller
     public function viewBrand(){
         $data = brand::all();
        // return response()->json($data);
-        return view('admin.brand',compact('data')); 
+       $role = role::find(Auth::guard('admin')->user()->role_id);
+        return view('admin.brand',compact('data','role'));
     }
 
     public function brandStore(Request $request){
@@ -37,13 +42,13 @@ class ProductController extends Controller
     $image = $request->file('brand_image');
     $fileName = rand() . '.' . $image->getClientOriginalExtension();
     $image->move(public_path('upload_brand/'), $fileName);
-    }  
+    }
         $brand = new brand;
         $brand->brand = $request->brand;
         $brand->brand_image = $fileName;
         $brand->status = $request->status;
         $brand->save();
-        return response()->json(['message'=>'Successfully Store'],200); 
+        return response()->json(['message'=>'Successfully Store'],200);
     }
 
     public function brandUpdate(Request $request){
@@ -74,27 +79,28 @@ class ProductController extends Controller
         $brand->brand_image = $fileName;
         $brand->status = $request->status;
         $brand->save();
-        return response()->json(['message'=>'Successfully Update'],200); 
+        return response()->json(['message'=>'Successfully Update'],200);
     }
     public function editBrand($id){
         $brand = brand::find($id);
-        return response()->json($brand); 
+        return response()->json($brand);
     }
 
     public function deleteBrand($id){
         $brand = brand::find($id);
-        $brand->delete(); 
-        return response()->json(['message'=>'Successfully Delete'],200); 
+        $brand->delete();
+        return response()->json(['message'=>'Successfully Delete'],200);
     }
 
      //Brand Edit Delete View Update Process Function End Here
 
-     
+
     //Attribute Edit Delete View Update Process Function Start Here
     public function viewAttribute(){
         $attribute = attribute::all();
         $terms = term::all();
-        return view('admin/attribute',compact('attribute','terms'));
+        $role = role::find(Auth::guard('admin')->user()->role_id);
+        return view('admin/attribute',compact('attribute','terms','role'));
     }
 
     public function attributeSave(Request $request){
@@ -104,7 +110,7 @@ class ProductController extends Controller
         $attribute = new attribute;
         $attribute->name = $request->attribute_name;
         $attribute->save();
-        return response()->json(['message'=>'Successfully Store'],200);  
+        return response()->json(['message'=>'Successfully Store'],200);
     }
 
     public function attributeUpdate(Request $request){
@@ -114,18 +120,18 @@ class ProductController extends Controller
         $attribute = attribute::find($request->id);
         $attribute->name = $request->attribute_name;
         $attribute->save();
-        return response()->json(['message'=>'Successfully Store'],200);  
+        return response()->json(['message'=>'Successfully Store'],200);
     }
 
     public function attributeEdit($id){
         $attribute = attribute::find($id);
-        return response()->json($attribute); 
+        return response()->json($attribute);
     }
 
     public function attributeDelete($id){
         $attribute = attribute::find($id);
         $attribute->delete();
-        return response()->json(['message'=>'Successfully Delete'],200); 
+        return response()->json(['message'=>'Successfully Delete'],200);
     }
     //Attribute Edit Delete View Update Process Function End Here
 
@@ -134,8 +140,8 @@ class ProductController extends Controller
     public function viewTerms($id){
         $terms = term::where('attribute_id','=',$id)->get();
         $attribute = attribute::find($id);
-        return view('admin/terms',compact('attribute','terms'));    
-        //return response()->json( $attribute);   
+        return view('admin/terms',compact('attribute','terms'));
+        //return response()->json( $attribute);
     }
 
     public function termsSave(Request $request){
@@ -146,7 +152,7 @@ class ProductController extends Controller
         $terms->terms_name = $request->cat_name;
         $terms->attribute_id = $request->attribute_id;
         $terms->save();
-        return response()->json(['message'=>'Successfully Store'],200);  
+        return response()->json(['message'=>'Successfully Store'],200);
     }
 
     public function termsUpdate(Request $request){
@@ -157,23 +163,23 @@ class ProductController extends Controller
         $terms->terms_name = $request->cat_name;
         $terms->attribute_id = $request->attribute_id;
         $terms->save();
-        return response()->json(['message'=>'Successfully Store'],200);  
+        return response()->json(['message'=>'Successfully Store'],200);
     }
 
     public function termsEdit($id){
         $terms = term::find($id);
-        return response()->json($terms); 
+        return response()->json($terms);
     }
- 
+
 
     public function termsDelete($id){
         $terms = term::find($id);
         $terms->delete();
-        return response()->json(['message'=>'Successfully Delete'],200); 
+        return response()->json(['message'=>'Successfully Delete'],200);
     }
        //Terms Edit Delete View Update Process Function End Here
 
-      
+
        //category Edit Delete View Update Process Function start Here
        public function viewCategoryId($id){
         $category = category::where('parent_id',$id)->get();
@@ -184,8 +190,8 @@ class ProductController extends Controller
             $i = $id;
             $sn=1;
             while ($i != "0") {
-               
-                $categories = category::find($i); 
+
+                $categories = category::find($i);
                 $cateLink = array(
                     'id' => $categories->id,
                     'name' => $categories->category_name,
@@ -194,14 +200,14 @@ class ProductController extends Controller
                 $categoryLink[]= $cateLink;
                 $i = $categories->parent_id;
                 $sn++;
-               
+
             }
             $linkCat1 = collect($categoryLink);
             $linkCat2 = $linkCat1->reverse();
            //return response()->json($linkCat2->all());
         }
-       
-           return view('admin/category',compact('category','linkCat2'));
+        $role = role::find(Auth::guard('admin')->user()->role_id);
+           return view('admin/category',compact('category','linkCat2','role'));
 
        }
        public function CategorySave(Request $request){
@@ -216,7 +222,7 @@ class ProductController extends Controller
         $category->category_image = $fileName;
         $category->parent_id = $request->parent_id;
         $category->save();
-        return response()->json("200"); 
+        return response()->json("200");
 
        }
        public function CategoryUpdate(Request $request){
@@ -231,17 +237,17 @@ class ProductController extends Controller
         $image->move(public_path('category_image/'), $fileName);
         $category->category_image = $fileName;
         }
-      
+
         $category->category_name = $request->category_name;
         $category->parent_id = $request->parent_id;
         $category->save();
-        return response()->json("200"); 
+        return response()->json("200");
 
        }
 
        public function EditCategory($id){
         $category = category::find($id);
-        return response()->json($category); 
+        return response()->json($category);
     }
        public function DeleteCategory($id){
         $category = category::find($id);
@@ -249,26 +255,28 @@ class ProductController extends Controller
         $filename1 = public_path().'/category_image/'.$file;
         \File::delete($filename1);
         $category->delete();
-        return response()->json('200'); 
+        return response()->json('200');
     }
 
-    // Greate New Product in Admin 
+    // Greate New Product in Admin
     public function createProduct(){
         $group = product_group::all();
         $brand = brand::all();
         $product = product::all();
         $attribute = attribute::all();
         $category = category::all();
-        return view('admin.newProduct',compact('group','brand','product','attribute','category'));
+        $role = role::find(Auth::guard('admin')->user()->role_id);
+        return view('admin.newProduct',compact('group','brand','product','attribute','category','role'));
     }
         //category Edit Delete View Update Process Function End Here
 
          //Group Edit Delete View Update Process Function start Here
         public function productGroup(){
             $product_group = product_group::all();
-            return view('admin.group',compact('product_group'));
+            $role = role::find(Auth::guard('admin')->user()->role_id);
+            return view('admin.group',compact('product_group','role'));
         }
-    
+
         public function saveGroup(Request $request){
             $request->validate([
                 'group'=>'required|unique:product_groups',
@@ -276,13 +284,13 @@ class ProductController extends Controller
             $product_group = new product_group;
             $product_group->group = $request->group;
             $product_group->save();
-            return response()->json($request); 
+            return response()->json($request);
         }
         public function editGroup($id){
             $product_group = product_group::find($id);
-            return response()->json($product_group); 
+            return response()->json($product_group);
         }
-    
+
         public function updateGroup(Request $request){
             $request->validate([
                 'group'=>'required|unique:product_groups,group,'.$request->id,
@@ -290,13 +298,13 @@ class ProductController extends Controller
             $product_group = product_group::find($request->id);
             $product_group->group = $request->group;
             $product_group->save();
-            return response()->json(['message'=>'Successfully Store'],200);  
+            return response()->json(['message'=>'Successfully Store'],200);
         }
-    
+
         public function deleteGroup($id){
             $product_group = product_group::find($id);
             $product_group->delete();
-            return response()->json(['message'=>'Successfully Delete'],200); 
+            return response()->json(['message'=>'Successfully Delete'],200);
         }
      //Group Edit Delete View Update Process Function End Here
 
@@ -325,34 +333,34 @@ class ProductController extends Controller
                unset($data[$key]);
             }
          }
-         return response()->json($data); 
+         return response()->json($data);
         //  echo '<pre>';
         //  print_r($data);
         //  echo '</pre>';
      }
 
      //Attribute Terms Get from Product Create Page
-     public function get_terms($id){ 
+     public function get_terms($id){
         $data  = DB::table('terms')
             ->select('*')
             ->where('attribute_id',$id)
             ->get();
-        
+
         $attribute = attribute::find($id);
 
 
-     
+
       $output = '<div id="'.$attribute->id.'">';
       $output .= '<br><label>Choose The '.$attribute->name.' </label><a float="right" class="pull-right href="javascript:void(0)" onclick="RemovePop('.$attribute->id.')"><i class="ft-trash-2"></i></a>';
       $output .= '<br><select style="width:100%" id="'.$attribute->name.'" name="'.$attribute->name.'" class="select2 form-control col-md-12" >';
       $output .= '<optgroup label="'.$attribute->name.'">';
         foreach ($data as $value){
-            $output .='<option value="'.$value->id.'">'.$value->terms_name.'</option>'; 
+            $output .='<option value="'.$value->id.'">'.$value->terms_name.'</option>';
         }
         $output .= '</optgroup>';
         $output .= '</select>';
         $output .= '</div>';
-      
+
       echo $output;
     }
     public function productSave(Request $request){
@@ -372,7 +380,7 @@ class ProductController extends Controller
     }
 
         $product = new product;
-        $product->category = collect($request->category)->implode(','); 
+        $product->category = collect($request->category)->implode(',');
         $product->product_name = $request->product_name;
         $product->group = $request->group;
         $product->brand_name = $request->brand_name;
@@ -421,11 +429,15 @@ class ProductController extends Controller
                     $attr->save();
                 }
             }
-            
+
          }
 
-        
-        return response()->json($product->id); 
+         $product_log = new product_log;
+         $product_log->product_id = $product->id;
+         $product_log->type ='Create';
+         $product_log->employee_name = Auth::guard('admin')->user()->emp_name;
+         $product_log->save();
+        return response()->json($product->id);
     }
 
 
@@ -474,45 +486,49 @@ class ProductController extends Controller
         $product->save();
 
         if(isset($request->attribute)){
-    
+
             foreach(explode(',', $request->attribute) as $id) {
-                $attribute_data[] = attribute::find($id);        
+                $attribute_data[] = attribute::find($id);
             }
             if(count($attribute_data) > 0){
                 for ($x = 0; $x < count($attribute_data); $x++) {
                     $attrName = $attribute_data[$x]->name;
                     $ter = term::where('id',$request[$attrName])->first();
                     $product_attribute = product_attribute::where('attribute',$attribute_data[$x]->id)->where('product_id',$request->product_page_id)->first();
-                    if(!isset($product_attribute)){    
+                    if(!isset($product_attribute)){
                         $attr = new product_attribute;
                         $attr->product_id = $request->product_page_id;
                         $attr->group_id = $request->group;
                         $attr->attribute = $attribute_data[$x]->id;
                         $attr->terms_id = $ter->id;
                         $attr->terms = $ter->terms_name;
-                        $attr->save();              
+                        $attr->save();
             }
             }
             }
-            
-         }
 
-        
-        return response()->json($request->product_page_id); 
+         }
+         $product_log = new product_log;
+         $product_log->product_id = $request->product_page_id;;
+         $product_log->type ='Updated';
+         $product_log->employee_name = Auth::guard('admin')->user()->emp_name;
+         $product_log->save();
+
+        return response()->json($request->product_page_id);
     }
 
 
     public function viewProduct(){
-        $product = product::all();
-        return view('admin/viewProduct',compact('product'));
+        $role = role::find(Auth::guard('admin')->user()->role_id);
+        return view('admin/viewProduct',compact('role'));
     }
     public function productDelete($id){
-        
+
         $product = product::find($id);
         $filename = public_path().'/product_img/'.$product->product_image;
         \File::delete($filename);
         $product->delete();
-    
+
         $product_attribute = product_attribute::where('product_id', $id)->delete();
         $upload = upload::where('product_id', $id)->get();
         if(!empty($upload)){
@@ -522,26 +538,26 @@ class ProductController extends Controller
                 if (file_exists($file_path)) {
                     unlink($file_path);
                 }
-        
+
                 if (file_exists($resized_file)) {
                     unlink($resized_file);
                 }
-        
-               
-        
+
+
+
             }
-           
+
                 upload::where('product_id', $id)->delete();
-            
-           
+
+
         }
-        
-       
-        return response()->json(['message'=>'Successfully Delete'],200); 
+
+
+        return response()->json(['message'=>'Successfully Delete'],200);
     }
 
     public function editProduct($id){
-        
+
         $product_find = product::find($id);
         // $data = DB::table('attributes as a')
         // ->join('product_attributes as pa','pa.attribute','=','a.id')
@@ -554,17 +570,18 @@ class ProductController extends Controller
         $product = product::all();
         $brand = brand::all();
         foreach(explode(',', $product_find->category) as $row) {
-            $tree_category[] = $row;        
+            $tree_category[] = $row;
         }
         foreach(explode(',', $product_find->related_product) as $row) {
-            $related_product[] = $row;        
+            $related_product[] = $row;
         }
 
-       //return response()->json($data); 
-        return view('admin/editProduct',compact('group','brand','product','category','attribute','product_attribute','product_find','tree_category','related_product'));
+       //return response()->json($data);
+       $role = role::find(Auth::guard('admin')->user()->role_id);
+        return view('admin/editProduct',compact('group','brand','product','category','attribute','product_attribute','product_find','tree_category','related_product','role'));
     }
 
-    public function getEditAttribute($id){ 
+    public function getEditAttribute($id){
         $product  = DB::table('product_attributes')
         ->select('*')
         ->where('product_id',$id)
@@ -584,17 +601,17 @@ class ProductController extends Controller
       $output .= '<optgroup label="'.$attribute->name.'">';
         foreach ($data as $value){
             if($value->terms_name == $row->terms){
-                $output .='<option selected value="'.$value->id.'">'.$value->terms_name.'</option>'; 
+                $output .='<option selected value="'.$value->id.'">'.$value->terms_name.'</option>';
             }
             else{
-                $output .='<option value="'.$value->id.'">'.$value->terms_name.'</option>'; 
+                $output .='<option value="'.$value->id.'">'.$value->terms_name.'</option>';
             }
-            
+
         }
         $output .= '</optgroup>';
         $output .= '</select>';
         $output .= '</div>';
-      
+
       echo $output;
     }
 }
@@ -615,6 +632,26 @@ public function getServerImages($id)
     return response()->json([
         'images' => $imageAnswer
     ]);
+}
+
+public function getProduct(){
+    $product = product::all();
+    return Datatables::of($product)
+    ->addColumn('product_name', function($product){
+
+        return '<td><a href="/admin/editProduct/'.$product->id.'">
+       '.$product->product_name.'</a>
+        </td>';
+        })
+    ->addColumn('product_image', function($product){
+        return '<td><img src="/product_img/'.$product->product_image.'" alt="" style="width: 80px"></td>';
+        })
+        ->addColumn('delete', function($product){
+            return '<td class="text-center"><i class="ft-trash-2 deleteIcon" onclick="Delete('.$product->id.')"></i></td>';
+        })
+        ->addIndexColumn()
+    ->rawColumns(['product_name','product_image','delete'])
+    ->make(true);
 }
 
 }

@@ -61,5 +61,7 @@
 @section('extra-js')
 <script src="../../../app-assets/vendors/js/editors/tinymce/tinymce.js" type="text/javascript"></script>
 <script src="../../../app-assets/js/scripts/editors/editor-tinymce.js" type="text/javascript"></script>
-
+<script>
+    $('.termsCondition').addClass('active');
+   </script>
 @endsection

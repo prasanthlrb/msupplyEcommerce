@@ -27,9 +27,10 @@
         
         <div class="card">
           <div class="card-header">
-            
+            @if($roles->user_create ==1)
                 <button id="open_model" data-backdrop="false" class="btn btn-success round btn-glow px-2" data-toggle="modal">Create User</button>
-          </div>
+          @endif
+              </div>
           <div class="card-content collapse show">
             <div class="card-body card-dashboard">
         <table class="table table-striped table-bordered zero-configuration">
@@ -40,7 +41,9 @@
                 <th>Email</th>
                 <th>Phone</th>
                 <th>Role</th>
+                @if($roles->user_action ==1)
                 <th>Action</th>
+                @endif
               </tr>
             </thead>
             <tbody>
@@ -51,8 +54,8 @@
             <td>{{$row->emp_name}}</td>
             <td>{{$row->email}}</td>
             <td>{{$row->phone}}</td>
-            <td>{{$row->role_id}}</td>
-          
+            <td>{{$row->role_name}}</td>
+            @if($roles->user_action ==1)
             <td class="text-center">
                 <span class="dropdown">
       <button id="btnSearchDrop2" type="button" data-toggle="dropdown" aria-haspopup="true"
@@ -65,7 +68,7 @@
       </span>
     </span>
                 </td>
-           
+                @endif
             </tr>
             <?php $x++?>
               @endforeach
@@ -127,9 +130,11 @@ aria-hidden="true">
     <div class="form-group row">
             <label class="col-md-3 label-control" for="projectinput6">Select Role</label>
             <div class="col-md-9">
-              <select name="role_id" class="form-control">
-                <option selected="" value="0">Active</option>
-                <option value="1">Deactive</option>
+              <select name="role_id" class="form-control select2">
+                <option selected="" value="" disabled>Select Role</option>
+                @foreach($role as $row)
+              <option value="{{$row->id}}">{{$row->role_name}}</option>
+                @endforeach
               </select>
             </div>
           </div>
@@ -152,7 +157,7 @@ aria-hidden="true">
   <script src="../../../app-assets/js/scripts/tables/datatables/datatable-basic.js"
   type="text/javascript"></script>
 <script>
-  $('.category-menu').addClass('active');
+  $('.employee').addClass('active');
   var action_type; // the action type used to from data Save And Update
   $('#open_model').click(function(){
     $('#attribute_model').modal('show');

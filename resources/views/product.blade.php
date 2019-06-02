@@ -121,12 +121,37 @@
                             </div> -->
 
                             <!-- - - - - - - - - - - - - - End of page navigation - - - - - - - - - - - - - - - - -->
-
+                            @if(count($rating)>0)
                             <div class="description_section v_centered">
+                                <?php 
+                                $rating_count;
+                            
+                                if(count($rating) > 1){
+                                    $total=0;
+                                    foreach($rating as $row){
+                                        $total +=$row->rating;
+                                    }
+                                    $rating_count = $total/count($rating);
+                                }else{
+                                    $rating_count = $rating[0]->rating;
+                                }
+
+
+                                ?>
+
+                                    <ul class="rating">
+
+                                            <li class="active"></li>
+                                            <li class="<?php echo $rating_count >= 2 ? 'active' : '' ?>"></li>
+                                            <li class="<?php echo $rating_count >= 3 ? 'active' : '' ?>"></li>
+                                            <li class="<?php echo $rating_count >= 4 ? 'active' : '' ?>"></li>
+                                            <li class="<?php echo $rating_count >= 5 ? 'active' : '' ?>"></li>
+
+                                        </ul>
                                 
                                 <ul class="topbar">
 
-                                    <li><a href="#"> Review(s)</a></li>
+                                    <li><a href="#">{{count($reviews)}} Review(s)</a></li>
                                     <!-- <li><a href="#">Add Your Review</a></li> -->
 
                                 </ul>
@@ -134,7 +159,7 @@
                                 <!-- - - - - - - - - - - - - - End of reviews menu - - - - - - - - - - - - - - - - -->
 
                             </div>
-
+                            @endif
                             <div class="description_section">
 
                                 <table class="product_info">
@@ -149,7 +174,7 @@
                                         </tr> -->
 
                                         <tr>
-                                        @if($product1->stock_quantity !="")
+                                        @if($product1->stock_quantity !="" && $product1->stock_quantity !=0)
                                             <td>Availability: </td>
                                             <td><span class="in_stock">in stock</span> {{$product1->stock_quantity}} item(s)</td>
                                         @else    
@@ -263,8 +288,12 @@
                             <!-- - - - - - - - - - - - - - Product actions - - - - - - - - - - - - - - - - -->
 
                             <div class="buttons_row">
-
+                                @if($product1->stock_quantity !="" && $product1->stock_quantity !=0)
                                 <button type="button" onclick="addCart({{$product1->id}})" class="button_blue middle_btn">Add to Cart</button>
+                            @else    
+                            <button type="button" class="button_blue middle_btn">Coming Soon</button>
+                            @endif
+                             
 
                                 <a href="/add-wishlist/{{$product1->id}}"><button type="button" class="button_dark_grey def_icon_btn middle_btn add_to_wishlist tooltip_container"><span class="tooltip top">Add to Wishlist</span></button></a>
 
@@ -295,7 +324,11 @@
                         <ul class="tabs_nav clearfix">
                             <li class="active"><a href="#tab-1">Description</a></li>
                             <li><a href="#tab-2">Specifications</a></li>
-                            <li><a href="#tab-3">Reviews ()</a></li>
+                            @if($product1->review == 'on')
+                            @if(count($reviews) > 0)
+                            <li><a href="#tab-3">{{count($reviews)}} Review (s)</a></li>
+                            @endif
+                            @endif
                         </ul>
                         
                         <div class="tab_containers_wrap">
@@ -316,32 +349,77 @@
                             </div>
 
                             <div id="tab-3" class="tab_container">
-                                <section class="section_offset">
-                                    <h3>Customer Reviews</h3>
-                                    
-                                                        
-                                                        </ul>
+                                    <section class="section_offset">
+
+                                            <h3>Customer Reviews</h3>
+                                        @if(!empty($review))
+                                       
+                                            <ul class="reviews">
+                                                    @foreach($review as $row)
+                                                <li>
+    
+                                                    <!-- - - - - - - - - - - - - - Review - - - - - - - - - - - - - - - - -->
+                                                    
+                                                    <article class="review">
+    
+                                                        <!-- - - - - - - - - - - - - - Rates - - - - - - - - - - - - - - - - -->
+    
+                                                      
+                                                        <!-- - - - - - - - - - - - - - End of rates - - - - - - - - - - - - - - - - -->
+    
+                                                        <!-- - - - - - - - - - - - - - Review body - - - - - - - - - - - - - - - - -->
+    
+                                                        <div class="review-body">
+    
+                                                            <div class="review-meta">
+                                                            Review by <a href="#" class="bold">{{$row->name}}</a> on {{$row->updated_at}} 
+                                                                
+                                                                    <ul class="rating">
+                                                                            <li class="active"></li>
+                                                                            <li class="<?php echo $row->rating >= 2 ? 'active' : '' ?>"></li>
+                                                                            <li class="<?php echo $row->rating >= 3 ? 'active' : '' ?>"></li>
+                                                                            <li class="<?php echo $row->rating >= 4 ? 'active' : '' ?>"></li>
+                                                                            <li class="<?php echo $row->rating >= 5 ? 'active' : '' ?>"></li>
+                                                                        </ul>
+    
+    
+                                                            </div>
+    
+                                                            <p>{{$row->review}}</p>
+    
+                                                        </div>
+    
+                                                        <!-- - - - - - - - - - - - - - End of review body - - - - - - - - - - - - - - - - -->
+    
+                                                    </article>
+    
+                                                    <!-- - - - - - - - - - - - - - End of review - - - - - - - - - - - - - - - - -->
+    
+                                                </li>
+                                                @endforeach
+                                               
+                                               
+    
+                                            </ul>
+                                            @endif
+                                            @if ($review->lastPage() > 1)
+                                            <ul class="pags">
+                                                <li class="{{ ($review->currentPage() == 1) ? ' disabled' : '' }}">
+                                                    <a href="{{ $review->url(1) }}">Previous</a>
+                                                </li>
+                                                @for ($i = 1; $i <= $review->lastPage(); $i++)
+                                                    <li class="{{ ($review->currentPage() == $i) ? ' active' : '' }}">
+                                                        <a href="{{ $review->url($i) }}">{{ $i }}</a>
                                                     </li>
-                                                    <li class="v_centered">
-                                                        <span class="name">Quality</span>
-                                                        <ul class="rating">
-                                                       
-                                                        </ul>
-                                                    </li>
-                                                </ul>
-                                                <div class="review-body">
-                                                    <div class="review-meta">
-                                                        <h5 class="bold"></h5>
-                                                        Review by <a href="#" class="bold"></a> on 
-                                                    </div>
-                                                    <p></p>
-                                                </div>
-                                            </article>
-                                        </li>
-                                    </ul>
-                                   
-                                    <!-- <a href="#" class="button_grey middle_btn">Show All</a> -->
-                                </section>
+                                                @endfor
+                                                <li class="{{ ($review->currentPage() == $review->lastPage()) ? ' disabled' : '' }}">
+                                                    <a href="{{ $review->url($review->currentPage()+1) }}" >Next</a>
+                                                </li>
+                                            </ul>
+                                            @endif
+                                            <br>
+                                                <br>
+                                        </section><!--/ .section_offset -->
                             </div>
 
                         </div>
@@ -400,7 +478,36 @@
                 <a href="/product/{{$r_product->id}}">{{$r_product->product_name}}</a>
 
                 <div class="clearfix product_info">
+                       
 
+                            <?php 
+                            $getRating = App\rating::where('item_id',$r_product->id)->get();
+                            if(count($getRating) > 0){
+                                $rating_count;
+                            
+                               
+                            $total=0;
+                            foreach($getRating as $row){
+                                $total +=$row->rating;
+                            }
+                            $rating_count = $total/count($getRating);
+                       
+                            }
+                               
+
+
+                                ?>
+                                @if(count($getRating) > 0)
+                                    <ul class="rating alignright">
+
+                                            <li class="active"></li>
+                                            <li class="<?php echo $rating_count >= 2 ? 'active' : '' ?>"></li>
+                                            <li class="<?php echo $rating_count >= 3 ? 'active' : '' ?>"></li>
+                                            <li class="<?php echo $rating_count >= 4 ? 'active' : '' ?>"></li>
+                                            <li class="<?php echo $rating_count >= 5 ? 'active' : '' ?>"></li>
+
+                                        </ul>
+                                        @endif
                     <p class="product_price alignleft"><b>₹{{$r_product->sales_price}}</b></p>
 
                 </div>
@@ -430,7 +537,7 @@
 
 
            
-                <section class="section_offset">
+                {{-- <section class="section_offset">
                     <h3 class="offset_title">You Might Also Like</h3>
                     <div class="owl_carousel widgets_carousel">
                         <ul class="products_list_widget">
@@ -582,7 +689,7 @@
 
                     </div>
 
-                </section>
+                </section> --}}
              
 
                 <!-- - - - - - - - - - - - - - End of you might also like - - - - - - - - - - - - - - - - -->

@@ -219,7 +219,7 @@
 			@endsection
 			@section('extra-js')
 <script>
-	$('.wishlist').addClass('accSidebarActive');
+	$('.accWishlist').addClass('current');
 	
 function removewish(id){
     var r = confirm("Are you sure");

@@ -14,9 +14,9 @@
         
         <div class="card">
           <div class="card-header">
-            
+              @if($role->cms_slider_create ==1)
                 <button id="open_model" data-backdrop="false" class="btn btn-success round btn-glow px-2" data-toggle="modal">Create Sliders</button>
-            
+            @endif
             <div class="heading-elements">
                
               <ul class="list-inline mb-0">
@@ -39,8 +39,9 @@
                     <th>SubTitle</th>
                     <th>Slider Position</th>
                     <th>Slider Image</th>
+                    @if($role->cms_slider_action ==1)
                     <th>Action</th>
-                  
+                  @endif
                   </tr>
                 </thead>
                 <tbody id="list-group-tags">
@@ -52,7 +53,7 @@
                 <td>{{$row->sub_title}}</td>
                 <td>{{$row->slider_position}}</td>
                 <td><img src="{{ asset("slider/$row->slider_image")}}" alt="" style="width:80px"></td>
-               
+                @if($role->cms_slider_action ==1)
                 <td class="text-center">
                     <span class="dropdown">
           <button id="btnSearchDrop2" type="button" data-toggle="dropdown" aria-haspopup="true"
@@ -65,7 +66,7 @@
           </span>
         </span>
                     </td>
-               
+               @endif
                 </tr>
               
                   @endforeach
@@ -78,8 +79,9 @@
                     <th>SubTitle</th>
                     <th>Slider Position</th>
                     <th>Slider Image</th>
+                    @if($role->cms_slider_action ==1)
                     <th>Action</th>
-                      
+                  @endif
                   </tr>
                 </tfoot>
               </table>
@@ -374,5 +376,8 @@ if (input.files && input.files[0]) {
 }
 }
     
+$('.sliders').addClass('active');
 </script>
+
+
 @endsection

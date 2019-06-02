@@ -31,7 +31,9 @@
                             <div class="form-group text-center">
                               <!-- Floating button Regular with text -->
                               <a href="javascript:void(null)" id="orderFilter" class="btn btn-float btn-cyan"><i class="la la-filter"></i><span>Filter</span></a>
+                              @if($role->order_action ==1)
                               <a href="javascript:void(null)" id="orderAction" class="btn btn-float btn-float-lg btn-pink"><i class="la la-check-circle"></i><span>Action</span></a>
+                              @endif
                               <a href="#" id="page-reload" class="btn btn-float btn-cyan"><i class="la la-refresh"></i><span>refresh</span></a>
                             </div>
                           </div>
@@ -92,7 +94,7 @@
 
 <script>
     var status_id = null;
-    $('.order-menu').addClass('active');
+    $('.orders').addClass('active');
 
     var orderPageTable = $('.zero-configuration').DataTable(
     {

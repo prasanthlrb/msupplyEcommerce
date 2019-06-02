@@ -26,6 +26,7 @@
 @endsection
 @section('extra-js')
 <script>
+    
 function reject(id){
   $.ajax({
         url : '/admin/reject/'+id,

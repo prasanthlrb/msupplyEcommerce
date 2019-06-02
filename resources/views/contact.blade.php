@@ -66,9 +66,9 @@
 
 											</li><!--/ .row -->
 
-											<div class="g-recaptcha" 
+											{{-- <div class="g-recaptcha" 
 												data-sitekey="{{env('GOOGLE_RECAPTCHA_KEY')}}">
-											</div>
+											</div> --}}
 
 										</ul>
 
@@ -158,7 +158,7 @@
 		dataType: "JSON",
 		success: function(data)
 		{
-			console.log(data);                
+			//console.log(data);                
 			$("#contact_form")[0].reset();
 			toastr.success('Mail Send Successfully', 'Successfully Send');
 		},

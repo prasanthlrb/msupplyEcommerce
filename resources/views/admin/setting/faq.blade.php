@@ -16,7 +16,9 @@
       <div class="col-12">
         <div class="card">
           <div class="card-header">
+            @if($role->faq_create ==1)
             <button id="open_model" data-backdrop="false" class="btn btn-success round btn-glow px-2" data-toggle="modal">Create Faq</button>
+            @endif
             <div class="heading-elements">
               <ul class="list-inline mb-0">
                 <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
@@ -34,9 +36,12 @@
                     <th>S No</th>
                     <th>Question</th>
                     <th>Answer</th>
-                   
+                    @if($role->faq_edit ==1)
                     <th>Edit</th>
+                    @endif
+                    @if($role->faq_delete ==1)
                     <th>Delete</th>
+                    @endif
                   </tr>
                 </thead>
                 <tbody>
@@ -45,9 +50,12 @@
                     <td>{{$row->id}}</td>
                     <td>{{$row->question}}</td>
                     <td>{{$row->answer}}</td>
-                   
+                    @if($role->faq_edit ==1)
                     <td class="text-center" onclick="editFaq({{$row->id}})"><i class="ft-edit"></i></td>
+                    @endif
+                    @if($role->faq_delete ==1)
                     <td class="text-center" onclick="deleteFaq({{$row->id}})"><i class="ft-trash-2"></i></td>
+                    @endif
                   </tr>
                 @endforeach
                 </tbody>
@@ -56,8 +64,12 @@
                       <th>S No</th>
                       <th>Question</th>
                       <th>Answer</th>
-                        <th>Edit</th>
-                        <th>Delete</th>
+                      @if($role->faq_edit ==1)
+                      <th>Edit</th>
+                      @endif
+                      @if($role->faq_delete ==1)
+                      <th>Delete</th>
+                      @endif
                   </tr>
                 </tfoot>
               </table>
@@ -117,6 +129,9 @@
   <script src="../../../app-assets/js/scripts/tables/datatables/datatable-basic.js"
   type="text/javascript"></script>
 <script>
+
+ $('.faq').addClass('active');
+
   var action_type;
   $('#open_model').click(function(){
     $('#faq_model').modal('show');

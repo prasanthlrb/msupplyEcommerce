@@ -84,5 +84,6 @@
  
   <script src="../../../app-assets/js/scripts/tables/datatables/datatable-basic.js"
   type="text/javascript"></script>
-
+<script>
+ $('.unverify_customer').addClass('active');</script>
 @endsection

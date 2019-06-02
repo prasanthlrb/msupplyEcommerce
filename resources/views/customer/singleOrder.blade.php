@@ -1,4 +1,7 @@
 @extends('layout.app')
+@section('extra-css')
+<style>
+</style>
 @section('content')
 
 <!-- - - - - - - - - - - - - - Page Wrapper - - - - - - - - - - - - - - - - -->
@@ -37,24 +40,27 @@
                             @elseif($order->order_status == 4)
                             on-hold
                             @elseif($order->order_status == 5)
-                            Failed
+                            Cancel
                             @endif</h1>
 
                     <!-- - - - - - - - - - - - - - Order table - - - - - - - - - - - - - - - - -->
 
                     <div class="section_offset">
+                            <div class="row">
 
-                        <!-- <header class="top_box">
+                                    <div class="col-md-6">
+                    <header class="top_box">
 
                             <div class="buttons_row">
-
-                                <a href="#" class="button_grey middle_btn">Reorder</a>
-
-                                <a href="#" class="button_grey middle_btn">Print Order</a>
-
+                                @if($order->order_status == 0 OR $order->order_status == 1)
+                                <a href="/account/order-cancel/{{$order->id}}" class="button_grey middle_btn">Cancel Order</a>
+                                @endif
+                                @if($order->order_status == 3)
+                                <a href="/account/order-print/{{$order->id}}" class="button_grey middle_btn" target="_blank">Print Order</a>
+                                @endif
                             </div>
 
-                        </header> -->
+                        </header>
 
                         <div class="table_wrap">
 
@@ -119,6 +125,54 @@
                             </table>
 
                         </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                            <section>
+                                                @if(!empty($product))
+                                                @if($product->review == 'on' && $order->order_status == 3)
+                                                <input type="hidden" name="item_id" id="item_id" value="{{$product->id}}">
+                                                    <h3>Review & Ratings</h3>
+                                                    @if(empty($rating))
+                                                    <ul class="rating alignleft">
+                                                         <li id="rating_1" class="rating_" value="1"></li>
+                                                        <li id="rating_2" class="rating_" value="2"></li>
+                                                        <li id="rating_3" class="rating_" value="3"></li>
+                                                        <li id="rating_4" class="rating_" value="4"></li>
+                                                        <li id="rating_5" class="rating_" value="5"></li>
+                                                    </ul>
+                                                    <br>
+                                                    <textarea id="reviews" name="review" rows="6"></textarea>
+                                                    <br>
+                                                    <div class="right_side">
+    
+                                                        <button type="button" id="reviewSubmit" class="button_blue middle_btn">Submit</button>
+                        
+                                                    </div>
+                                                    @else
+                                                    <input type="hidden" name="review_old" id="review_old" value="{{$review->id}}">
+                                                    <input type="hidden" name="rating_old" id="rating_old" value="{{$rating->id}}">
+                                                    <ul class="rating alignleft">
+                                                            <li id="rating_1" class="rating_ active" value="1"></li>
+                                                           <li id="rating_2" class="rating_ <?php echo $rating->rating >= 2 ? 'active' : '' ?>" value="2"></li>
+                                                           <li id="rating_3" class="rating_ <?php echo $rating->rating >= 3 ? 'active' : '' ?>" value="3"></li>
+                                                           <li id="rating_4" class="rating_ <?php echo $rating->rating >= 4 ? 'active' : '' ?>" value="4"></li>
+                                                           <li id="rating_5" class="rating_ <?php echo $rating->rating >= 5 ? 'active' : '' ?>" value="5"></li>
+                                                       </ul>
+                                                       <br>
+                                                    <textarea id="reviews" name="review" rows="6">{{$review->review}}</textarea>
+                                                       <br>
+                                                       <div class="right_side">
+       
+                                                           <button type="button" id="reviewResubmit" class="button_blue middle_btn">Resubmit</button>
+                           
+                                                       </div>
+                                                    @endif
+                                                    @endif
+                                                    @endif
+                                                </section>
+                                    </div>
+
+                            </div>
 
                     </div><!--/ .section_offset -->
 
@@ -281,6 +335,7 @@
                                 $shipping = 0;
                                 ?>
                                 @foreach($order_items as $order_item)
+                                <input type="hidden" name="order_item_id" id="order_item_id" value="{{$order_item->id}}">
                                     <tr>
                                         <td data-title="Product Name">
                                             <a href="#" class="product_title">
@@ -342,6 +397,9 @@
         </div>
     </div>
 </div>
+
+@endsection
+@section('extra-js')
 <script>
     $('.orders').addClass('accSidebarActive');
 function Review(){
@@ -375,9 +433,108 @@ function Review(){
         }
     }); 
 }
-    
-</script>
-@endsection
-@section('extra-js')
+var rating = 0;
+    $('.rating_').click(function(){
+     rating = $(this).val();
+     setTimeout(function(){
+        if(rating == 1){
+            $('#rating_1').addClass('active');
+            $('#rating_2').removeClass('active');
+            $('#rating_3').removeClass('active');
+            $('#rating_4').removeClass('active');
+            $('#rating_5').removeClass('active');
+           
+        }else if(rating == 2){
+            $('#rating_1').addClass('active');
+            $('#rating_2').addClass('active');
+            $('#rating_3').removeClass('active');
+            $('#rating_4').removeClass('active');
+            $('#rating_5').removeClass('active');
+           
+        }else if(rating == 3){
+            $('#rating_1').addClass('active');
+            $('#rating_2').addClass('active');
+            $('#rating_3').addClass('active');
+            $('#rating_4').removeClass('active');
+            $('#rating_5').removeClass('active');
+           
+        }else if(rating == 4){
+            $('#rating_1').addClass('active');
+            $('#rating_2').addClass('active');
+            $('#rating_3').addClass('active');
+            $('#rating_4').addClass('active');
+            $('#rating_5').removeClass('active');
+            
+        }else if(rating == 5){
+            $('#rating_1').addClass('active');
+            $('#rating_2').addClass('active');
+            $('#rating_3').addClass('active');
+            $('#rating_4').addClass('active');
+            $('#rating_5').addClass('active');
+           
+        }
+    }, 500);
+    });
+    $('#reviewSubmit').click(function(){
+        var reviews = $('#reviews').val();
+        var order_item_id = $('#order_item_id').val();
+        var item_id = $('#item_id').val();
+        if(rating !=0){
+        if(reviews.length >60){
+            product_form_data = {
+                reviews:reviews,
+                rating:rating,
+                order_item_id:order_item_id,
+                item_id:item_id 
+            }
 
+        $.ajax({
+        url : '/account/add-review',
+        type: "GET",
+        data: product_form_data,
+        dataType: "JSON",
+        success: function(data)
+        {
+            console.log(data)
+            toastr.success('Review Store Successfully', 'Successfully Save');
+           
+        }
+    }); 
+
+            }else{
+                toastr.error("Review length Maximun 60 Characters");
+            }
+        }else{
+            toastr.error("Please Rating Your Product");
+        }
+    });
+    $('#reviewResubmit').click(function(){
+        var reviews = $('#reviews').val();
+        var review_old = $('#review_old').val();
+        var rating_old = $('#rating_old').val();
+        if(reviews.length >60){
+            product_form_data = {
+                reviews:reviews,
+                rating:rating,
+                review_old:review_old,
+                rating_old:rating_old 
+            }
+
+        $.ajax({
+        url : '/account/re-review',
+        type: "GET",
+        data: product_form_data,
+        dataType: "JSON",
+        success: function(data)
+        {
+            console.log(data)
+            toastr.success('Review Store Successfully', 'Successfully Save');
+           
+        }
+    }); 
+        }else{
+            toastr.error("Review length Maximun 60 Characters");
+        }
+    })
+</script>
 @endsection

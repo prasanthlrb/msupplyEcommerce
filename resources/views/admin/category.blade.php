@@ -33,19 +33,10 @@
         
         <div class="card">
           <div class="card-header">
-            
+            @if($role->category_create ==0)
                 <button id="open_model" data-backdrop="false" class="btn btn-success round btn-glow px-2" data-toggle="modal">Create Category</button>
+            @endif
             
-            <div class="heading-elements">
-               
-              <ul class="list-inline mb-0">
-                
-                <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
-                <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
-                <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
-                
-              </ul>
-            </div>
           </div>
           <div class="card-content collapse show">
             <div class="card-body card-dashboard">
@@ -59,8 +50,9 @@
                     @if($y < 4)
                   <th>SubCategory</th>
                   @endif
+                  @if($role->category_action ==0)
                     <th>Action</th>
-                  
+                  @endif
                   </tr>
                 </thead>
                 <tbody>
@@ -73,6 +65,7 @@
                 @if($y < 4)
                 <td><a href="/admin/category/{{$row->id}}">Create SubCategory</a></td>
                 @endif
+                @if($role->category_action ==0)
                 <td class="text-center">
                     <span class="dropdown">
           <button id="btnSearchDrop2" type="button" data-toggle="dropdown" aria-haspopup="true"
@@ -85,7 +78,7 @@
           </span>
         </span>
                     </td>
-               
+               @endif
                 </tr>
                 <?php $x++?>
                   @endforeach
@@ -98,8 +91,9 @@
                         @if($y < 4)
                       <th>SubCategory</th>
                       @endif
+                      @if($role->category_action ==0)
                         <th>Action</th>
-                      
+                      @endif
                       </tr>
                 </tfoot>
               </table>

@@ -170,7 +170,7 @@ ul.pagination {
 												@elseif($order->order_status == 4)
 												on-hold
 												@elseif($order->order_status == 5)
-												Failed
+												Cancel
 												@endif
 											</td>
 											<td data-title="Total" class="total">₹ {{$order->total_amount}}</td>
@@ -200,11 +200,11 @@ ul.pagination {
 			</div><!--/ .page_wrapper-->
 			
             <!-- - - - - - - - - - - - - - End Page Wrapper - - - - - - - - - - - - - - - - -->
-<script>
-	$('.orders').addClass('accSidebarActive');
-</script>   
+  
 			@endsection
 			
 			@section('extra-js')
-
+			<script>
+					$('.accOrders').addClass('current');
+				</script> 
 @endsection

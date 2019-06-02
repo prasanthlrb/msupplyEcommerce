@@ -10,12 +10,19 @@
 
         <ul class="breadcrumbs">
             <li><a href="/">Home</a></li>
-           
+            <li>{{$category->category_name}}</li>
         </ul>
 
         <div class="row">
 
             <aside class="col-md-3 col-sm-4 has_mega_menu">
+
+                    <div class="section_offset">
+                            @if($category->category_image != null)
+                            <h3>{{$category->category_name}}</h3>
+                        <img src="/category_image/{{$category->category_image}}" alt="">
+                            @endif
+                    </div>
 
                 <!-- - - - - - - - - - - - - - Categories - - - - - - - - - - - - - - - - -->
 
@@ -25,44 +32,50 @@
 						
 								
                     <div id='cssmenu'>
-                        <ul>
-                           <li><a href='#'><span>Home</span></a></li>
-                           <li class='active has-sub has-new-sub'><a href='#'><span>Products</span></a>
-                              <ul class="first-child"><!-- over all child bro -->
-                                 <li class='has-sub has-new-sub'><a href='#'><span>Product 1</span></a>
-                                    <ul class="second-child">
-                                       <li class="has-sub has-new-sub"><a href='#'class='has-sub has-new-sub'><span>Sub Product</span></a>
-                                             <ul class="second-child">
-                                                <li><a href='#'><span>Sub Product</span></a></li>
-                                                <li class='has-sub has-new-sub'><a href='#' class='has-sub has-new-sub'><span>Sub Product</span></a>
+                            <ul>
+                                    <!-- First Menu start -->
+                                    @foreach(App\category::with('childs')->where('parent_id',0)->get() as $item)
+                                    @if($item->childs->count() > 0)
+                                    <li class='active has-sub has-new-sub'><a href='/category/{{$item->id}}'><span>{{$item->category_name}}</span></a>
+                                        <!-- second Menu start -->
+                                        <ul class="first-child">
+                                        @foreach($item->childs as $item2)
+                                            @if($item2->childs->count() > 0)
+                                            <li class='has-sub has-new-sub'><a href='/category/{{$item2->id}}'><span>{{$item2->category_name}}</span></a>
+                                                <ul class="second-child">
+                                                @foreach($item2->childs as $item3)
+                                                @if($item3->childs->count() > 0)
+                                                <li class="has-sub has-new-sub"><a href='/category/{{$item3->id}}'class='has-sub has-new-sub'><span>{{$item3->category_name}}</span></a>
                                                     <ul class="second-child">
-                                                            <li class='has-sub has-new-sub'><a href='#' class='has-sub has-new-sub'><span>Sub Product</span></a>
-                                                                <ul class="second-child">
-                                                                        <li class='last'><a href='#'><span>Sub Product</span></a></li>
-                                                                    </ul>	
-                                                            </li>
-                                                    </ul>
+                                                    @foreach($item3->childs as $item4)
+                                                    @if($item4->childs->count() > 0)
+                                                    <li class='has-sub has-new-sub'><a href='/category/{{$item4->id}}' class='has-sub has-new-sub'><span>{{$item4->category_name}}</span></a>
+                                                    @else
+                                                    <li class='last'><a href='/category/{{$item4->id}}'><span>{{$item4->category_name}}</span></a></li>
+                                                    @endif
+                                                    @endforeach
+                                                </ul>
                                                 </li>
-                                                <li class='last'><a href='#'><span>Sub Product</span></a></li>
-                                                <li class='last'><a href='#'><span>Sub Product</span></a></li>
-                                                <li class='last'><a href='#'><span>Sub Product</span></a></li>                                               
-                                             </ul><!-- inner product menu -->
-                                       </li>
-                                       <li class='last'><a href='#'><span>Sub Product</span></a></li>
-                                    </ul>
-                                 </li><!-- 2nd level menu end here -->
-                                 <li class='has-sub has-new-sub'><a href='#'><span>Product 2</span></a>
-                                    <ul class="second-child">
-                                       <li><a href='#'><span>Sub Product</span></a></li>
-                                       <li class='last'><a href='#'><span>Sub Product</span></a></li>
-                                    </ul>
-                                 </li>
-                                 <li><a href='#'><span>Product 3</span></a></li>
-                              </ul>
-                           </li>
-                           <li><a href='#'><span>About</span></a></li>
-                           <li class='last'><a href='#'><span>Contact</span></a></li>
-                        </ul>
+                                                @else
+                                                <li class='last'><a href='/category/{{$item3->id}}'><span>{{$item3->category_name}}</span></a></li>
+                                                @endif
+                                                @endforeach
+                                            </ul>
+                                                </li>
+                                            @else
+                                            <li class='last'><a href='/category/{{$item2->id}}'><span>{{$item2->category_name}}</span></a></li>
+                                            @endif
+                                            @endforeach
+                                        </ul>
+                                        <!-- second Menu end -->
+                                    </li>
+                                    @else
+                            <li><a href='/category/{{$item->id}}'><span>{{$item->category_name}}</span></a></li>
+                                    @endif
+                               
+                                 @endforeach
+                                 <!-- First Menu End -->
+                            </ul>
                         </div>
                 </section><!--/ .animated.transparent-->
 
@@ -110,7 +123,7 @@
                  <!-- - - - - - - - - - - - - - Filter - - - - - - - - - - - - - - - - -->
 
 
-
+{{-- 
                  <section class="section_offset">
 
                     <h3>Already Viewed Products</h3>
@@ -159,7 +172,7 @@
 
                     </ul><!--/ .list_of_products-->
 
-                </section>
+                </section> --}}
 
                 <!-- - - - - - - - - - - - - - End of already viewed products - - - - - - - - - - - - - - - - -->
 
@@ -238,25 +251,7 @@
 
                             <!-- - - - - - - - - - - - - - Number of products shown - - - - - - - - - - - - - - - - -->
 
-                            <div class="v_centered">
-
-                                <span>Show:</span>
-
-                                <div class="custom_select">
-
-                                    <select name="">
-
-                                        <option value="15">15</option>
-                                        <option value="12">12</option>
-                                        <option value="9">9</option>
-                                        <option value="6">6</option>
-                                        <option value="3">3</option>
-
-                                    </select>
-
-                                </div>
-
-                            </div>
+                           
 
                             <!-- - - - - - - - - - - - - - End of number of products shown - - - - - - - - - - - - - - - - -->
 
@@ -329,15 +324,34 @@
 
                                             <p class="product_price alignleft"><b>₹{{$product1->sales_price}}</b></p>
 
-                                            <!-- <ul class="rating alignright">
-
-                                                <li class="active"></li>
-                                                <li class="active"></li>
-                                                <li class="active"></li>
-                                                <li class="active"></li>
-                                                <li></li>
-
-                                            </ul> -->
+                                            <?php 
+                                            $getRating = App\rating::where('item_id',$product1->id)->get();
+                                            if(count($getRating) > 0){
+                                                $rating_count;
+                                            
+                                               
+                                            $total=0;
+                                            foreach($getRating as $row){
+                                                $total +=$row->rating;
+                                            }
+                                            $rating_count = $total/count($getRating);
+                                       
+                                            }
+                                               
+                
+                
+                                                ?>
+                                                @if(count($getRating) > 0)
+                                                    <ul class="rating alignright">
+                
+                                                            <li class="active"></li>
+                                                            <li class="<?php echo $rating_count >= 2 ? 'active' : '' ?>"></li>
+                                                            <li class="<?php echo $rating_count >= 3 ? 'active' : '' ?>"></li>
+                                                            <li class="<?php echo $rating_count >= 4 ? 'active' : '' ?>"></li>
+                                                            <li class="<?php echo $rating_count >= 5 ? 'active' : '' ?>"></li>
+                
+                                                        </ul>
+                                                        @endif
 
                                         </div>
 
@@ -351,7 +365,7 @@
                                             
                                         </a>
 
-                                        <!-- <div class="v_centered product_reviews">
+                                         {{-- <div class="v_centered product_reviews">
                                         
                                             <ul class="rating">
 
@@ -370,7 +384,7 @@
 
                                             </ul>
 
-                                        </div> -->
+                                        </div>  --}}
 
                                         <div><?php echo $product1->product_description;?></div>
 
@@ -384,13 +398,7 @@
 
                                         <ul class="seller_stats">
 
-                                            <li>Shipping: 
-                                                @if($product1->shipping_type == 1)
-                                                <span class="success">Free Shipping</span>
-                                                @else
-                                                <span class="success">Paid Shipping</span>
-                                                @endif
-                                            </li>
+                                            
                                             @if($product1->stock_quantity != "")
                                             <li>Availability: <span class="success">in stock</span></li>
                                             @else

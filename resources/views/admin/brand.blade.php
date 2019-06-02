@@ -17,9 +17,9 @@
         
         <div class="card">
           <div class="card-header">
-            
+            @if($role->brand_create ==1)
                 <button id="open_model" data-backdrop="false" class="btn btn-success round btn-glow px-2" data-toggle="modal">Create Brand</button>
-            
+            @endif
             <div class="heading-elements">
                
               <ul class="list-inline mb-0">
@@ -41,8 +41,11 @@
                     <th>Brand Name</th>                   
                     <th>Brand Image</th>                   
                     <th>Status</th>
+                    @if($role->brand_action ==1)
                     <th>Edit</th>
+                  
                     <th>Delete</th>
+                    @endif
                   </tr>
                 </thead>
                 <tbody>
@@ -59,8 +62,11 @@
                       <i class="ft-slash text-danger"></i>
                       @endif
                     </td>
+                    @if($role->brand_action ==1)
                     <td class="text-center" onclick="editCat({{$row->id}})"><i class="ft-edit"></i></td>
+                   
                     <td class="text-center" onclick="deleteCat({{$row->id}})"><i class="ft-trash-2"></i></td>
+                    @endif
                   </tr>
                 @endforeach
                 </tbody>
@@ -70,9 +76,11 @@
                         <th>Brand Name</th> 
                         <th>Brand Image</th>                  
                         <th>Status</th>
-        
+                        @if($role->brand_action ==1)
                         <th>Edit</th>
+                       
                         <th>Delete</th>
+                        @endif
                   </tr>
                 </tfoot>
               </table>

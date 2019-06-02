@@ -17,9 +17,9 @@
         
         <div class="card">
           <div class="card-header">
-            
+            @if($role->transport_create ==1)
                 <button id="open_model" data-backdrop="false" class="btn btn-success round btn-glow px-2" data-toggle="modal">Create vehicle</button>
-            
+            @endif
             <div class="heading-elements">
                
               <ul class="list-inline mb-0">
@@ -42,8 +42,12 @@
                     <th>Per Kmpl Price</th>
                     <th>vehicle Image</th>                   
                     <th>Other Rate</th>
+                    @if($role->transport_edit ==1)
                     <th>Edit</th>
+                    @endif
+                    @if($role->transport_delete ==1)
                     <th>Delete</th>
+                    @endif
                   </tr>
                 </thead>
                 <tbody>
@@ -56,9 +60,14 @@
                     <td><img style="width: 100px;" src="{{asset('transport/').'/'.$row->vehicle_image}}" alt=""></td>
                     
                     <td style="text-align:center;font-weight:700">₹ {{$row->other}}</td>
+                    @if($role->transport_edit ==1)
                     <td class="text-center" onclick="editCat({{$row->id}})"><i class="ft-edit"></i></td>
+                    @endif
+                    @if($role->transport_delete ==1)
                     <td class="text-center" onclick="deleteCat({{$row->id}})"><i class="ft-trash-2"></i></td>
+                    @endif
                   </tr>
+
                   <?php $x++?>
                 @endforeach
                 </tbody>
@@ -68,9 +77,13 @@
                     <th>vehicle Name</th>                   
                     <th>Per Kmpl Price</th>
                     <th>vehicle Image</th>   
-                    <th>Other Rate</th>                
+                    <th>Other Rate</th>     
+                    @if($role->transport_edit ==1)           
                     <th>Edit</th>
+                    @endif
+                    @if($role->transport_delete ==1)
                     <th>Delete</th>
+                    @endif
                   </tr>
                 </tfoot>
               </table>
@@ -147,6 +160,7 @@
   <script src="../../../app-assets/js/scripts/tables/datatables/datatable-basic.js"
   type="text/javascript"></script>
 <script>
+   $('.transports').addClass('active');
   var action_type;
   $('#open_model').click(function(){
     $('#brand_model').modal('show');
