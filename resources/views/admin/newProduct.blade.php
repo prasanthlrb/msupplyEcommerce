@@ -4,16 +4,16 @@
 <style>
   .nav-vertical .nav-left.nav-tabs li.nav-item a.nav-link {
       min-width: 11.5rem !important;
-      
+
   }
-  
+
  .single-product{
   display: block;
   width: 100%;
   height: 300px;
   background-color: white;
   border-radius: 5px;
-  
+
  }
  .single-dynamic-product{
   display: block;
@@ -21,7 +21,7 @@
   height: 185px;
   background-color: white;
   border-radius: 5px;
-  
+
  }
  .seo-preview-content h3 {
   color: #1a0dab;
@@ -53,16 +53,16 @@
 <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/file-uploaders/dropzone.min.css">
 <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/ui/prism.min.css">
 <link rel="stylesheet" type="text/css" href="../../../app-assets/css/plugins/file-uploaders/dropzone.css">
-  
+
 @endsection
 @section('section')
 
 
 <div class="content-wrapper">
 <div class="content-body">
-   
-      
-        
+
+
+
         <section id="horizontal-form-layouts">
             <form action="POST" id="product_form_data" enctype="multipart/form-data">
                 {{ csrf_field() }}
@@ -73,10 +73,10 @@
                     <div class="card">
                       <div class="card-content collpase show">
                         <div class="card-body">
-                          
+
                             <div class="form-body">
                               <h4 class="form-section"><i class="ft-shopping-cart"></i> Add New Product</h4>
-                          
+
                               <div class="form-group row">
                                 <label class="col-md-3 label-control" for="projectinput1">Product Name</label>
                                 <div class="col-md-9">
@@ -84,7 +84,7 @@
                                   name="product_name">
                                 </div>
                               </div>
-                             
+
                               <div class="form-group row">
                                     <label class="col-md-3 label-control" for="Select Brand">Select Category</label>
                                     <div class="col-md-9">
@@ -112,7 +112,7 @@
                                       <label class="col-md-3 label-control" for="Select category">Select Product Group</label>
                                       <div class="col-md-9">
                                         <select name="group" id="group" class="form-control">
-                                        <option value="" selected="" disabled="">Select Product Group</option>
+                                        <option value="" selected="">Select Product Group</option>
                                           @foreach($group as $group)
                                           <option value="{{$group->id}}">{{$group->group}}</option>
                                           @endforeach
@@ -122,8 +122,8 @@
                                   </div>
 
 
-                          
-                       
+
+
                         </div>
                       </div>
                     </div>
@@ -135,46 +135,46 @@
                     <button type="button" id="single-product" class="btn btn-info block single-pro"><i class="la la-plus"></i> Set product image</button>
                   </div>
                 </div>
-             
+
              <div class="row">
               <div class="col-12">
                 <div class="card">
                   <div class="card-header">
                     <h4 class="card-title">Product Description</h4>
-                 
-                   
+
+
                   </div>
                   <div class="card-content collapse show">
                     <div class="card-body">
-                    
+
                         <div class="form-group">
                           <textarea id="product_description" name="product_description" class="tinymce">
-                                     
+
                           </textarea>
                         </div>
-                     
+
                     </div>
                   </div>
                 </div>
               </div>
              </div>
-            
-            
-                  
-                      
-                   
+
+
+
+
+
                <div class="row">
-                
-                
+
+
                     <div class="col-12">
                       <div class="card">
-                      
-                       
+
+
                         <div class="card-content">
                           <div class="card-body">
                               <div class="form-group row">
                                   <label class="col-md-3 label-control text-bold-600 font-medium-2" for="projectinput6">Product Data</label>
-                                 
+
                                 </div>
 
                             <div class="nav-vertical">
@@ -203,8 +203,11 @@
                                   <a class="nav-link" id="baseVerticalLeft2-tab7" data-toggle="tab" aria-controls="tabVerticalLeft27"
                                   href="#tabVerticalLeft27" aria-expanded="false"><i class="la la-bank"></i> TAX</a>
                                 </li>
-                               
-                              
+                                <li class="nav-item">
+                                    <a class="nav-link" id="baseVerticalLeft2-tab8" data-toggle="tab" aria-controls="tabVerticalLeft28"
+                                    href="#tabVerticalLeft28" aria-expanded="false"><i class="ft-layout"></i> Options</a>
+                                  </li>
+
                                 <li class="nav-item">
                                   <a class="nav-link" id="baseVerticalLeft2-tab6" data-toggle="tab" aria-controls="tabVerticalLeft26"
                                   href="#tabVerticalLeft26" aria-expanded="false"><i class="la la-gear"></i> Advanced</a>
@@ -218,29 +221,29 @@
                                     <label for="projectinput1">Regular price</label>
                                     <input type="text" id="regular_price" class="form-control" name="regular_price">
                                   </div>
-                               
+
                                 <div class="form-group" style="padding-left:10px">
                                     <label for="projectinput1">sales price</label>
                                     <input type="text" id="sales_price" class="form-control" name="sales_price">
                                   </div>
-                                
+
                                 </div>
                                 <div class="tab-pane tap2" id="tabVerticalLeft22" aria-labelledby="baseVerticalLeft2-tab2">
                                     <div class="form-group" style="padding-left:10px">
                                         <label for="projectinput1">SKU</label>
                                         <input type="text" id="sku" class="form-control" name="sku">
                                       </div>
-                                   
+
                                     <div class="form-group" style="padding-left:10px">
                                         <label for="projectinput1">Stock quantity</label>
                                         <input type="text" id="stock_quantity" class="form-control" name="stock_quantity">
                                       </div>
-                                 
+
                                     <div class="form-group" style="padding-left:10px">
                                         <label for="projectinput1">Low stock threshold</label>
                                         <input type="text" id="low_stock" class="form-control" name="low_stock">
                                       </div>
-                                   
+
                                 </div>
                                 <div class="tab-pane tap4" id="tabVerticalLeft23" aria-labelledby="baseVerticalLeft2-tab3" style="padding:30px">
                                     <div class="form-group">
@@ -261,10 +264,10 @@
                                           </div>
                                         </div>
                                       </div>
-                                    
+
                                 </div>
                                 <div class="tab-pane" id="tabVerticalLeft24" aria-labelledby="baseVerticalLeft2-tab4">
-                                 
+
                                       <div class="form-group " style="padding-left:10px">
                                           <label for="">Related Product</label>
                                         <select style="width:100%" placeholder="search for product" id="related_product" name="related_product[]" class="select2 form-control col-md-12" multiple="multiple">
@@ -272,10 +275,10 @@
                                           @foreach ($product as $product1)
                                             <option value="{{$product1->id}}">{{$product1->product_name}}</option>
                                           @endforeach
-                                          </optgroup>              
+                                          </optgroup>
                                         </select>
                                       </div>
-                            
+
                             </div>
                             <div class="tab-pane" id="tabVerticalLeft25" aria-labelledby="baseVerticalLeft2-tab5">
                                 {{-- <form method="post" id="termsData">
@@ -291,26 +294,26 @@
                                         @endforeach
                                       </select>
                                     </div>
-                                   
-                                  <div id="show_terms"> 
+
+                                  <div id="show_terms">
 
                                   </div>
-                               
+
                                   </div>
-                                
-   
+
+
                                 {{-- </form> --}}
                                 </div>
                                 <div class="tab-pane" id="tabVerticalLeft27" aria-labelledby="baseVerticalLeft2-tab7">
                                     <div class="form-group">
                                         <label for="projectinput6">Tax Type</label>
-                                      
+
                                           <select name="tax_type" id="tax_type" class="form-control" >
                                           <option value="" selected disabled>Select The Tax Type</option>
-                                           
+
                                             <option value="in">Inclusive</option>
                                             <option value="out">Exclusive</option>
-                                         
+
                                           </select>
                                         </div>
                                     <div class="form-group">
@@ -318,6 +321,13 @@
                                         <input type="text" class="form-control" name="tax" id="tax">
                                       </div>
                                   </div>
+
+                                  <div class="tab-pane p-2" id="tabVerticalLeft28" aria-labelledby="baseVerticalLeft2-tab8">
+                                      <button class="btn btn-primary float-right" type="button" id="addOptionSet"> Add Options Set</button>
+
+                                      <div id="optionSetPlace"></div>
+                                  </div>
+
                                 <div class="tab-pane" id="tabVerticalLeft26" aria-labelledby="baseVerticalLeft2-tab6">
                                     <div class="dropdown-item">
                                         <input type="checkbox" name="featured" id="featured" class="switchery-xs" />
@@ -339,6 +349,11 @@
                                         <input type="checkbox" name="review" id="review" class="switchery-xs" />
                                         <label for="switchery5" class="card-title ml-1">Enable as a product review</label>
                                       </div>
+
+                                      <div class="dropdown-item">
+                                        <input type="checkbox" name="colors" class="switchery-xs" />
+                                        <label for="switchery5" class="card-title ml-1">Enable Colors options</label>
+                                      </div>
                                 </div>
 
                           </div>
@@ -346,9 +361,9 @@
                       </div>
                     </div>
                   </div>
-              
+
                 </div>
-              
+
               </section>
                   <div class="row">
                         <div class="col-6">
@@ -356,46 +371,46 @@
                             <div class="card-header">
                               <h4 class="card-title">Product SEO</h4>
                               <p><i class="la la-eye"></i> Google search preview</p><hr>
-                             
+
                             </div>
                             <div class="card-content collapse show">
                               <div class="card-body">
 
                     <div class="box box-solid">
-                     
+
                         <div class="box-body">
                           <div class="seo-preview-content">
-                            
+
                             <h3 id="seo-page-title">Page Title</h3>
-                            <p class="link"><?php 
+                            <p class="link"><?php
                               echo URL::to('/'); ?>/product/</p>
                             <p class="description" id="seo-description">Enter your meta tag description.</p>
                           </div><hr>
                           <div class="seo-content">
-                            <div class="row">  
+                            <div class="row">
                               <div class="col-md-12">
-                                <div class="form-group">  
+                                <div class="form-group">
                                   <div class="col-md-12">
                                   <input type="text" class="form-control" name="seo_title" id="seo_title" placeholder="page title" value="">
-                                  </div>  
+                                  </div>
                                 </div>
-                                
-                                <div class="form-group">  
-                                  <div class="col-md-12">  
+
+                                <div class="form-group">
+                                  <div class="col-md-12">
                                     <textarea id="seo_description" class="form-control" name="seo_description" placeholder="meta tag description"></textarea>
                                   </div>
-                                </div>  
-                                <div class="form-group">   
-                                  <div class="col-md-12">  
+                                </div>
+                                <div class="form-group">
+                                  <div class="col-md-12">
                                     <textarea id="seo_keywords" class="form-control" name="seo_keywords" placeholder="meta tag keywords by comma separator. exxample - tshirt, mobile"></textarea>
                                   </div>
                                 </div>
                               </div>
                             </div>
-                          </div>  
+                          </div>
 
 
-                        </div>  
+                        </div>
                       </div>
 
                               </div>
@@ -403,13 +418,13 @@
                           </div>
                         </div>
                       </form>
-                      
+
 
                         <div class="col-6">
                             <div class="card">
                               <div class="card-header">
                                 <h4 class="card-title">Product Gallery</h4>
-                               
+
                               </div>
                               <div class="card-content collapse show">
                                 <div class="card-body">
@@ -429,13 +444,13 @@
                                     <div class="fallback">
                                         <input type="file" name="file" id="productGallery" multiple>
                                     </div>
-                                    
+
                                 </form>
                                 </div>
                               </div>
                             </div>
                           </div>
-                       
+
                   </div>
 
 
@@ -443,27 +458,27 @@
                         <div class="col-md-6">
                           <div class="card">
                             <div class="card-header">
-                             
-                            
-                              
+
+
+
                             </div>
                             <div class="card-content collpase show">
                               <div class="card-body">
-                              
-                               
+
+
                                   <div class="form-actions">
                                     <button id="btnSave" onclick="Save_product()" type="button" class="btn btn-primary">
                                       <i class="la la-check-square-o"></i> Save & Publish
                                     </button>
                                   </div>
-                                
+
                               </div>
                             </div>
                           </div>
                         </div>
-                       
+
                     </div>
-                    
+
 </div>
 </div>
 </div>
@@ -485,15 +500,16 @@ var attributes = [];
 $('.catalog-menu').addClass('active');
 function Save_product(){
 
-  $("#btnSave").attr("disabled", "disabled");
+  //$("#btnSave").attr("disabled", "disabled");
   var product_form_data = new FormData($('#product_form_data')[0]);
   // var productGallery = $('#productGallery').val();
  var product_description = tinyMCE.activeEditor.getContent();
    product_form_data.append('product_description',product_description);
+   product_form_data.append("optionSet", addOptionSet);
    product_form_data.append("attribute", attributes);
-$("span").find('.text-danger').remove();
+   $("span").find('.text-danger').remove();
   $.ajax({
-    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }, 
+    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
     url : '/admin/productSave',
     type: "POST",
     data: product_form_data,
@@ -502,17 +518,17 @@ $("span").find('.text-danger').remove();
     dataType: "JSON",
     success: function(data)
     {
-      $('#product_get_id').val(data);
+      //$('#product_get_id').val(data);
       console.log(data);
-      // $('input[name=pro_id]').val(data);                
-      // $('input[name=personal]').val(data);                
+      // $('input[name=pro_id]').val(data);
+      // $('input[name=personal]').val(data);
       //$("#product_form_data")[0].reset();
-    
+
       toastr.success('Product Store Successfully', 'Successfully Save');
       //location.reload();
-       CallDropZone();
-     
-  
+       //CallDropZone();
+
+
     },
     error: function (textStatus, errorThrown) {
       $("#btnSave").removeAttr("disabled");
@@ -522,7 +538,7 @@ $("span").find('.text-danger').remove();
         //$('[name="'+i+'"]').after('<span class="text-danger">'+obj[0]+' </span>');
       });
     }
-  }); 
+  });
 
 }
 function CallDropZone(){
@@ -565,7 +581,7 @@ $("#attribute").on("change", function(){
   var id = $('#attribute').val();
   attributes.push(id);
   console.log(attributes);
-    $.ajax({        
+    $.ajax({
         url : '/admin/get_terms/'+id,
         type: "GET",
         success: function(data)
@@ -573,8 +589,8 @@ $("#attribute").on("change", function(){
           console.log(data);
           $('#attribute').val('');
 
-          $("#attribute option[value=" + id + "]").prop("disabled", true);;           
-          
+          $("#attribute option[value=" + id + "]").prop("disabled", true);;
+
           $( "#show_terms" ).after(function() {
             //$('#show_terms').html(data);
             return "<div>" + data + "</div>";
@@ -583,21 +599,20 @@ $("#attribute").on("change", function(){
    });
 });
 
-function RemovePop(id){ 
+function RemovePop(id){
   if(confirm('Are you sure delete this row?'))
   {
     attributes = jQuery.grep(attributes, function(value) {
       return value != id;
     });
-    console.log(attributes);
     $( "#"+id ).remove();
-    $("#attribute option[value=" + id + "]").prop("disabled", false);  
+    $("#attribute option[value=" + id + "]").prop("disabled", false);
   }
 }
 
 
 function save_terms(){
-  
+
   var termsData = new FormData($('#termsData')[0]);
   termsData.append("attribute", attributes);
   console.log(termsData.getAll('size'));
@@ -610,12 +625,12 @@ function save_terms(){
     dataType: "JSON",
     success: function(data)
     {
-      console.log(data);                
+      console.log(data);
       $('#testSubmit').trigger('click')
     },
     error: function (textStatus, errorThrown) {
-      
-     
+
+
   }
 });
 }
@@ -629,7 +644,7 @@ function initImageUpload(box) {
     let file = e.currentTarget.files[0];
     checkType(file);
   }
-  
+
   function previewImage(file){
     let thumb = box.querySelector('.js--image-preview'),
         reader = new FileReader();
@@ -651,7 +666,7 @@ function initImageUpload(box) {
       previewImage(file);
     }
   }
-  
+
 }
 
 
@@ -691,7 +706,56 @@ $('#group-product').on('change',function(){
     $('.tap3').removeClass('hidden');
     //$('.tap4').addClass('active');
   }
-})
+});
+var addOptionSet = [];
+var addOptionSetLocal = 1;
+$('#addOptionSet').click(()=>{
+
+   var optionSet = '<div id="optionsetRow'+addOptionSetLocal+'" class="pt-4"><div class="row"><div class="form-group col-6"><label for="projectinput1">Option Set Row '+addOptionSetLocal+'</label><input type="text" class="form-control" name="optionSetRow'+addOptionSetLocal+'" placeholder="Option Label Name"></div>'+
+   '<div class="form-group col-6"> <label for="projectinput6">Option Show Type</label><select name="option_show_type'+addOptionSetLocal+'" class="form-control">'+
+   '<option value="select">Select Model</option><option value="label">Label Model</option>'+
+    '</select></div></div><div class="option1">'+
+    '<div class="form-group row">'+
+    '<div class="col-4"><input type="text" class="form-control" name="optionName'+addOptionSetLocal+'[]" placeholder="Option Name"></div>'+
+    '</div>'+
+    '<div class="form-group row">'+
+     '<div class="col-4"><input type="text" class="form-control" name="optionName'+addOptionSetLocal+'[]" placeholder="Option Name"></div>'+
+     '<div class="col-4"><input type="text" class="form-control" name="current_price'+addOptionSetLocal+'[]" placeholder="Change Original Price"></div>'+
+    '<div class="col-4"><input type="text" class="form-control" name="additional_price'+addOptionSetLocal+'[]" placeholder="Additional Price"></div></div><div id="optionPlace'+addOptionSetLocal+'"></div>'+
+    '<button class="btn btn-default" type="button" onclick="addOption('+addOptionSetLocal+')">Add Option</button>'+
+    '<button class="btn btn-danger float-right" type="button" onclick="removeOptionSet('+addOptionSetLocal+')">Remove Option Set</button><hr></div>';
+    addOptionSet.push(addOptionSetLocal)
+    addOptionSetLocal++;
+    $('#optionSetPlace').append(optionSet);
+});
+
+function removeOptionSet(id){
+    if(confirm('Are you sure delete this row?'))
+  {
+    addOptionSet = jQuery.grep(addOptionSet, function(value) {
+      return value != id;
+    });
+    $('#optionsetRow'+id).remove();
+  }
+
+}
+var optionLineData = [];
+var optionLineCount = 1;
+function addOption(id){
+var option = '<div id="optionLine'+id+'of'+optionLineCount+'"><i class="ft-minus-circle text-danger" style="float:right;cursor:pointer" onclick="removeOptionLabel('+id+','+optionLineCount+')"></i><div class="form-group row">'+
+    '<div class="col-4"><input type="text" class="form-control" name="optionName'+id+'[]" placeholder="Option Name"></div>'+
+    '<div class="col-4"><input type="text" class="form-control" name="current_price'+id+'[]" placeholder="Change Original Price"></div>'+
+    '<div class="col-4"><input type="text" class="form-control" name="additional_price'+id+'[]" placeholder="Additional Price"></div></div></div>';
+    optionLineData.push({
+      'parent':id,
+      'child':optionLineCount
+    });
+    optionLineCount++;
+    $('#optionPlace'+id).append(option);
+}
+function removeOptionLabel(parent,child){
+    $("#optionLine"+parent+'of'+child).remove();
+}
 </script>
 
 

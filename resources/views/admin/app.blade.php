@@ -205,6 +205,8 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
             @if($role->attribute_set == 1)
             <li class="attributeSet-menu"><a class="menu-item" href="/admin/product-group/">Attributes Set</a></li>
             @endif
+
+            <li class="colors-menu"><a class="menu-item" href="/admin/colors-category/">Colors</a></li>
           </ul>
         </li>
 

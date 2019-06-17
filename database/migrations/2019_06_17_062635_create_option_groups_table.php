@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBrandsTable extends Migration
+class CreateOptionGroupsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateBrandsTable extends Migration
      */
     public function up()
     {
-        Schema::create('brands', function (Blueprint $table) {
+        Schema::create('option_groups', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('brand');
-            $table->string('brand_image')->nullable();
-            $table->string('status');
-            $table->string('active')->default(0);
+            $table->string('product_id');
+            $table->string('group_name');
+            $table->string('option_show_type');
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ class CreateBrandsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('brands');
+        Schema::dropIfExists('option_groups');
     }
 }

@@ -17,6 +17,10 @@ use Auth;
 use App\role;
 use Yajra\DataTables\Facades\DataTables;
 use App\product_log;
+use App\color_category;
+use App\color;
+use App\optionGroup;
+use App\optionValue;
 class ProductController extends Controller
 {
     //Brand Edit Delete View Update Process Function Start Here
@@ -33,12 +37,11 @@ class ProductController extends Controller
 
     public function brandStore(Request $request){
         $request->validate([
-            'brand'=>'required',
-            'brand_image'=>'required',
+            'brand'=>'required'
         ]);
     //image upload
     $fileName = null;
-    if($request->file('brand_image')!=""){
+    if($request->file('brand_image')!="" || $request->file('brand_image') != null){
     $image = $request->file('brand_image');
     $fileName = rand() . '.' . $image->getClientOriginalExtension();
     $image->move(public_path('upload_brand/'), $fileName);
@@ -368,7 +371,6 @@ class ProductController extends Controller
             'imgInp'=>'required',
             'category'=>'required',
             'product_name'=>'required|unique:products',
-            // 'sku'=>'required|unique:product_datas',
         ]);
 
         //image upload
@@ -408,6 +410,7 @@ class ProductController extends Controller
         $product->new_product = $request->new_product;
         $product->recommended = $request->recommended;
         $product->featured = $request->featured;
+        $product->colors = $request->colors;
         $product->save();
 
         if(isset($request->attribute)){
@@ -437,84 +440,136 @@ class ProductController extends Controller
          $product_log->type ='Create';
          $product_log->employee_name = Auth::guard('admin')->user()->emp_name;
          $product_log->save();
-        return response()->json($product->id);
+    if($request->optionSet){
+        $data = explode(',',$request->optionSet);
+        foreach($data as $x){
+            $optionGroup = new optionGroup;
+            $optionGroup->product_id = $product->id;
+            $optionGroup->group_name = $request['optionSetRow'.$x];
+            $optionGroup->option_show_type = $request['option_show_type'.$x];
+            $optionGroup->save();
+
+            foreach($request['optionName'.$x] as $key =>$value){
+                $optionValue = new optionValue;
+                $optionValue->group_id = $optionGroup->id;
+                $optionValue->name = $value;
+                if($key !=0){
+                    $optionValue->current_price = $request['current_price'.$x][$key-1];
+                    $optionValue->additional_price = $request['additional_price'.$x][$key-1];
+                }else{
+                    $optionValue->home_option = '1';
+                }
+                $optionValue->save();
+            }
+        }
+
+    }
+
+
+        return response()->json($request);
     }
 
 
     public function productUpdate(Request $request){
-        $request->validate([
-           // 'imgInp'=>'required',
-            'category'=>'required',
-            //'product_name'=>'required|unique:products',
-            // 'sku'=>'required|unique:product_datas',
-        ]);
-        $product = product::find($request->product_page_id);
-        $product->category = collect($request->category)->implode(',');
-        $product->product_name = $request->product_name;
-        $product->group = $request->group;
-        $product->brand_name = $request->brand_name;
-        $product->product_description = $request->product_description;
-        $product->seo_title = $request->seo_title;
-        $product->seo_description = $request->seo_description;
-        $product->seo_keywords = $request->seo_keywords;
-        $fileName = null;
-        if($request->file('imgInp')!=""){
-        $image = $request->file('imgInp');
-        $fileName = rand() . '.' . $image->getClientOriginalExtension();
-        $image->move(public_path('product_img/'), $fileName);
-        $product->product_image = $fileName;
+        // $request->validate([
+        //    // 'imgInp'=>'required',
+        //     'category'=>'required',
+        //     //'product_name'=>'required|unique:products',
+        //     // 'sku'=>'required|unique:product_datas',
+        // ]);
+        // $product = product::find($request->product_page_id);
+        // $product->category = collect($request->category)->implode(',');
+        // $product->product_name = $request->product_name;
+        // $product->group = $request->group;
+        // $product->brand_name = $request->brand_name;
+        // $product->product_description = $request->product_description;
+        // $product->seo_title = $request->seo_title;
+        // $product->seo_description = $request->seo_description;
+        // $product->seo_keywords = $request->seo_keywords;
+        // $fileName = null;
+        // if($request->file('imgInp')!=""){
+        // $image = $request->file('imgInp');
+        // $fileName = rand() . '.' . $image->getClientOriginalExtension();
+        // $image->move(public_path('product_img/'), $fileName);
+        // $product->product_image = $fileName;
+        // }
+        // $product->regular_price = $request->regular_price;
+        // $product->sales_price = $request->sales_price;
+        // $product->sku = $request->sku;
+        // $product->stock_quantity = $request->stock_quantity;
+        // $product->low_stock = $request->low_stock;
+        // $product->weight = $request->weight;
+        // $product->length = $request->length;
+        // $product->width = $request->width;
+        // $product->height = $request->height;
+        // $product->tax = $request->tax;
+        // $product->tax_type = $request->tax_type;
+        // $product->shipping_type = $request->shipping_type;
+        // $product->shipping_amount = $request->shipping_amount;
+        // $product->related_product = collect($request->related_product)->implode(',');
+        // $product->hot_product = $request->hot_product;
+        // $product->review = $request->review;
+        // $product->new_product = $request->new_product;
+        // $product->recommended = $request->recommended;
+        // $product->featured = $request->featured;
+        // $product->save();
+
+        // if(isset($request->attribute)){
+
+        //     foreach(explode(',', $request->attribute) as $id) {
+        //         $attribute_data[] = attribute::find($id);
+        //     }
+        //     if(count($attribute_data) > 0){
+        //         for ($x = 0; $x < count($attribute_data); $x++) {
+        //             $attrName = $attribute_data[$x]->name;
+        //             $ter = term::where('id',$request[$attrName])->first();
+        //             $product_attribute = product_attribute::where('attribute',$attribute_data[$x]->id)->where('product_id',$request->product_page_id)->first();
+        //             if(!isset($product_attribute)){
+        //                 $attr = new product_attribute;
+        //                 $attr->product_id = $request->product_page_id;
+        //                 $attr->group_id = $request->group;
+        //                 $attr->attribute = $attribute_data[$x]->id;
+        //                 $attr->terms_id = $ter->id;
+        //                 $attr->terms = $ter->terms_name;
+        //                 $attr->save();
+        //     }
+        //     }
+        //     }
+
+        //  }
+        //  $product_log = new product_log;
+        //  $product_log->product_id = $request->product_page_id;
+        //  $product_log->type ='Updated';
+        //  $product_log->employee_name = Auth::guard('admin')->user()->emp_name;
+        //  $product_log->save();
+
+        if($request->optionSet){
+            $data = explode(',',$request->optionSet);
+            $opGroup = optionGroup::where('product_id',$request->product_page_id)->get();
+            // foreach($data as $x){
+            //     $optionGroup = new optionGroup;
+            //     $optionGroup->product_id = $product->id;
+            //     $optionGroup->group_name = $request['optionSetRow'.$x];
+            //     $optionGroup->option_show_type = $request['option_show_type'.$x];
+            //     $optionGroup->save();
+
+                // foreach($request['optionName'.$x] as $key =>$value){
+                //     $optionValue = new optionValue;
+                //     $optionValue->group_id = $optionGroup->id;
+                //     $optionValue->name = $value;
+                //     if($key !=0){
+                //         $optionValue->current_price = $request['current_price'.$x][$key-1];
+                //         $optionValue->additional_price = $request['additional_price'.$x][$key-1];
+                //     }else{
+                //         $optionValue->home_option = '1';
+                //     }
+                //     $optionValue->save();
+                // }
+           // }
+
         }
-        $product->regular_price = $request->regular_price;
-        $product->sales_price = $request->sales_price;
-        $product->sku = $request->sku;
-        $product->stock_quantity = $request->stock_quantity;
-        $product->low_stock = $request->low_stock;
-        $product->weight = $request->weight;
-        $product->length = $request->length;
-        $product->width = $request->width;
-        $product->height = $request->height;
-        $product->tax = $request->tax;
-        $product->tax_type = $request->tax_type;
-        $product->shipping_type = $request->shipping_type;
-        $product->shipping_amount = $request->shipping_amount;
-        $product->related_product = collect($request->related_product)->implode(',');
-        $product->hot_product = $request->hot_product;
-        $product->review = $request->review;
-        $product->new_product = $request->new_product;
-        $product->recommended = $request->recommended;
-        $product->featured = $request->featured;
-        $product->save();
 
-        if(isset($request->attribute)){
-
-            foreach(explode(',', $request->attribute) as $id) {
-                $attribute_data[] = attribute::find($id);
-            }
-            if(count($attribute_data) > 0){
-                for ($x = 0; $x < count($attribute_data); $x++) {
-                    $attrName = $attribute_data[$x]->name;
-                    $ter = term::where('id',$request[$attrName])->first();
-                    $product_attribute = product_attribute::where('attribute',$attribute_data[$x]->id)->where('product_id',$request->product_page_id)->first();
-                    if(!isset($product_attribute)){
-                        $attr = new product_attribute;
-                        $attr->product_id = $request->product_page_id;
-                        $attr->group_id = $request->group;
-                        $attr->attribute = $attribute_data[$x]->id;
-                        $attr->terms_id = $ter->id;
-                        $attr->terms = $ter->terms_name;
-                        $attr->save();
-            }
-            }
-            }
-
-         }
-         $product_log = new product_log;
-         $product_log->product_id = $request->product_page_id;;
-         $product_log->type ='Updated';
-         $product_log->employee_name = Auth::guard('admin')->user()->emp_name;
-         $product_log->save();
-
-        return response()->json($request->product_page_id);
+        return response()->json($request);
     }
 
 
@@ -551,6 +606,14 @@ class ProductController extends Controller
 
 
         }
+        $optionGroup = optionGroup::where('product_id',$id)->get();
+        if(count($optionGroup) > 0){
+            foreach($optionGroup as $group){
+                optionValue::where('group_id',$group->id)->delete();
+            }
+            optionGroup::where('product_id',$id)->delete();
+
+        }
 
 
         return response()->json(['message'=>'Successfully Delete'],200);
@@ -569,6 +632,9 @@ class ProductController extends Controller
         $attribute = attribute::all();
         $product = product::all();
         $brand = brand::all();
+        $optionGroup = optionGroup::where('product_id',$id)->get();
+
+
         foreach(explode(',', $product_find->category) as $row) {
             $tree_category[] = $row;
         }
@@ -578,7 +644,14 @@ class ProductController extends Controller
 
        //return response()->json($data);
        $role = role::find(Auth::guard('admin')->user()->role_id);
-        return view('admin/editProduct',compact('group','brand','product','category','attribute','product_attribute','product_find','tree_category','related_product','role'));
+       if(count($optionGroup) > 0){
+        $optionGroupGetter = optionGroup::where('product_id',$id)->select('id')->get();
+        $optionValue = optionValue::whereIn('group_id',$optionGroupGetter)->get();
+        return view('admin/editProduct',compact('optionGroup','optionValue','group','brand','product','category','attribute','product_attribute','product_find','tree_category','related_product','role'));
+    }else{
+        return view('admin/editProduct',compact('optionGroup','group','brand','product','category','attribute','product_attribute','product_find','tree_category','related_product','role'));
+    }
+
     }
 
     public function getEditAttribute($id){
@@ -654,4 +727,132 @@ public function getProduct(){
     ->make(true);
 }
 
+    public function viewColorCategory(){
+        $color_category = color_category::all();
+        return view('admin.color_category',compact('color_category'));
+    }
+    public function viewColors($id){
+        $color = color_category::find($id);
+        return view('admin.colors',compact('color'));
+    }
+
+    public function saveColorCategory(Request $request){
+        $request->validate([
+             'title'=>'required',
+             'colors'=>'required',
+         ]);
+        $color_category = new color_category;
+        $color_category->title = $request->title;
+        $color_category->colors = $request->colors;
+        $color_category->status = $request->status;
+        $color_category->save();
+        return response()->json(['message'=>'Color Category Save Successfully'],200);
+    }
+    public function editColorsCategory($id){
+        $color_category = color_category::find($id);
+        return response()->json($color_category);
+    }
+    public function deleteColorsCategory($id){
+        color_category::find($id)->delete();
+        return response()->json(['message'=>'Color Category Delete Successfully'],200);
+    }
+
+    public function loadColorCategory(){
+        $color_category = color_category::all();
+        $output ='';
+        foreach($color_category as $row){
+            $output .=' <div class="col-md-12">
+            <div class="card p-1 text-white" style="background:'.$row->colors.'">
+              <div class="card-content">
+                <div class="card-body">
+                  <div class="float-left">
+                    <p class="white mb-0">
+                    <strong>'.$row->title.'</strong>
+                    </p>
+                  </div>
+                  <div class="float-right">
+                      <button class="btn btn-warning" onclick="editCat('.$row->id.')">Edit</button>
+                      <button class="btn btn-danger" onclick="deleteCat('.$row->id.')">Delete</button>
+                  <a href="/admin/colors/'.$row->id.'" class="btn btn-dark">Open Colors</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>';
+        }
+        print $output;
+    }
+
+    public function updateColorCategory(Request $request){
+        $request->validate([
+            'title'=>'required',
+            'colors'=>'required',
+        ]);
+        $color_category = color_category::find($request->id);
+        $color_category->title = $request->title;
+        $color_category->colors = $request->colors;
+        $color_category->status = $request->status;
+        $color_category->save();
+        return response()->json(['message'=>'Color Category Update Successfully'],200);
+    }
+
+    public function loadColor($id){
+        $output ='';
+        $colors = color::where('category',$id)->get();
+        if(count($colors) > 0){
+            foreach($colors as $row){
+                $output .='  <div class="card mb-1 col-md-3">
+                <div class="card-content">
+                  <div class="bg-lighten-1 height-50" style="background-color:'.$row->color.'"></div>
+                  <div class="p-1">
+                    <p class="mb-0">
+                      <strong>'.$row->name.'</strong>
+                      <div class="text-muted float-right">
+                          <div class="btn-group" role="group" aria-label="Third Group">
+                              <button type="button" class="btn btn-icon btn-outline-warning" onclick="editColor('.$row->id.')"><i class="ft ft-edit"></i></button>
+                              <button type="button" class="btn btn-icon btn-outline-danger" onclick="deleteColor('.$row->id.')"><i class="la la-trash"></i></button>
+                          </div>
+                      </div>
+                    </p>
+                    <p class="mb-0">'.$row->price.'</p>
+                  </div>
+                </div>
+              </div>';
+            }
+        }else{
+            $output .='  <div class="card mb-1 col-md-3">
+            <p>Colors Not Found</p>
+            </div>';
+        }
+
+        echo $output;
+    }
+
+    public function colorsSave(Request $request){
+        $colors = new color;
+        $colors->name = $request->name;
+        $colors->category = $request->category;
+        $colors->price = $request->price;
+        $colors->color = $request->color;
+        $colors->save();
+        return response()->json(['message'=>'Color Category Update Successfully'],200);
+    }
+    public function colorsUpdate(Request $request){
+        $colors = color::find($request->id);
+        $colors->name = $request->name;
+        $colors->price = $request->price;
+        $colors->color = $request->color;
+        $colors->save();
+        return response()->json(['message'=>'Color Category Update Successfully'],200);
+    }
+
+    public function editColors($id){
+        $color = color::find($id);
+        return response()->json($color);
+    }
+
+    public function deleteColors($id){
+        color::find($id)->delete();
+        return response()->json(['message'=>'Color Category Delete Successfully'],200);
+    }
 }

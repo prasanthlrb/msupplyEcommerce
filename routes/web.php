@@ -133,6 +133,22 @@ Route::get('/delete-category/{id}','productController@DeleteCategory');
 Route::post('/category-save','productController@CategorySave');
 Route::post('/category-update','productController@CategoryUpdate');
 
+//colors
+Route::get('/colors-category','productController@viewColorCategory');
+Route::get('/load-color-category','productController@loadColorCategory');
+Route::get('/load-color/{id}','productController@loadColor');
+Route::post('add-color-category','productController@saveColorCategory');
+Route::post('update-color-category','productController@updateColorCategory');
+Route::get('/edit_color_category/{id}','productController@editColorsCategory');
+Route::get('/delete_color_category/{id}','productController@deleteColorsCategory');
+Route::get('/colors/{id}','productController@viewColors');
+Route::get('/edit-colors/{id}','productController@editColors');
+Route::get('/delete-colors/{id}','productController@deleteColors');
+Route::post('/colors-save','productController@colorsSave');
+Route::post('/colors-update','productController@colorsUpdate');
+
+
+
 //Product Management
 Route::get('/create-product','productController@createProduct');
 Route::get('/get-category-tree','productController@categoryTree');

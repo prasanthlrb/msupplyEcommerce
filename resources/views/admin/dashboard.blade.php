@@ -164,7 +164,7 @@
                                     <tbody>
                                         @foreach($customerData as $row)
                                       <tr>
-                                            <th scope="row" class="border-top-0">{{$row['customer_name']}}</th>
+                                            <th scope="row" class="border-top- 0">{{$row['customer_name']}}</th>
                                             <td class="border-top-0">{{$row['order_count']}}</td>
 
                                       </tr>

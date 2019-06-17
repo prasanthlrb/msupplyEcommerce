@@ -4,16 +4,16 @@
 <style>
   .nav-vertical .nav-left.nav-tabs li.nav-item a.nav-link {
       min-width: 11.5rem !important;
-      
+
   }
-  
+
  .single-product{
   display: block;
   width: 100%;
   height: 300px;
   background-color: white;
   border-radius: 5px;
-  
+
  }
  .single-dynamic-product{
   display: block;
@@ -21,7 +21,7 @@
   height: 185px;
   background-color: white;
   border-radius: 5px;
-  
+
  }
  .seo-preview-content h3 {
   color: #1a0dab;
@@ -53,16 +53,16 @@
 <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/file-uploaders/dropzone.min.css">
 <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/ui/prism.min.css">
 <link rel="stylesheet" type="text/css" href="../../../app-assets/css/plugins/file-uploaders/dropzone.css">
-  
+
 @endsection
 @section('section')
 
 
 <div class="content-wrapper">
 <div class="content-body">
-   
-      
-        
+
+
+
         <section id="horizontal-form-layouts">
            <form action="POST" id="product_form_data" enctype="multipart/form-data">
                 {{ csrf_field() }}
@@ -160,12 +160,12 @@
 
 
                 </div>
-            
-            
-                  
-                      
-                   
-             
+
+
+
+
+
+
 
 
     <div class="row">
@@ -202,7 +202,10 @@
                                         <a class="nav-link" id="baseVerticalLeft2-tab7" data-toggle="tab" aria-controls="tabVerticalLeft27"
                                         href="#tabVerticalLeft27" aria-expanded="false"><i class="la la-bank"></i> TAX</a>
                                       </li>
-
+                                      <li class="nav-item">
+                                        <a class="nav-link" id="baseVerticalLeft2-tab8" data-toggle="tab" aria-controls="tabVerticalLeft28"
+                                        href="#tabVerticalLeft28" aria-expanded="false"><i class="ft-layout"></i> Options</a>
+                                      </li>
                                 <li class="nav-item">
                                     <a class="nav-link" id="baseVerticalLeft2-tab6" data-toggle="tab" aria-controls="tabVerticalLeft26" href="#tabVerticalLeft26" aria-expanded="false"><i class="la la-gear"></i> Advanced</a>
                                 </li>
@@ -257,8 +260,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
-                                   
+
+
                                 </div>
                                 <div class="tab-pane" id="tabVerticalLeft24" aria-labelledby="baseVerticalLeft2-tab4">
 
@@ -294,25 +297,25 @@
                                                 @endforeach
                                       </select>
                                     </div>
-                                   
-                                  <div id="show_terms"> 
+
+                                  <div id="show_terms">
 
                                   </div>
-                               
+
                                   </div>
-                                
-   
+
+
                                 {{-- </form> --}}
                                 </div>
                                 <div class="tab-pane" id="tabVerticalLeft27" aria-labelledby="baseVerticalLeft2-tab7">
                                         <div class="form-group">
                                             <label for="projectinput6">Tax Type</label>
-                                          
+
                                               <select name="tax_type" id="tax_type" class="form-control">
                                                     <option value="">Select The Tax Type</option>
                                                 <option value="in" <?php echo $product_find->tax_type == 'in' ? 'selected' : '' ?>>Inclusive</option>
                                                 <option value="out" <?php echo $product_find->tax_type == 'out' ? 'selected' : '' ?>>Exclusive</option>
-                                             
+
                                               </select>
                                             </div>
                                         <div class="form-group">
@@ -320,6 +323,73 @@
                                         <input type="text" class="form-control" name="tax" id="tax" value="{{$product_find->tax}}">
                                           </div>
                                       </div>
+
+                                      <div class="tab-pane p-2" id="tabVerticalLeft28" aria-labelledby="baseVerticalLeft2-tab8">
+
+                                        <button class="btn btn-primary float-right" type="button" id="addOptionSet"> Add Options Set</button>
+
+                                        <div id="optionSetPlace">
+                                                @if(count($optionGroup) > 0)
+                                                <?php
+                                                $line = 1;
+                                                ?>
+                                                @foreach($optionGroup as $row)
+                                                <div id="optionsetRow{{$line}}" class="pt-4">
+                                                    <div class="row">
+                                                        <div class="form-group col-6">
+                                                            <label for="projectinput1">Option Set Row {{$line}}</label>
+                                                        <input type="text" class="form-control" name="optionSetRow{{$line}}" value="{{$row->group_name}}">
+                                                         </div>
+                                                        <div class="form-group col-6">
+                                                            <label for="projectinput6">Option Show Type</label>
+                                                             <select name="option_show_type{{$line}}" class="form-control">
+                                                            <option value="select" <?php echo $row->option_show_type == 'select'?'selected' : ''?>>Select Model</option>
+                                                            <option value="label" <?php echo $row->option_show_type == 'label'?'selected' : ''?>>Label Model</option>
+                                                         </select>
+                                                        </div>
+                                                     </div>
+                                                     <div class="option1">
+                                                     @foreach($optionValue as $values)
+                                                     @if($values->group_id == $row->id)
+                                                     @if($values->home_option == '1')
+                                                    <div class="form-group row">
+                                                    <div class="col-4">
+                                                        <input type="text" class="form-control" name="optionName{{$line}}[]" value="{{$values->name}}">
+                                                    </div>
+                                                    </div>
+                                                @else
+                                                <div class="form-group row">
+                                                <div class="col-4">
+                                                    <input type="text" class="form-control" name="optionName{{$line}}[]" value="{{$values->name}}">
+                                                    </div>
+                                                <div class="col-4">
+                                                    <input type="text" class="form-control" name="current_price{{$line}}[]" value="{{$values->current_price}}">
+                                                    </div>
+                                                <div class="col-4">
+                                                    <input type="text" class="form-control" name="additional_price{{$line}}[]" value="{{$values->additional_price}}">
+                                                </div>
+                                            </div>
+
+                                            @endif
+                                            @endif
+                                            @endforeach
+
+                                            <div id="optionPlace{{$line}}">
+                                                </div>
+                                                <button class="btn btn-default" type="button" onclick="addOption({{$line}})">Add Option</button>
+                                                <button class="btn btn-danger float-right" type="button" onclick="removeOptionSet({{$line}})">Remove Option Set</button><hr></div>
+                                                <?php
+                                                $line++;
+                                                ?>
+                                                @endforeach
+
+
+                                                @endif
+                                        </div>
+                                    </div></div>
+                                </div>
+
+
 
                                 <div class="tab-pane" id="tabVerticalLeft26" aria-labelledby="baseVerticalLeft2-tab6">
                                     <div class="dropdown-item">
@@ -341,6 +411,10 @@
                                     <div class="dropdown-item">
                                         <input <?php echo $product_find->review == 'on' ? 'checked' : '' ?> type="checkbox" name="review" id="review" class="switchery-xs" />
                                         <label for="switchery5" class="card-title ml-1">Enable as a product review</label>
+                                    </div>
+                                    <div class="dropdown-item">
+                                        <input <?php echo $product_find->colors == 'on' ? 'checked' : '' ?> type="checkbox" name="colors" id="colors" class="switchery-xs" />
+                                        <label for="switchery5" class="card-title ml-1">Enable The Color Option</label>
                                     </div>
                                 </div>
 
@@ -369,7 +443,7 @@
                                         <div class="seo-preview-content">
 
                                             <h3 id="seo-page-title">{{$product_find->seo_title}}</h3>
-                                            <p class="link"><?php 
+                                            <p class="link"><?php
                                                             echo URL::to('/'); ?>/product/</p>
                                             <p class="description" id="seo-description">{{$product_find->seo_description}}.</p>
                                         </div>
@@ -446,14 +520,14 @@
                         <div class="col-md-6">
                           <div class="card">
                             <div class="card-header">
-                             
-                            
-                              
+
+
+
                             </div>
                             <div class="card-content collpase show">
                               <div class="card-body">
-                              
-                               
+
+
                                   <div class="form-actions">
                                       @if($role->catalog_edit ==1)
                                     <button id="btnSave" onclick="Save_product()" type="button" class="btn btn-primary">
@@ -461,17 +535,18 @@
                                     </button>
                                     @endif
                                   </div>
-                                
+
                               </div>
                             </div>
                           </div>
                         </div>
-                       
+
                     </div>
-                    
+
 </div>
 </div>
 </div>
+
 
 @endsection
 @section('extra-js')
@@ -487,22 +562,44 @@
 
 <script>
     var attributes = [];
+    var addOptionSet = [];
     $('.catalog-menu').addClass('active');
+    var addOptionSetLocal = "<?php echo count($optionGroup) >0 ? count($optionGroup) +1 : '1' ?>";
 </script>
+@if(count($optionGroup) > 0)
+<?php
+$xy=1;
+foreach ($optionGroup as $key => $value) {
+ ?>
+<script>
+        addOptionSet.push("<?php echo $xy ?>");
+    </script>
+
+<?php
+$xy++;
+}
+
+?>
+
+@endif
+
+
 @foreach($product_attribute as $data1)
 <script>
-    attributes.push("<?php echo $data1->attribute; ?>");
-    console.log(attributes);
+        attributes.push("<?php echo $data1->attribute; ?>");
 </script>
 @endforeach
 <script>
+    setTimeout(()=>{
+        console.log(addOptionSet);
+    },5000)
    $(document).ready(function() {
    $.ajax({
             url:'/admin/get_edit_attribute/'+{!!$product_find->id!!},
             type: "GET",
             success: function(data) {
                 //$('#attribute').val('');
-                //$("#attribute option[value=" + id + "]").prop("disabled", true);;        
+                //$("#attribute option[value=" + id + "]").prop("disabled", true);;
                 setTimeout(function() {
                     $(".select2").select2();
                 }, 100);
@@ -516,7 +613,7 @@
    });
     function Save_product() {
 
-        $("#btnSave").attr("disabled", "disabled");
+        //$("#btnSave").attr("disabled", "disabled");
         var product_form_data = new FormData($('#product_form_data')[0]);
         var productGallery = $('#productGallery').val();
         var product_description = tinyMCE.activeEditor.getContent();
@@ -524,6 +621,7 @@
         product_form_data.append('product_description', product_description);
         product_form_data.append("attribute", attributes);
         product_form_data.append("product_page_id", product_page_id);
+        product_form_data.append("optionSet", addOptionSet);
         //   product_form_data.append('regular_price',regular_price);
         //   product_form_data.append('sales_price',sales_price);
         //   product_form_data.append('sku',sku);
@@ -571,13 +669,13 @@
             success: function(data) {
                 $('#product_get_id').val(data);
                 console.log(data);
-                // $('input[name=pro_id]').val(data);                
-                // $('input[name=personal]').val(data);                
+                // $('input[name=pro_id]').val(data);
+                // $('input[name=personal]').val(data);
                 //$("#product_form_data")[0].reset();
 
                 toastr.success('Product Store Successfully', 'Successfully Save');
                 //location.reload();
-                CallDropZone();
+              //  CallDropZone();
 
 
             },
@@ -768,6 +866,57 @@
             //$('.tap4').addClass('active');
         }
     })
+
+    //option Script
+
+
+$('#addOptionSet').click(()=>{
+
+   var optionSet = '<div id="optionsetRow'+addOptionSetLocal+'" class="pt-4"><div class="row"><div class="form-group col-6"><label for="projectinput1">Option Set Row '+addOptionSetLocal+'</label><input type="text" class="form-control" name="optionSetRow'+addOptionSetLocal+'" placeholder="Option Label Name"></div>'+
+   '<div class="form-group col-6"> <label for="projectinput6">Option Show Type</label><select name="option_show_type'+addOptionSetLocal+'" class="form-control">'+
+   '<option value="select">Select Model</option><option value="label">Label Model</option>'+
+    '</select></div></div><div class="option1">'+
+    '<div class="form-group row">'+
+    '<div class="col-4"><input type="text" class="form-control" name="optionName'+addOptionSetLocal+'[]" placeholder="Option Name"></div>'+
+    '</div>'+
+    '<div class="form-group row">'+
+     '<div class="col-4"><input type="text" class="form-control" name="optionName'+addOptionSetLocal+'[]" placeholder="Option Name"></div>'+
+     '<div class="col-4"><input type="text" class="form-control" name="current_price'+addOptionSetLocal+'[]" placeholder="Change Original Price"></div>'+
+    '<div class="col-4"><input type="text" class="form-control" name="additional_price'+addOptionSetLocal+'[]" placeholder="Additional Price"></div></div><div id="optionPlace'+addOptionSetLocal+'"></div>'+
+    '<button class="btn btn-default" type="button" onclick="addOption('+addOptionSetLocal+')">Add Option</button>'+
+    '<button class="btn btn-danger float-right" type="button" onclick="removeOptionSet('+addOptionSetLocal+')">Remove Option Set</button><hr></div>';
+    addOptionSet.push(addOptionSetLocal)
+    addOptionSetLocal++;
+    $('#optionSetPlace').append(optionSet);
+});
+
+function removeOptionSet(id){
+    if(confirm('Are you sure delete this row?'))
+  {
+    addOptionSet = jQuery.grep(addOptionSet, function(value) {
+      return value != id;
+    });
+    $('#optionsetRow'+id).remove();
+  }
+
+}
+var optionLineData = [];
+var optionLineCount = 1;
+function addOption(id){
+var option = '<div id="optionLine'+id+'of'+optionLineCount+'"><i class="ft-minus-circle text-danger" style="float:right;cursor:pointer" onclick="removeOptionLabel('+id+','+optionLineCount+')"></i><div class="form-group row">'+
+    '<div class="col-4"><input type="text" class="form-control" name="optionName'+id+'[]" placeholder="Option Name"></div>'+
+    '<div class="col-4"><input type="text" class="form-control" name="current_price'+id+'[]" placeholder="Change Original Price"></div>'+
+    '<div class="col-4"><input type="text" class="form-control" name="additional_price'+id+'[]" placeholder="Additional Price"></div></div></div>';
+    optionLineData.push({
+      'parent':id,
+      'child':optionLineCount
+    });
+    optionLineCount++;
+    $('#optionPlace'+id).append(option);
+}
+function removeOptionLabel(parent,child){
+    $("#optionLine"+parent+'of'+child).remove();
+}
 </script>
 
 

@@ -40,6 +40,7 @@ class CreateProductsTable extends Migration
             $table->string('new_product')->nullable();
             $table->string('recommended')->nullable();
             $table->string('featured')->nullable();
+            $table->string('colors')->nullable();
             $table->string('related_product')->nullable();
             $table->string('tax')->nullable();
             $table->string('tax_type')->nullable();
