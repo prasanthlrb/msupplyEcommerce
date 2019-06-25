@@ -5,7 +5,7 @@
     ============================================ -->
     <link rel="stylesheet" href="/js/fancybox/source/jquery.fancybox.css">
     <link rel="stylesheet" href="/js/fancybox/source/helpers/jquery.fancybox-thumbs.css">
-    
+
 @endsection
 @section('content')
 
@@ -21,15 +21,15 @@
             <li><a href="/">Home</a></li>
             <li><a href="/category/{{$breadcrumbs->id}}">{{$breadcrumbs->category_name}}</a></li>
             <li>{{$product1->product_name}}</li>
-            
-           
+
+
         </ul>
 
         <!-- - - - - - - - - - - - - - End of breadcrumbs - - - - - - - - - - - - - - - - -->
 
         <div class="row">
 
-            <main class="col-md-9 col-sm-8">
+            <main class="col-md-12 col-sm-12">
 
                 <!-- - - - - - - - - - - - - - Product images & description - - - - - - - - - - - - - - - - -->
 
@@ -39,7 +39,7 @@
 
                         <!-- - - - - - - - - - - - - - Product image column - - - - - - - - - - - - - - - - -->
 
-                        <div class="single_product">
+                        <div class="col-md-5">
 
                             <!-- - - - - - - - - - - - - - Image preview container - - - - - - - - - - - - - - - - -->
 
@@ -48,7 +48,7 @@
                                     <img id="img_zoom" data-zoom-image="{{asset('/product_img').'/'.$product1->product_image}}" src="{{asset('/product_img').'/'.$product1->product_image}}" alt="">
                                 <?php } else{ ?>
                                     <img id="img_zoom" data-zoom-image="{{asset('/images/qv_img_1.jpg')}}" src="{{asset('/images/qv_img_1.jpg')}}" alt="">
-                                <?php } ?>     
+                                <?php } ?>
                                 <!-- <button class="button_grey_2 icon_btn middle_btn open_qv"><i class="icon-resize-full-6"></i></button> -->
 
                             </div><!--/ .image_preview_container-->
@@ -56,7 +56,7 @@
                             <!-- - - - - - - - - - - - - - End of image preview container - - - - - - - - - - - - - - - - -->
 
                             <!-- - - - - - - - - - - - - - Prodcut thumbs carousel - - - - - - - - - - - - - - - - -->
-                            
+
                             <div class="product_preview">
 
                                 <div class="owl_carousel" id="thumbnails">
@@ -69,20 +69,20 @@
 
                                         <img src="{{asset('/product_gallery').'/'.$upload1->resized_name}}" data-large-image="{{asset('/product_gallery').'/'.$upload1->filename}}" alt="">
                                     </a>
-             
+
                                     @endif
                                 @endforeach
-                                    
+
                                 </div><!--/ .owl-carousel-->
-                                
+
 
                             </div><!--/ .product_preview-->
-                            
+
                             <!-- - - - - - - - - - - - - - End of prodcut thumbs carousel - - - - - - - - - - - - - - - - -->
 
                             <!-- - - - - - - - - - - - - - Share - - - - - - - - - - - - - - - - -->
-                            
-                            <!-- <div class="v_centered">
+
+                             <div class="v_centered">
 
                                 <span class="title">Share this:</span>
 
@@ -96,9 +96,9 @@
                                     <a class="addthis_counter addthis_bubble_style"></a>
                                     </div>
                                 </div>
-                                
-                            </div> -->
-                            
+
+                            </div>
+
                             <!-- - - - - - - - - - - - - - End of share - - - - - - - - - - - - - - - - -->
 
                         </div>
@@ -107,7 +107,7 @@
 
                         <!-- - - - - - - - - - - - - - Product description column - - - - - - - - - - - - - - - - -->
 
-                        <div class="single_product_description">
+                        <div class="single_product_description col-md-7">
 
                             <h3 class="offset_title"><a href="#">{{$product1->product_name}}</a></h3>
 
@@ -123,9 +123,9 @@
                             <!-- - - - - - - - - - - - - - End of page navigation - - - - - - - - - - - - - - - - -->
                             @if(count($rating)>0)
                             <div class="description_section v_centered">
-                                <?php 
+                                <?php
                                 $rating_count;
-                            
+
                                 if(count($rating) > 1){
                                     $total=0;
                                     foreach($rating as $row){
@@ -148,7 +148,7 @@
                                             <li class="<?php echo $rating_count >= 5 ? 'active' : '' ?>"></li>
 
                                         </ul>
-                                
+
                                 <ul class="topbar">
 
                                     <li><a href="#">{{count($reviews)}} Review(s)</a></li>
@@ -169,7 +169,7 @@
                                         <!-- <tr>
 
                                             <td>Vendor: </td>
-                                         
+
 
                                         </tr> -->
 
@@ -177,7 +177,7 @@
                                         @if($product1->stock_quantity !="" && $product1->stock_quantity !=0)
                                             <td>Availability: </td>
                                             <td><span class="in_stock">in stock</span> {{$product1->stock_quantity}} item(s)</td>
-                                        @else    
+                                        @else
                                             <td>Availability: </td>
                                             <td><span style="color:red;">Out of Stock</span></td>
                                         @endif
@@ -200,10 +200,10 @@
 
                             <!-- <hr> -->
 
-                            
+
                                 @if($product1->regular_price !="")
                                     <p class="product_price"><s>₹{{$product1->regular_price}}</s> <b class="theme_color">₹{{$product1->sales_price}}</b></p>
-                                @else    
+                                @else
                                     <p class="product_price"><b class="theme_color">₹{{$product1->sales_price}}</b></p>
                                 @endif
 
@@ -212,7 +212,7 @@
 <form method="post" id="termsData">
 {{ csrf_field() }}
 
-                    
+
 <?php $arraydata=array(); ?>
 <?php $term_id=array(); ?>
 <?php $x=0; ?>
@@ -229,71 +229,150 @@
                     @if(in_array($attri->id, $arraydata))
                         <div class="description_section_2 v_centered">
                             <span class="title">{{$attri->name}}:</span>
-                         
-                            <?php
-                             $term=array(); 
 
-                             
+                            <?php
+                             $term=array();
+
+
                              ?>
                             @foreach($product_attribute as $pro_attri)
-                           
-                           
+
+
                               @if(!in_array($pro_attri->terms_id, $term ) && $attri->id == $pro_attri->attribute)
-                              
+
                               @if(!in_array($pro_attri->terms_id, $term_id ) && $product1->id != $pro_attri->product_id)
                               <a href="/product-advance-filter/{{$product1->id}}/{{$pro_attri->attribute}}/{{$pro_attri->terms_id}}" class="button_grey">{{$pro_attri->terms}}</a>
                               @else
-            
+
                               <a href="javascript:void(null)" class="button_grey active">{{$pro_attri->terms}}</a>
-                             
-                           
-                             
+
+
+
                                 @endif
-                                
-                                <?php 
+
+                                <?php
 
                                 $term[]=$pro_attri->terms_id;
-                                  
+
                                 ?>
-                                
-                             
+
+
                               @endif
-                             
-                             
-                              
-                              
+
+
+
+
                             @endforeach
                         </div>
                         <br>
                     @endif
-                @endforeach            
+                @endforeach
+            </form>
 
-                            
+
+                <form id="optionForm" method="post">
+                        {{ csrf_field() }}
+                                @if(count($optionData['group']) > 0)
+                                <input type="hidden" id="optionAvailable" value="0">
+                        @foreach($optionData['group'] as $group)
+                        @if($group->option_show_type == 'select')
+                <div class="description_section_2 v_centered">
+
+                    <span class="title">{{$group->group_name}}:</span>
+
+
+                    <div class="custom_select min">
+
+                        <select name="{{$group->id}}">
+                            @foreach($optionData[$group->id] as $key => $optionVal)
+                        <option value="{{$optionVal->name}}">{{$optionVal->name}}</option>
+
+                            @endforeach
+                        </select>
+
+                    </div>
+
+
+
+
+                </div>
+                <br>
+                @else
+                <li class="row">
+
+                        <div class="col-xs-12">
+
+                            <label>{{$group->group_name}}:</label>
+
+                            <div class="form_el">
+                                    @foreach($optionData[$group->id] as $key => $optionVal)
+                            <input <?php echo $key ==0?'checked':'' ?> type="radio" name="{{$group->id}}" id="radio_{{$group->id}}{{$key}}" value="{{$optionVal->name}}">
+                            <label for="radio_{{$group->id}}{{$key}}">{{$optionVal->name}}</label>
+                                @endforeach
+                            </div>
+
+                        </div>
+
+                    </li>
+                @endif
+                @endforeach
+                @endif
+
+
+            </form>
+
+
+                @if($product1->colors == 'on')
+                <div class="buttons_row">
+                <button type="button" class="button_blue middle_btn" onclick="getColorModal()" id="colorButtonModule"><i class="icon-sun"></i>Click to Select the Colors</button>
+                </div>
+                @endif
+                <br>
+                           @if(count($custom_qty) >0)
+                                <div class="description_section_2 v_centered">
+                                        <span class="title">Select Qty:</span>
+                                        <div class="custom_select min">
+                                            <select name="button_qty">
+                                                @foreach($custom_qty as $qtyData)
+                                            <option value="{{$qtyData->customqty}}"></option>
+                                                @endforeach
+
+                                            </select>
+                                        </div>
+
+                                </div>
+                                @else
                             <div class="description_section_2 v_centered">
-                                
+
                                 <span class="title">Qty:</span>
                                 <input type="hidden" id="shipping_amount" name="shipping_amount" value="{{$product1->shipping_amount}}">
 
                                 <div class="qty min clearfix">
+                                    @if($product1->order_limit != null)
+                                    <button class="theme_button" type="button" data-direction="minus" onclick="checkOrderLimit({{$product1->order_limit}})">-</button>
+                                    @else
+
                                     <button class="theme_button" type="button" data-direction="minus">-</button>
-                                    <input type="text" name="button_qty" value="1" id="button_qty">
+                                    @endif
+                                    <input type="text" name="button_qty" value="<?php echo $product1->order_limit !=null ? $product1->order_limit : 1?>" id="button_qty">
                                     <button class="theme_button" type="button" data-direction="plus">+</button>
 
                                 </div>
 
                             </div>
-
+                                @endif
                             <!-- - - - - - - - - - - - - - End of quantity - - - - - - - - - - - - - - - - -->
 
                             <!-- - - - - - - - - - - - - - Product actions - - - - - - - - - - - - - - - - -->
 
                             <div class="buttons_row">
                                 @if($product1->stock_quantity !="" && $product1->stock_quantity !=0)
+                                <input type="hidden" id="haveAcolor" value="<?php echo $product1->colors == 'on'? '1':'0'?>">
                                 <button type="button" onclick="addCart({{$product1->id}})" class="button_blue middle_btn">Add to Cart</button>
-                            @else    
+                            @else
                             <button type="button" class="button_blue middle_btn">Coming Soon</button>
                             @endif
-                             
+
 
                                 <a href="/add-wishlist/{{$product1->id}}"><button type="button" class="button_dark_grey def_icon_btn middle_btn add_to_wishlist tooltip_container"><span class="tooltip top">Add to Wishlist</span></button></a>
 
@@ -301,10 +380,9 @@
 
                             </div>
 
-                            <!-- <button onclick="saveterms({{$product1->product_id}})" class="theme_button" type="button" >Check</button> -->
 
                             <!-- - - - - - - - - - - - - - End of product actions - - - - - - - - - - - - - - - - -->
-</form>                 
+
                         </div>
 
                         <!-- - - - - - - - - - - - - - End of product description column - - - - - - - - - - - - - - - - -->
@@ -323,14 +401,14 @@
 
                         <ul class="tabs_nav clearfix">
                             <li class="active"><a href="#tab-1">Description</a></li>
-                            <li><a href="#tab-2">Specifications</a></li>
+                            <li><a href="#tab-2">Product Details</a></li>
                             @if($product1->review == 'on')
                             @if(count($reviews) > 0)
                             <li><a href="#tab-3">{{count($reviews)}} Review (s)</a></li>
                             @endif
                             @endif
                         </ul>
-                        
+
                         <div class="tab_containers_wrap">
 
                             <div id="tab-1" class="tab_container">
@@ -341,6 +419,7 @@
 
                             <div id="tab-2" class="tab_container">
                                 <ul class="specifications">
+                                    <li><span>No of Items:</span>{{$product1->items}} </li>
                                     <li><span>Weight:</span>{{$product1->weight}}</li>
                                     <li><span>Length:</span>{{$product1->length}}</li>
                                     <li><span>Width:</span>{{$product1->width}}</li>
@@ -353,27 +432,27 @@
 
                                             <h3>Customer Reviews</h3>
                                         @if(!empty($review))
-                                       
+
                                             <ul class="reviews">
                                                     @foreach($review as $row)
                                                 <li>
-    
+
                                                     <!-- - - - - - - - - - - - - - Review - - - - - - - - - - - - - - - - -->
-                                                    
+
                                                     <article class="review">
-    
+
                                                         <!-- - - - - - - - - - - - - - Rates - - - - - - - - - - - - - - - - -->
-    
-                                                      
+
+
                                                         <!-- - - - - - - - - - - - - - End of rates - - - - - - - - - - - - - - - - -->
-    
+
                                                         <!-- - - - - - - - - - - - - - Review body - - - - - - - - - - - - - - - - -->
-    
+
                                                         <div class="review-body">
-    
+
                                                             <div class="review-meta">
-                                                            Review by <a href="#" class="bold">{{$row->name}}</a> on {{$row->updated_at}} 
-                                                                
+                                                            Review by <a href="#" class="bold">{{$row->name}}</a> on {{$row->updated_at}}
+
                                                                     <ul class="rating">
                                                                             <li class="active"></li>
                                                                             <li class="<?php echo $row->rating >= 2 ? 'active' : '' ?>"></li>
@@ -381,25 +460,25 @@
                                                                             <li class="<?php echo $row->rating >= 4 ? 'active' : '' ?>"></li>
                                                                             <li class="<?php echo $row->rating >= 5 ? 'active' : '' ?>"></li>
                                                                         </ul>
-    
-    
+
+
                                                             </div>
-    
+
                                                             <p>{{$row->review}}</p>
-    
+
                                                         </div>
-    
+
                                                         <!-- - - - - - - - - - - - - - End of review body - - - - - - - - - - - - - - - - -->
-    
+
                                                     </article>
-    
+
                                                     <!-- - - - - - - - - - - - - - End of review - - - - - - - - - - - - - - - - -->
-    
+
                                                 </li>
                                                 @endforeach
-                                               
-                                               
-    
+
+
+
                                             </ul>
                                             @endif
                                             @if ($review->lastPage() > 1)
@@ -430,7 +509,7 @@
                 </div>
 
 
-             
+
 @if(!empty($related_product))
 <section class="section_offset">
 
@@ -449,7 +528,7 @@
                     <img src="{{asset('/product_img').'/'.$r_product->product_image}}" alt="">
                 <?php } else{ ?>
                     <img src="/images/product_img_30.jpg" alt="">
-                <?php } ?> 
+                <?php } ?>
 
 
                 <div class="actions_wrap">
@@ -478,22 +557,22 @@
                 <a href="/product/{{$r_product->id}}">{{$r_product->product_name}}</a>
 
                 <div class="clearfix product_info">
-                       
 
-                            <?php 
+
+                            <?php
                             $getRating = App\rating::where('item_id',$r_product->id)->get();
                             if(count($getRating) > 0){
                                 $rating_count;
-                            
-                               
+
+
                             $total=0;
                             foreach($getRating as $row){
                                 $total +=$row->rating;
                             }
                             $rating_count = $total/count($getRating);
-                       
+
                             }
-                               
+
 
 
                                 ?>
@@ -527,271 +606,11 @@
 
             </main><!--/ [col]-->
 
-            <aside class="col-md-3 col-sm-4">
+            {{-- <aside class="col-md-3 col-sm-4">
 
-                <!-- - - - - - - - - - - - - - Seller Information - - - - - - - - - - - - - - - - -->
 
-                <section class="section_offset">
 
-                </section>
-
-
-           
-                {{-- <section class="section_offset">
-                    <h3 class="offset_title">You Might Also Like</h3>
-                    <div class="owl_carousel widgets_carousel">
-                        <ul class="products_list_widget">
-                      
-                            <li>
-                                <a href="#" class="product_thumb">
-                                    <img style="width:70px;height:50px;" src="" alt="">
-                                </a>
-                                <div class="wrapper">
-                                    <a href="/product-view/" class="product_title"></a>
-                                    <div class="clearfix product_info">
-                                        <p class="product_price alignleft"><b>₹</b></p>
-                                        <ul class="rating alignright">
-                                            <!-- <li class="active"></li>
-                                            <li class="active"></li>
-                                            <li class="active"></li>
-                                            <li class="active"></li>
-                                            <li></li> -->
-                                        </ul>
-                                    </div>
-                                </div>
-                            </li>
-                      
-                        </ul>
-
-                        <ul class="products_list_widget">
-
-                            <!-- - - - - - - - - - - - - - Product - - - - - - - - - - - - - - - - -->
-
-                            <li>
-                                
-                                <a href="#" class="product_thumb">
-                                    
-                                    <img src="/images/product_thumb_7.jpg" alt="">
-
-                                </a>
-
-                                <div class="wrapper">
-
-                                    <a href="#" class="product_title">Diam eu massa quisque donec...</a>
-
-                                    <div class="clearfix product_info">
-
-                                        <p class="product_price alignleft"><b>₹5.99</b></p>
-
-                                        <!-- - - - - - - - - - - - - - Product rating - - - - - - - - - - - - - - - - -->
-
-                                        <ul class="rating alignright">
-
-                                            <li class="active"></li>
-                                            <li class="active"></li>
-                                            <li class="active"></li>
-                                            <li class="active"></li>
-                                            <li></li>
-
-                                        </ul>
-                                        
-                                        <!-- - - - - - - - - - - - - - End of product rating - - - - - - - - - - - - - - - - -->
-
-                                    </div>
-
-                                </div>
-
-                            </li>
-
-                            <!-- - - - - - - - - - - - - - End of product - - - - - - - - - - - - - - - - -->
-
-                            <!-- - - - - - - - - - - - - - Product - - - - - - - - - - - - - - - - -->
-
-                            <li>
-                                
-                                <a href="#" class="product_thumb">
-                                    
-                                    <img src="/images/product_thumb_8.jpg" alt="">
-
-                                </a>
-
-                                <div class="wrapper">
-
-                                    <a href="#" class="product_title">Ut pharetra augue nec augue...</a>
-
-                                    <div class="clearfix product_info">
-
-                                        <p class="product_price alignleft"><b>₹8.99</b></p>
-
-                                        <!-- - - - - - - - - - - - - - Product rating - - - - - - - - - - - - - - - - -->
-
-                                        <ul class="rating alignright">
-
-                                            <li class="active"></li>
-                                            <li class="active"></li>
-                                            <li class="active"></li>
-                                            <li class="active"></li>
-                                            <li class="active"></li>
-
-                                        </ul>
-                                        
-                                        <!-- - - - - - - - - - - - - - End of product rating - - - - - - - - - - - - - - - - -->
-
-                                    </div>
-
-                                </div>
-
-                            </li>
-
-                            <!-- - - - - - - - - - - - - - End of product - - - - - - - - - - - - - - - - -->
-
-                            <!-- - - - - - - - - - - - - - Product - - - - - - - - - - - - - - - - -->
-
-                            <li>
-                                
-                                <a href="#" class="product_thumb">
-                                    
-                                    <img src="/images/product_thumb_9.jpg" alt="">
-
-                                </a>
-
-                                <div class="wrapper">
-
-                                    <a href="#" class="product_title">Donec porta diam eu massa...</a>
-
-                                    <div class="clearfix product_info">
-
-                                        <p class="product_price alignleft"><b>₹76.99</b></p>
-
-                                        <!-- - - - - - - - - - - - - - Product rating - - - - - - - - - - - - - - - - -->
-
-                                        <ul class="rating alignright">
-
-                                            <li class="active"></li>
-                                            <li class="active"></li>
-                                            <li class="active"></li>
-                                            <li class="active"></li>
-                                            <li class="active"></li>
-
-                                        </ul>
-                                        
-                                        <!-- - - - - - - - - - - - - - End of product rating - - - - - - - - - - - - - - - - -->
-
-                                    </div>
-
-                                </div>
-
-                            </li>
-
-                            <!-- - - - - - - - - - - - - - End of product - - - - - - - - - - - - - - - - -->
-
-                        </ul><!--/ .list_of_products-->
-
-                    </div>
-
-                </section> --}}
-             
-
-                <!-- - - - - - - - - - - - - - End of you might also like - - - - - - - - - - - - - - - - -->
-
-                <!-- - - - - - - - - - - - - - Infoblock - - - - - - - - - - - - - - - - -->
-
-                <div class="section_offset">
-
-                    <section class="infoblock type_2">
-
-                        <i class="icon-lock"></i>
-
-                        <h4 class="caption"><b>Safe &amp; Secure Payment</b></h4>
-
-                       
-                    </section><!--/ .infoblock.type_2-->
-
-                </div>
-
-                <!-- - - - - - - - - - - - - - End infoblock - - - - - - - - - - - - - - - - -->
-
-                <!-- - - - - - - - - - - - - - Already viewed products - - - - - - - - - - - - - - - - -->
-
-                {{-- <section class="section_offset">
-
-                    <h3>Already Viewed Products</h3>
-
-                    <ul class="products_list_widget">
-
-                        <!-- - - - - - - - - - - - - - Product - - - - - - - - - - - - - - - - -->
-
-                        <li>
-                            
-                            <a href="#" class="product_thumb">
-                                
-                                <img src="images/product_thumb_4.jpg" alt="">
-
-                            </a>
-
-                            <div class="wrapper">
-
-                                <a href="#" class="product_title">Adipiscing aliquet sed in lacus...</a>
-
-                                <div class="clearfix product_info">
-
-                                    <p class="product_price alignleft"><b>₹5.99</b></p>
-
-                                    <!-- - - - - - - - - - - - - - Product rating - - - - - - - - - - - - - - - - -->
-
-                                    <ul class="rating alignright">
-
-                                        <li class="active"></li>
-                                        <li class="active"></li>
-                                        <li class="active"></li>
-                                        <li class="active"></li>
-                                        <li></li>
-
-                                    </ul>
-                                    
-                                    <!-- - - - - - - - - - - - - - End of product rating - - - - - - - - - - - - - - - - -->
-
-                                </div>
-
-                            </div>
-
-                        </li>
-
-                        <!-- - - - - - - - - - - - - - End of product - - - - - - - - - - - - - - - - -->
-
-                        <!-- - - - - - - - - - - - - - Product - - - - - - - - - - - - - - - - -->
-
-                        <li>
-                            
-                            <a href="#" class="product_thumb">
-                                
-                                <img src="images/product_thumb_11.jpg" alt="">
-
-                            </a>
-
-                            <div class="wrapper">
-
-                                <a href="#" class="product_title">Ut pharetra augue nec augue,...</a>
-
-                                <div class="clearfix product_info">
-
-                                    <p class="product_price alignleft"><s>₹19.99</s> <b>₹13.99</b></p>
-
-                                </div>
-
-                            </div>
-
-                        </li>
-
-                        <!-- - - - - - - - - - - - - - End of product - - - - - - - - - - - - - - - - -->
-
-                    </ul><!--/ .list_of_products-->
-
-                </section> --}}
-
-                <!-- - - - - - - - - - - - - - End of already viewed products - - - - - - - - - - - - - - - - -->
-
-            </aside><!--/ [col]-->
+            </aside> --}}
 
         </div><!--/ .row-->
 
@@ -805,7 +624,7 @@
 @endsection
 
 @section('extra-js')
-	
+
 <!-- Include Libs & Plugins
     ============================================ -->
     <script src="/js/jquery.elevateZoom-3.0.8.min.js"></script>
@@ -813,6 +632,120 @@
     <script src="/js/fancybox/source/helpers/jquery.fancybox-media.js"></script>
     <script src="/js/fancybox/source/helpers/jquery.fancybox-thumbs.js"></script>
     <script>
-    		
+
+function addCart(id){
+    var qty  = $('#button_qty').val();
+    var haveAcolor = $('#haveAcolor').val()
+    var optionAvailable = $('#optionAvailable').val();
+
+    //Both Color and Option Available
+    if(haveAcolor == '1' && optionAvailable){
+        //get Form Data
+        var formData = new FormData($('#optionForm')[0]);
+        let inputColor = $('#inputColor').val();
+        if(inputColor){
+            try{
+        formData.append('product_id',id);
+        formData.append('colors',inputColor);
+        formData.append('qty',qty);
+    $.ajax({
+    url : '/set-cart-item',
+         type: "POST",
+          data: formData,
+          contentType: false,
+          processData: false,
+          dataType: "JSON",
+    success: function(data)
+    {
+        console.log(data);
+    },error: function (error) {
+           console.log(error);
+        }
+    });
+        }catch(err){
+        console.log(err)
+        }
+        }else{
+            getColorModal();
+        }
+        //only Have a Color Data
+    }else if(haveAcolor == '1'){
+        let inputColor = $('#inputColor').val();
+        if(inputColor){
+            $.ajax({
+            url : '/set-cart-item',
+            type: "GET",
+            data: {color:inputColor,id:id,qty:qty},
+    success: function(data)
+    {
+        console.log(data);
+    },error: function (error) {
+           console.log(error);
+        }
+    });
+        }else{
+            getColorModal();
+        }
+        //only have a option form Data
+    }
+    else if(optionAvailable){
+         //get Data Form
+        var formData = new FormData($('#optionForm')[0]);
+        formData.append('product_id',id);
+        formData.append('qty',qty);
+        $.ajax({
+        url : '/set-cart-item',
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+        dataType: "JSON",
+        success: function(data)
+        {
+        console.log(data);
+        },error: function (error) {
+           console.log(error);
+        }
+        });
+    }
+    //both color and option not have
+    else{
+
+        setCart(id,qty);
+    }
+
+
+    }
+    //end of function
+        function getColorModal(){
+            $.arcticmodal({
+                        url : '/get-color-modal'
+                    });
+        }
+        function getColors(id){
+            $('.arcticmodal-close').trigger('click');
+            $.ajax({
+                url:'/selected-color/'+id,
+                method:'GET',
+                success:function(data){
+                    console.log(data);
+                    $('#inputColor').remove();
+                    $('#colorButtonModule').css('background-color',data.color)
+                    $('#colorButtonModule').text(data.name+' Rs: '+data.price)
+                    $('#colorButtonModule').append('<input type="hidden" name="inputColor" id="inputColor" value="'+data.id+'">')
+                }
+            })
+        }
+
+        function checkOrderLimit(data){
+            var button_qty = $('#button_qty').val();
+            if(button_qty <= button_qty){
+
+                toastr.error('is Maximum of '+data, 'Your Order Limit QTY');
+                setTimeout(()=>{
+                    $('#button_qty').val(data);
+                },0)
+            }
+        }
     </script>
 @endsection

@@ -43,6 +43,8 @@ class CreateProductsTable extends Migration
             $table->string('colors')->nullable();
             $table->string('related_product')->nullable();
             $table->string('tax')->nullable();
+            $table->number('items')->nullable();
+            $table->number('order_limit')->nullable();
             $table->string('tax_type')->nullable();
             $table->string('active')->default(0);
             $table->timestamps();

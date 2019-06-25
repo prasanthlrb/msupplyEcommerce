@@ -21,6 +21,9 @@ use App\color_category;
 use App\color;
 use App\optionGroup;
 use App\optionValue;
+use App\custom_qty;
+use App\unit;
+use App\product_unit;
 class ProductController extends Controller
 {
     //Brand Edit Delete View Update Process Function Start Here
@@ -269,7 +272,8 @@ class ProductController extends Controller
         $attribute = attribute::all();
         $category = category::all();
         $role = role::find(Auth::guard('admin')->user()->role_id);
-        return view('admin.newProduct',compact('group','brand','product','attribute','category','role'));
+        $units = unit::all();
+        return view('admin.newProduct',compact('group','brand','product','attribute','category','role','units'));
     }
         //category Edit Delete View Update Process Function End Here
 
@@ -411,6 +415,8 @@ class ProductController extends Controller
         $product->recommended = $request->recommended;
         $product->featured = $request->featured;
         $product->colors = $request->colors;
+        $product->items = $request->items;
+        $product->order_limit = $request->order_limit;
         $product->save();
 
         if(isset($request->attribute)){
@@ -464,114 +470,263 @@ class ProductController extends Controller
         }
 
     }
+    if(count($request->customqty) > 0){
+        foreach($request->customqty as $data){
+            $custom_qty = new custom_qty;
+            $custom_qty->product_id = $product->id;
+            $custom_qty->customqty = $data;
+            $custom_qty->save();
+        }
+
+    }
+    if(isset($request->units)){
+        foreach(explode(',',$request->units) as $id) {
+            $unit_data[] = unit::find($id);
+        }
+        if(count($unit_data) > 0){
+        foreach($unit_data as $units){
+            $product_unit = new product_unit;
+            $product_unit->unit_price = $request['unit'.$units->id];
+            $product_unit->unit_name = $units->unit_name;
+            $product_unit->product_id = $product->id;
+            $product_unit->unit_id = $units->id;
+            $product_unit->save();
+        }
+    }
+    }
 
 
-        return response()->json($request);
+        return response()->json($product->id);
     }
 
 
     public function productUpdate(Request $request){
-        // $request->validate([
-        //    // 'imgInp'=>'required',
-        //     'category'=>'required',
-        //     //'product_name'=>'required|unique:products',
-        //     // 'sku'=>'required|unique:product_datas',
-        // ]);
-        // $product = product::find($request->product_page_id);
-        // $product->category = collect($request->category)->implode(',');
-        // $product->product_name = $request->product_name;
-        // $product->group = $request->group;
-        // $product->brand_name = $request->brand_name;
-        // $product->product_description = $request->product_description;
-        // $product->seo_title = $request->seo_title;
-        // $product->seo_description = $request->seo_description;
-        // $product->seo_keywords = $request->seo_keywords;
-        // $fileName = null;
-        // if($request->file('imgInp')!=""){
-        // $image = $request->file('imgInp');
-        // $fileName = rand() . '.' . $image->getClientOriginalExtension();
-        // $image->move(public_path('product_img/'), $fileName);
-        // $product->product_image = $fileName;
-        // }
-        // $product->regular_price = $request->regular_price;
-        // $product->sales_price = $request->sales_price;
-        // $product->sku = $request->sku;
-        // $product->stock_quantity = $request->stock_quantity;
-        // $product->low_stock = $request->low_stock;
-        // $product->weight = $request->weight;
-        // $product->length = $request->length;
-        // $product->width = $request->width;
-        // $product->height = $request->height;
-        // $product->tax = $request->tax;
-        // $product->tax_type = $request->tax_type;
-        // $product->shipping_type = $request->shipping_type;
-        // $product->shipping_amount = $request->shipping_amount;
-        // $product->related_product = collect($request->related_product)->implode(',');
-        // $product->hot_product = $request->hot_product;
-        // $product->review = $request->review;
-        // $product->new_product = $request->new_product;
-        // $product->recommended = $request->recommended;
-        // $product->featured = $request->featured;
-        // $product->save();
+        $request->validate([
+           // 'imgInp'=>'required',
+            'category'=>'required',
+            //'product_name'=>'required|unique:products',
+            // 'sku'=>'required|unique:product_datas',
+        ]);
+        $product = product::find($request->product_page_id);
+        $product->category = collect($request->category)->implode(',');
+        $product->product_name = $request->product_name;
+        $product->group = $request->group;
+        $product->brand_name = $request->brand_name;
+        $product->product_description = $request->product_description;
+        $product->seo_title = $request->seo_title;
+        $product->seo_description = $request->seo_description;
+        $product->seo_keywords = $request->seo_keywords;
+        $fileName = null;
+        if($request->file('imgInp')!=""){
+        $image = $request->file('imgInp');
+        $fileName = rand() . '.' . $image->getClientOriginalExtension();
+        $image->move(public_path('product_img/'), $fileName);
+        $product->product_image = $fileName;
+        }
+        $product->regular_price = $request->regular_price;
+        $product->sales_price = $request->sales_price;
+        $product->sku = $request->sku;
+        $product->stock_quantity = $request->stock_quantity;
+        $product->low_stock = $request->low_stock;
+        $product->weight = $request->weight;
+        $product->length = $request->length;
+        $product->width = $request->width;
+        $product->height = $request->height;
+        $product->tax = $request->tax;
+        $product->tax_type = $request->tax_type;
+        $product->shipping_type = $request->shipping_type;
+        $product->shipping_amount = $request->shipping_amount;
+        $product->related_product = collect($request->related_product)->implode(',');
+        $product->hot_product = $request->hot_product;
+        $product->review = $request->review;
+        $product->new_product = $request->new_product;
+        $product->recommended = $request->recommended;
+        $product->featured = $request->featured;
+        $product->colors = $request->colors;
+        $product->items = $request->items;
+        $product->order_limit = $request->order_limit;
+        $product->save();
 
-        // if(isset($request->attribute)){
+        if(isset($request->attribute)){
 
-        //     foreach(explode(',', $request->attribute) as $id) {
-        //         $attribute_data[] = attribute::find($id);
-        //     }
-        //     if(count($attribute_data) > 0){
-        //         for ($x = 0; $x < count($attribute_data); $x++) {
-        //             $attrName = $attribute_data[$x]->name;
-        //             $ter = term::where('id',$request[$attrName])->first();
-        //             $product_attribute = product_attribute::where('attribute',$attribute_data[$x]->id)->where('product_id',$request->product_page_id)->first();
-        //             if(!isset($product_attribute)){
-        //                 $attr = new product_attribute;
-        //                 $attr->product_id = $request->product_page_id;
-        //                 $attr->group_id = $request->group;
-        //                 $attr->attribute = $attribute_data[$x]->id;
-        //                 $attr->terms_id = $ter->id;
-        //                 $attr->terms = $ter->terms_name;
-        //                 $attr->save();
-        //     }
-        //     }
-        //     }
+            foreach(explode(',', $request->attribute) as $id) {
+                $attribute_data[] = attribute::find($id);
+            }
+            if(count($attribute_data) > 0){
+                for ($x = 0; $x < count($attribute_data); $x++) {
+                    $attrName = $attribute_data[$x]->name;
+                    $ter = term::where('id',$request[$attrName])->first();
+                    $product_attribute = product_attribute::where('attribute',$attribute_data[$x]->id)->where('product_id',$request->product_page_id)->first();
+                    if(!isset($product_attribute)){
+                        $attr = new product_attribute;
+                        $attr->product_id = $request->product_page_id;
+                        $attr->group_id = $request->group;
+                        $attr->attribute = $attribute_data[$x]->id;
+                        $attr->terms_id = $ter->id;
+                        $attr->terms = $ter->terms_name;
+                        $attr->save();
+            }
+            }
+            }
 
-        //  }
-        //  $product_log = new product_log;
-        //  $product_log->product_id = $request->product_page_id;
-        //  $product_log->type ='Updated';
-        //  $product_log->employee_name = Auth::guard('admin')->user()->emp_name;
-        //  $product_log->save();
+         }
+         $product_log = new product_log;
+         $product_log->product_id = $request->product_page_id;
+         $product_log->type ='Updated';
+         $product_log->employee_name = Auth::guard('admin')->user()->emp_name;
+         $product_log->save();
 
         if($request->optionSet){
             $data = explode(',',$request->optionSet);
             $opGroup = optionGroup::where('product_id',$request->product_page_id)->get();
-            // foreach($data as $x){
-            //     $optionGroup = new optionGroup;
-            //     $optionGroup->product_id = $product->id;
-            //     $optionGroup->group_name = $request['optionSetRow'.$x];
-            //     $optionGroup->option_show_type = $request['option_show_type'.$x];
-            //     $optionGroup->save();
+            if(count($opGroup) >0){
+                foreach($data as $indexed => $datas){
+                    if(count($opGroup) > $indexed ){
+                        $optionGroup = optionGroup::find($opGroup[$indexed]->id);
+                        $optionGroup->group_name = $request['optionSetRow'.$datas];
+                        $optionGroup->option_show_type = $request['option_show_type'.$datas];
+                        $optionGroup->save();
+                        $opValue = optionValue::where('group_id',$opGroup[$indexed]->id)->get();
+                        foreach($request['optionName'.$datas] as $key =>$value){
+                            if(count($opValue) > $key){
+                                $optionValue = optionValue::find($opValue[$key]->id);
+                                $optionValue->name = $value;
+                                if(!$optionValue->home_option == 1){
+                                    $optionValue->current_price = $request['current_price'.$datas][$key-1];
+                                    $optionValue->additional_price = $request['additional_price'.$datas][$key-1];
+                                }
+                                $optionValue->save();
+                            }else{
+                                $optionValue = new optionValue;
+                                $optionValue->group_id = $optionGroup->id;
+                                $optionValue->name = $value;
+                                if($key !=0){
+                                    $optionValue->current_price = $request['current_price'.$datas][$key-1];
+                                    $optionValue->additional_price = $request['additional_price'.$datas][$key-1];
+                                }else{
+                                    $optionValue->home_option = '1';
+                                }
+                                $optionValue->save();
 
-                // foreach($request['optionName'.$x] as $key =>$value){
-                //     $optionValue = new optionValue;
-                //     $optionValue->group_id = $optionGroup->id;
-                //     $optionValue->name = $value;
-                //     if($key !=0){
-                //         $optionValue->current_price = $request['current_price'.$x][$key-1];
-                //         $optionValue->additional_price = $request['additional_price'.$x][$key-1];
-                //     }else{
-                //         $optionValue->home_option = '1';
-                //     }
-                //     $optionValue->save();
-                // }
-           // }
+                            }
+
+                        }
+
+                    }else{
+                        $optionGroup = new optionGroup;
+                        $optionGroup->product_id = $request->product_page_id;
+                        $optionGroup->group_name = $request['optionSetRow'.$datas];
+                        $optionGroup->option_show_type = $request['option_show_type'.$datas];
+                        $optionGroup->save();
+                        foreach($request['optionName'.$datas] as $key =>$value){
+                            $optionValue = new optionValue;
+                            $optionValue->group_id = $optionGroup->id;
+                            $optionValue->name = $value;
+                            if($key !=0){
+                                $optionValue->current_price = $request['current_price'.$datas][$key-1];
+                                $optionValue->additional_price = $request['additional_price'.$datas][$key-1];
+                            }else{
+                                $optionValue->home_option = '1';
+                            }
+                            $optionValue->save();
+                        }
+                    }
+                }
+            }else{
+                foreach($data as $x){
+                    $optionGroup = new optionGroup;
+                    $optionGroup->product_id = $request->product_page_id;
+                    $optionGroup->group_name = $request['optionSetRow'.$x];
+                    $optionGroup->option_show_type = $request['option_show_type'.$x];
+                    $optionGroup->save();
+
+                    foreach($request['optionName'.$x] as $key =>$value){
+                        $optionValue = new optionValue;
+                        $optionValue->group_id = $optionGroup->id;
+                        $optionValue->name = $value;
+                        if($key !=0){
+                            $optionValue->current_price = $request['current_price'.$x][$key-1];
+                            $optionValue->additional_price = $request['additional_price'.$x][$key-1];
+                        }else{
+                            $optionValue->home_option = '1';
+                        }
+                        $optionValue->save();
+                    }
+               }
+            }
+
 
         }
 
-        return response()->json($request);
+        //Custom QTY Module
+        $customqty = custom_qty::where('product_id',$request->product_page_id)->get();
+        if(count($customqty) > 0){
+            $countQTY =1;
+            foreach($request->customqty as $key => $data){
+                if(count($customqty) >= $countQTY){
+                    $custom_qty = custom_qty::find($customqty[$key]->id);
+                    $custom_qty->customqty = $data;
+                    $custom_qty->save();
+                }else{
+                $custom_qty = new custom_qty;
+                $custom_qty->product_id = $request->product_page_id;
+                $custom_qty->customqty = $data;
+                $custom_qty->save();
+                }
+                $countQTY++;
+            }
+
+        }else{
+            if(count($request->customqty) > 0){
+            foreach($request->customqty as $data){
+                $custom_qty = new custom_qty;
+                $custom_qty->product_id = $request->product_page_id;
+                $custom_qty->customqty = $data;
+                $custom_qty->save();
+            }
+        }
+        }
+
+        //units module
+       if(isset($request->units)){
+        foreach(explode(',',$request->units) as $id) {
+            $unit_data[] = unit::find($id);
+        }
+       }
+       if(count($unit_data) > 0){
+        foreach($unit_data as $units){
+            $product_unit = new product_unit;
+            $product_unit->unit_price = $request['unit'.$units->id];
+            $product_unit->unit_name = $units->unit_name;
+            $product_unit->product_id = $product->id;
+            $product_unit->unit_id = $units->id;
+            $product_unit->save();
+        }
     }
 
+        return response()->json($request->product_page_id);
+    }
+
+    //removeOption in product page
+    public function removeOption($id){
+        optionValue::find($id)->delete();
+        return response()->json(['message'=>'Option Remove Successfully Delete'],200);
+    }
+
+
+    public function removeCustomQty($id){
+        $custom_qty = custom_qty::find($id)->delete();
+        return response()->json(['message'=>'Custom QTY is Successfully Delete'],200);
+    }
+
+
+
+    //remove option Group with option
+    public function removeOptionGroup($id){
+        optionGroup::find($id)->delete();
+        optionValue::where('group_id',$id)->delete();
+        return response()->json(['message'=>'Option Row is Successfully Delete'],200);
+    }
 
     public function viewProduct(){
         $role = role::find(Auth::guard('admin')->user()->role_id);
@@ -641,15 +796,18 @@ class ProductController extends Controller
         foreach(explode(',', $product_find->related_product) as $row) {
             $related_product[] = $row;
         }
+        $customqty = custom_qty::where('product_id',$id)->get();
 
        //return response()->json($data);
+       $product_unit = product_unit::where('product_id',$id)->get();
        $role = role::find(Auth::guard('admin')->user()->role_id);
+       $units = unit::all();
        if(count($optionGroup) > 0){
         $optionGroupGetter = optionGroup::where('product_id',$id)->select('id')->get();
         $optionValue = optionValue::whereIn('group_id',$optionGroupGetter)->get();
-        return view('admin/editProduct',compact('optionGroup','optionValue','group','brand','product','category','attribute','product_attribute','product_find','tree_category','related_product','role'));
+        return view('admin/editProduct',compact('optionGroup','optionValue','group','brand','product','category','attribute','product_attribute','product_find','tree_category','related_product','role','customqty','product_unit','units'));
     }else{
-        return view('admin/editProduct',compact('optionGroup','group','brand','product','category','attribute','product_attribute','product_find','tree_category','related_product','role'));
+        return view('admin/editProduct',compact('optionGroup','group','brand','product','category','attribute','product_attribute','product_find','tree_category','related_product','role','customqty','product_unit','units'));
     }
 
     }
@@ -803,18 +961,23 @@ public function getProduct(){
             foreach($colors as $row){
                 $output .='  <div class="card mb-1 col-md-3">
                 <div class="card-content">
-                  <div class="bg-lighten-1 height-50" style="background-color:'.$row->color.'"></div>
+                  <div class="bg-lighten-1 height-50" style="background-color:'.$row->color.'">
+                  <span style="color: #fff;
+                  font-size: 16px;
+                  font-weight: 600;
+                  margin: 10px;">'.$row->price.' Rs</span></div>
                   <div class="p-1">
                     <p class="mb-0">
                       <strong>'.$row->name.'</strong>
                       <div class="text-muted float-right">
+
                           <div class="btn-group" role="group" aria-label="Third Group">
                               <button type="button" class="btn btn-icon btn-outline-warning" onclick="editColor('.$row->id.')"><i class="ft ft-edit"></i></button>
                               <button type="button" class="btn btn-icon btn-outline-danger" onclick="deleteColor('.$row->id.')"><i class="la la-trash"></i></button>
                           </div>
                       </div>
                     </p>
-                    <p class="mb-0">'.$row->price.'</p>
+                    <p class="mb-0">'.$row->code.'</p>
                   </div>
                 </div>
               </div>';
@@ -834,6 +997,7 @@ public function getProduct(){
         $colors->category = $request->category;
         $colors->price = $request->price;
         $colors->color = $request->color;
+        $colors->code = $request->code;
         $colors->save();
         return response()->json(['message'=>'Color Category Update Successfully'],200);
     }
@@ -842,6 +1006,7 @@ public function getProduct(){
         $colors->name = $request->name;
         $colors->price = $request->price;
         $colors->color = $request->color;
+        $colors->code = $request->code;
         $colors->save();
         return response()->json(['message'=>'Color Category Update Successfully'],200);
     }
@@ -854,5 +1019,57 @@ public function getProduct(){
     public function deleteColors($id){
         color::find($id)->delete();
         return response()->json(['message'=>'Color Category Delete Successfully'],200);
+    }
+
+    public function viewUnit(){
+        $units = unit::all();
+        return view('admin.unit',compact('units'));
+    }
+    public function editUnit($id){
+        $units = unit::find($id);
+        return response()->json($units);
+    }
+    public function deleteUnit($id){
+        unit::find($id)->delete();
+        return response()->json(['message'=>'Unit Delete Successfully'],200);
+    }
+    public function unitStore(Request $request){
+        $request->validate([
+            'unit_name'=>'required',
+        ]);
+        $units = new unit;
+        $units->unit_name = $request->unit_name;
+        $units->save();
+        return response()->json(['message'=>'Unit Save Successfully'],200);
+    }
+    public function unitUpdate(Request $request){
+        $request->validate([
+            'unit_name'=>'required',
+        ]);
+        $units = unit::find($request->id);
+        $units->unit_name = $request->unit_name;
+        $units->save();
+        return response()->json(['message'=>'Unit Update Successfully'],200);
+    }
+
+    //get unit
+    public function get_unit($id){
+      $data  = unit::find($id);
+      $output = '<div class="form-group" id="unitRow'.$data->id.'"><label for="projectinput1">'.$data->unit_name.' QTY Price</label>';
+      $output .='<a float="right" class="pull-right href="javascript:void(0)" onclick="RemoveUnit('.$data->id.')"><i class="ft-trash-2"></i></a>';
+      $output .='<input type="text" class="form-control" name="unit'.$data->id.'" id="unit'.$data->id.'">';
+      $output .='</div>';
+      echo $output;
+    }
+
+    public function productUnitDelete($id){
+        product_unit::find($id)->delete();
+        return response()->json(['message'=>'Unit Delete Successfully'],200);
+    }
+    public function productUnitUpdate($id,$data){
+        $product_unit = product_unit::find($id);
+        $product_unit->unit_price = $data;
+        $product_unit->save();
+        return response()->json(['message'=>'Unit Update Successfully'],200);
     }
 }

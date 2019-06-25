@@ -28,10 +28,10 @@ class OrderMailable extends Mailable
      */
     public function build()
     {
-        $address = $this->contactData['email'];
-        $name = $this->contactData['name'];
-        $subject = "Your Order ".''.$this->contactData['product_name'].' to be'.$this->contactData['status'];
-        return $this->view('email.order')
+        $address = $this->orderData['email'];
+        $name = $this->orderData['name'];
+        $subject = "Your Order ".''.$this->orderData['product_name'].' to be'.$this->orderData['status'];
+        return $this->view('email.test')
         ->from($address, $name)
         ->subject($subject);
     }

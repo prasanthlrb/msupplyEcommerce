@@ -31,31 +31,31 @@ class pageSettingController extends Controller
     $fileName = rand() . '.' . $image->getClientOriginalExtension();
     $image->move(public_path('ads/'), $fileName);
     $ads->ad_name = $fileName;
-    } 
+    }
         }else if($request->id == 2){
     if($request->file('firstInputImage')!=""){
     $image = $request->file('firstInputImage');
     $fileName = rand() . '.' . $image->getClientOriginalExtension();
     $image->move(public_path('ads/'), $fileName);
     $ads->ad_name = $fileName;
-    } 
+    }
         }else{
     if($request->file('firstInputImage')!=""){
     $image = $request->file('firstInputImage');
     $fileName = rand() . '.' . $image->getClientOriginalExtension();
     $image->move(public_path('ads/'), $fileName);
     $ads->ad_name = $fileName;
-    } 
+    }
         }
         $ads->url = $request->url;
         $ads->save();
-        return response()->json($request); 
+        return response()->json($request);
     }
 
     public function showSlider(){
         $slider= homeSlider::orderBy('position', 'ASC')->get();
         $role = role::find(Auth::guard('admin')->user()->role_id);
-        return view('admin.setting.slider',compact('slider'));
+        return view('admin.setting.slider',compact('slider','role'));
     }
 
     public function sliderSave(Request $request){
@@ -74,7 +74,7 @@ class pageSettingController extends Controller
        $slider->button_color = $request->button_color;
        $slider->button_y = $request->button_y;
        $slider->slider_position = $request->slider_position;
-       
+
        $slider->slider_image = $fileName;
        $slider->title_color = $request->title_color;
        $slider->title_y = $request->title_y;
@@ -154,7 +154,7 @@ class pageSettingController extends Controller
         $slider = homeSlider::find($id);
         $storeslider = array();
         if($slider->position > $index){
-          for ($i= $index; $i < $slider->position; $i++) { 
+          for ($i= $index; $i < $slider->position; $i++) {
               $num = $i;
             $slider_drop = homeSlider::where('position',$i)->first();
             $slider_drop->position = $num+1;
@@ -168,13 +168,13 @@ class pageSettingController extends Controller
           }
 
         }else{
-            for ($i= $index; $i > $slider->position; $i--) { 
+            for ($i= $index; $i > $slider->position; $i--) {
                 $num = $i;
               $slider_drop1 = homeSlider::where('position',$i)->first();
               $slider_drop1->position = $num-1;
              // $slider_drop->save();
              $storeslider[] = $slider_drop1;
-            } 
+            }
             foreach($storeslider as $row){
                 $slider_Update = homeSlider::find($row->id);
                 $slider_Update->position = $row->position;
@@ -184,8 +184,8 @@ class pageSettingController extends Controller
         $slider1 = homeSlider::find($id);
         $slider1->position = $index;
         $slider1->save();
-        return response()->json($storeslider); 
-       
+        return response()->json($storeslider);
+
     }
 
     public function homeLayout(){
@@ -210,7 +210,7 @@ class pageSettingController extends Controller
         }
         $layout->position = $position_count;
         $layout->save();
-        return response()->json($request); 
+        return response()->json($request);
     }
 
     public function EditLayout($id){
@@ -220,32 +220,32 @@ class pageSettingController extends Controller
         $output = '';
         if($layout->type == "products"){
             foreach(explode(',', $layout->product_id) as $row) {
-                $layout_collection[] = $row;        
+                $layout_collection[] = $row;
             }
             $layout->product_id = $layout_collection;
             foreach($product as $prod){
                 if(in_array($prod->id,$layout_collection)){
-                    $output .= '<option value="'.$prod->id.'" selected>'.$prod->product_name.'</option>'; 
+                    $output .= '<option value="'.$prod->id.'" selected>'.$prod->product_name.'</option>';
                 }else{
-                    $output .= '<option value="'.$prod->id.'">'.$prod->product_name.'</option>'; 
+                    $output .= '<option value="'.$prod->id.'">'.$prod->product_name.'</option>';
                 }
             }
         }else{
             foreach(explode(',', $layout->category_id) as $row) {
-                $layout_collection[] = $row;        
+                $layout_collection[] = $row;
             }
             $layout->category_id = $layout_collection;
             foreach($category as $cat){
                 if(in_array($cat->id,$layout_collection)){
-                    $output .= '<option value="'.$cat->id.'" selected>'.$cat->category_name.'</option>'; 
+                    $output .= '<option value="'.$cat->id.'" selected>'.$cat->category_name.'</option>';
                 }else{
-                    $output .= '<option value="'.$cat->id.'">'.$cat->category_name.'</option>'; 
+                    $output .= '<option value="'.$cat->id.'">'.$cat->category_name.'</option>';
                 }
             }
         }
-        
-        
-        return response()->json(array($layout,$output)); 
+
+
+        return response()->json(array($layout,$output));
     }
     public function UpdateLayout(Request $request){
         $layout =  home_product_layout::find($request->id);
@@ -257,9 +257,9 @@ class pageSettingController extends Controller
             $layout->category_id = collect($request->category)->implode(',');
         }
         $layout->save();
-        return response()->json($request); 
+        return response()->json($request);
     }
-    
+
     public function DeleteLayout($id){
         $layout = home_product_layout::find($id);
         $layoutAll = home_product_layout::all();
@@ -277,12 +277,12 @@ class pageSettingController extends Controller
         $layout1->delete();
         return response()->json("200");
     }
-    
+
     public function dropLayout($index,$id){
         $layout = home_product_layout::find($id);
         $storeLayout = array();
         if($layout->position > $index){
-          for ($i= $index; $i < $layout->position; $i++) { 
+          for ($i= $index; $i < $layout->position; $i++) {
               $num = $i;
             $layout_drop = home_product_layout::where('position',$i)->first();
             $layout_drop->position = $num+1;
@@ -296,13 +296,13 @@ class pageSettingController extends Controller
           }
 
         }else{
-            for ($i= $index; $i > $layout->position; $i--) { 
+            for ($i= $index; $i > $layout->position; $i--) {
                 $num = $i;
               $layout_drop1 = home_product_layout::where('position',$i)->first();
               $layout_drop1->position = $num-1;
              // $layout_drop->save();
              $storeLayout[] = $layout_drop1;
-            } 
+            }
             foreach($storeLayout as $row){
                 $layout_Update = home_product_layout::find($row->id);
                 $layout_Update->position = $row->position;
@@ -312,7 +312,7 @@ class pageSettingController extends Controller
         $layout1 = home_product_layout::find($id);
         $layout1->position = $index;
         $layout1->save();
-        return response()->json($storeLayout); 
-       
+        return response()->json($storeLayout);
+
     }
 }

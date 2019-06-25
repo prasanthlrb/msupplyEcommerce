@@ -24,6 +24,7 @@ use App\company;
 use App\review;
 use App\rating;
 use App\Mail\OrderMailable;
+use Illuminate\Support\Facades\Mail;
 use PDF;
 use App\Contactinfo;
 
@@ -344,7 +345,7 @@ class AccountController extends Controller
                 $output = '<h5 class="button_grey">Own Transport</h5>';
             }
             return view('checkout', compact('getCart', 'product_data', 'shipping', 'billing', 'output', 'result', 'totalPrice', 'transport_Price'));
-            //return response()->json($result); 
+            //return response()->json($result);
             //print $result;
         } else {
             return redirect('/shipping');
@@ -355,7 +356,7 @@ class AccountController extends Controller
     {
         $transport = transport::all();
         //return response()->json($transport);
-        //return response()->json($transport_exits); 
+        //return response()->json($transport_exits);
         // $transport_exits = Session::get('transport');
         if (Session::has('transport')) {
             return redirect('/checkout');
@@ -379,6 +380,8 @@ class AccountController extends Controller
     //order to be placed
     public function orderPlaced($id, $ship, $bill)
     {
+        $payTotal =0;
+        $orderIDdetails=array();
         $getCart = Cart::getContent();
         foreach ($getCart as $item) {
             $product_id[] = $item->id;
@@ -389,6 +392,7 @@ class AccountController extends Controller
             $order_item = new order_item; //order item create
             $cart_qty = Cart::get($row->id);
             $item_total = $cart_qty->quantity * $row->sales_price;
+
             if ($row->tax_type == "in") {
                 $tax = round($item_total * $row->tax / (100 + $row->tax), 2);
                 $order_item->tax_type = "inclusive";
@@ -396,6 +400,7 @@ class AccountController extends Controller
                 $order_item->tax_percent = $row->tax;
                 $order_item->total_price = $item_total;
                 $order->total_amount = $item_total;
+                $payTotal+=$item_total;
             } else {
                 $tax = $item_total * $row->tax / 100;
                 $total = $item_total + $tax;
@@ -404,6 +409,7 @@ class AccountController extends Controller
                 $order_item->tax_percent = $row->tax;
                 $order_item->total_price = $total;
                 $order->total_amount = $total;
+                $payTotal+=$total;
             }
 
             if (Session::has('transport')) {
@@ -428,6 +434,7 @@ class AccountController extends Controller
             $order->payment_type = $id;
             $order->transport_type = $transport_type;
             $order->save();
+            $orderIDdetails[] += $order->id;
             //order item store
             $order_item->product_name = $row->product_name;
             $order_item->sales_price = $row->sales_price;
@@ -469,7 +476,30 @@ class AccountController extends Controller
                 $order_transport->save();
             }
         }
-        return redirect('account/dashboard');
+
+        $api = new \Instamojo\Instamojo(
+            config('services.instamojo.api_key'),
+            config('services.instamojo.auth_token'),
+            config('services.instamojo.url')
+        );
+
+    try {
+        $response = $api->paymentRequestCreate(array(
+            "purpose" => "Online SHOPING",
+            "amount" => $payTotal,
+            "buyer_name" => Auth::user()->name,
+            "send_email" => true,
+            "email" => Auth::user()->email,
+            "phone" => Auth::user()->phone,
+            "redirect_url" => "http://127.0.0.1:8000/pay-success"
+            ));
+
+            header('Location: ' . $response['longurl']);
+            exit();
+    }catch (Exception $e) {
+        print('Error: ' . $e->getMessage());
+    }
+        //return redirect('account/dashboard');
     }
 
     public function orders()
@@ -554,7 +584,7 @@ class AccountController extends Controller
         $company->gst = $request->gst;
         $company->gst_doc = $fileName;
         $company->save();
-        //return response()->json($request->hasFile('gst_doc')); 
+        //return response()->json($request->hasFile('gst_doc'));
         return redirect('/account/company-verify');
     }
 
@@ -639,7 +669,7 @@ class AccountController extends Controller
     public function deleteAddress($id)
     {
         $order_detail = order_detail::find($id);
-        //return view('customer.editShipping'); 
+        //return view('customer.editShipping');
         $order_detail->delete();
         return back()->withInput();
     }
@@ -787,7 +817,7 @@ class AccountController extends Controller
         return view('customer.singleOrder',compact('order','order_items','billing','shipping','product','review','rating'));
     }
 
-    //review 
+    //review
     public function review(){
         $id=Auth::user()->id;
         $review = DB::table('reviews')
@@ -834,11 +864,16 @@ class AccountController extends Controller
         //     $message->to('prasanthbca7@gmail.com','To LRB')->subject($all['cf_order_number']);
         //     $message->from('prasanthats@gmail.com','To Prasanth');
         // });
-        //  $orderData = $request->all();
-        // Mail::to($contactData['cf_email'])->send(new OrderMailable($orderData));
-        //return 'Email was sent';
-        return response()->json(['message'=>'Successfully Send'],200); 
-        //return response()->json($contactData['cf_email']); 
+          $orderData = array(
+              'email'=>'prasanthats@gmail.com',
+              'name'=>'prasanth',
+              'product_name'=>'Tiles',
+              'status'=>'Order Placed'
+          );
+       Mail::to('prasanthats@gmail.com')->send(new OrderMailable($orderData));
+        return 'Email was sent';
+        // return response()->json(['message'=>'Successfully Send'],200);
+        //return response()->json($orderData);
     }
 
     public function orderCancel($id){
@@ -857,6 +892,38 @@ class AccountController extends Controller
         $pdf->setPaper('A4', 'portrait');
         return $pdf->stream('order.pdf');
         // return view('customer.printOrder',compact('order','billing'));
+    }
+
+    public function verifyOrder(){
+        try{
+            $six_digit_random_number = mt_rand(100000, 999999);
+            $msg = 'Your Checkout Verification code is '.$six_digit_random_number;
+            $requestParams = array(
+                'route' => '2',
+                'api-token' => '25p83e9*wu.0szd_4),7hyaokirlfbnvgcxj1mqt',
+                'sender' => 'KASMDU',
+                'numbers' => Auth::user()->phone,
+                'message' => $msg,
+            );
+            //merge API url and parameters
+            $apiUrl = "http://smspro.co.in/httpapi/v1/sendsms?";
+            foreach($requestParams as $key => $val){
+                $apiUrl .= $key.'='.urlencode($val).'&';
+            }
+            $apiUrl = rtrim($apiUrl, "&");
+
+            //API call
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $apiUrl);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_exec($ch);
+            curl_close($ch);
+            return response()->json($six_digit_random_number);
+               }
+               catch(Exception  $e){
+                   return response()->json($e->getMessage());
+               }
+
     }
 
 }

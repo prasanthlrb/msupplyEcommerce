@@ -30,7 +30,7 @@
 		============================================ -->
 		 <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/plugins/extensions/toastr.css')}}">
   		 <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/extensions/toastr.css')}}">
-		
+
 		<!-- Theme CSS
 		============================================ -->
 		<link rel="stylesheet" href="{{ asset('js/rs-plugin/css/settings.css')}}">
@@ -47,12 +47,12 @@
 		<!--[if lte IE 9]>
 			<link rel="stylesheet" type="text/css" href="{{ asset('css/oldie.css')}}">
         <![endif]-->
-      
+
         @yield('extra-css')
 	</head>
 	<body class="front_page promo_popup">
 
-		
+
 
 		<!-- - - - - - - - - - - - - - Main Wrapper - - - - - - - - - - - - - - - - -->
 
@@ -74,24 +74,24 @@
 
 								<!-- - - - - - - - - - - - - - Login - - - - - - - - - - - - - - - - -->
 
-								
 
 
-								 
-												@if(Auth::user())										
+
+
+												@if(Auth::user())
 												<p><b>Hello </b> <i style="color:#ff4557">{{Auth::user()->name}}</i>
 												<a href="{{ route('logout') }}" onclick="event.preventDefault();
 													document.getElementById('logout-form').submit();">
 									    Logout</a> </p>
-												
-									
+
+
 																		<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
 																			@csrf
 																		</form>
 												@else
 												<p>Welcom visitor <a href="/login">Login</a> or <a href="/register">Register</a></p>
 												@endif
-																
+
 
 								<!-- - - - - - - - - - - - - - End login - - - - - - - - - - - - - - - - -->
 
@@ -100,14 +100,14 @@
 							<div class="col-lg-6 col-md-5 col-sm-4">
 
 								<div class="clearfix">
-                                    
+
 									<!-- - - - - - - - - - - - - - Language change - - - - - - - - - - - - - - - - -->
 
 									<div class="alignright site_settings">
                                             <img src="{{ asset('/images/android-app-alt.png')}}" alt="" width="71px">
                                             <img src="{{ asset('/images/app-store.png')}}" alt="" width="71px">
-									
-{{--                                         
+
+{{--
 										<ul class="dropdown site_setting_list language">
 
 											<li class="animated_item"><a href="#"><img src="{{ asset('images/flag_en.jpg')}}" alt=""> English</a></li>
@@ -119,7 +119,7 @@
 									</div><!--/ .alignright.site_settings-->
 
 									<!-- - - - - - - - - - - - - - End of language change - - - - - - - - - - - - - - - - -->
-									
+
 									<!-- - - - - - - - - - - - - - Currency change - - - - - - - - - - - - - - - - -->
 
 									<div class="alignright site_settings currency">
@@ -147,7 +147,7 @@
 					</div><!--/ .container -->
 
 				</div><!--/ .top_part -->
-				
+
 				<!-- - - - - - - - - - - - - - End of top part - - - - - - - - - - - - - - - - -->
 
 				<hr>
@@ -194,16 +194,16 @@
 
 									<!-- - - - - - - - - - - - - - Search form - - - - - - - - - - - - - - - - -->
 
-									
+
 									<form action="/filter" method="post" class="clearfix search type_2">
-									
+
 										<input value="{{old('search')}}" type="text" name="search" tabindex="1" placeholder="Search..." class="alignleft">
 										{{ csrf_field() }}
 										<!-- - - - - - - - - - - - - - Categories - - - - - - - - - - - - - - - - -->
-										
+
 											<div class="custom_select search_category alignleft ">
 										<style>
-										
+
 										</style>
 												<select class="manual" style="border: 1px solid #ffffff;" name="website_main_category">
 													<option>All Categories</option>
@@ -258,7 +258,7 @@
 
 										<ul class="theme_menu cats dropdown">
 
-										
+
 
 												<!-- - - - - - - - - - - - - - Mega menu - - - - - - - - - - - - - - - - -->
 
@@ -304,7 +304,7 @@
 																@else
 														<li><a href='/category/{{$item->id}}'><span>{{$item->category_name}}</span></a></li>
 																@endif
-															 
+
 															 @endforeach
 															 <!-- First Menu End -->
 														</ul>
@@ -312,11 +312,11 @@
 	</div>
 												<!-- - - - - - - - - - - - - - End of mega menu - - - - - - - - - - - - - - - - -->
 
-                                         
 
-											
 
-											
+
+
+
 									{{--  <li class="has_megamenu animated_item"><a href="#" class="all"><b>All Categories</b></a></li>  --}}
 
 										</ul>
@@ -336,12 +336,12 @@
 											<ul>
 
 												<li class="home_menu"><a href="/">Home</a></li>
-											
+
 												<li class="account_menu"><a href="/account/dashboard">My Account</a></li>
 												<li class="cart_menu"><a href="/cart">Shopping Cart</a></li>
 												<li class="checkout_menu"><a href="/transports">Checkout</a></li>
 												<li class="contact_menu"><a href="/contact">Contact Us</a></li>
-											
+
 
 											</ul>
 
@@ -354,22 +354,22 @@
 									<!-- - - - - - - - - - - - - - Navigation item - - - - - - - - - - - - - - - - -->
 
 									<div class="nav_item size_4">
-										@if(Auth::user())	
+										@if(Auth::user())
 										<a href="/account/wishlist" class="wishlist_button" data-amount="{{count(App\wishlist::where('user',Auth::user()->id)->get())}}"></a>
 										@else
 										<a href="/account/wishlist" class="wishlist_button" data-amount="0"></a>
 										@endif
 									</div><!--/ .nav_item-->
 
-									
+
 									<div class="nav_item size_4">
 
 										<a href="/compare" class="compare_button" data-amount="{{Session::has('compare') ? count(Session::get('compare')) : '0'}}" id="compare_button"></a>
-										
+
 									</div><!--/ .nav_item-->
 									<!-- - - - - - - - - - - - - - End of main navigation - - - - - - - - - - - - - - - - -->
 
-								
+
 
 									<!-- - - - - - - - - - - - - - Navigation item - - - - - - - - - - - - - - - - -->
 									<div class="nav_item size_3">
@@ -383,12 +383,12 @@
 
 										<div class="shopping_cart dropdown active visible" id="cart-menu">
 
-												
+
 
 											</div><!--/ .shopping_cart.dropdown-->
-										
+
 										<!-- - - - - - - - - - - - - - End of products list - - - - - - - - - - - - - - - - -->
-										
+
 									</div><!--/ .nav_item-->
 
 
@@ -409,7 +409,7 @@
 				<!-- - - - - - - - - - - - - - End of main navigation wrapper - - - - - - - - - - - - - - - - -->
 
 			</header>
-			
+
 			<!-- - - - - - - - - - - - - - End Header - - - - - - - - - - - - - - - - -->
 
 			@yield('content')
@@ -456,7 +456,7 @@
 						</ul><!--/ .infoblocks_wrap.section_offset.clearfix-->
 
 					</div><!--/ .infoblocks_container -->
-						
+
 					<!-- - - - - - - - - - - - - - End of infoblocks - - - - - - - - - - - - - - - - -->
 
 				</div><!--/ .container -->
@@ -533,7 +533,7 @@
 									<!-- - - - - - - - - - - - - - End social icons list - - - - - - - - - - - - - - - - -->
 
 								</section>
-								
+
 								<!-- - - - - - - - - - - - - - End of about us widget - - - - - - - - - - - - - - - - -->
 
 							</div><!--/ [col]-->
@@ -558,9 +558,9 @@
 									</ul>
 
 								</section><!--/ .widget-->
-								
+
 								<!-- - - - - - - - - - - - - - End of information widget - - - - - - - - - - - - - - - - -->
-							
+
 							</div><!--/ [col]-->
 
 							<div class="col-md-2 col-sm-6">
@@ -613,7 +613,7 @@
 
 								<!-- - - - - - - - - - - - - - Blog widget - - - - - - - - - - - - - - - - -->
 
-							
+
 
 								<!-- - - - - - - - - - - - - - End of blog widget - - - - - - - - - - - - - - - - -->
 
@@ -649,10 +649,10 @@
 							<li><img src="/images/payment_8.png" alt=""></li>
 
 						</ul>
-						
+
 						<!-- - - - - - - - - - - - - - End of payments - - - - - - - - - - - - - - - - -->
 
-						
+
 						<p class="copyright">&copy; {{date('Y')}} <a href="index.html">K.A.S Housing Pvt Ltd</a>. All Rights Reserved.</p>
 						<p>Development &amp; Maintenance By <a href="http://lrbtech.com"> LRB INFO TECH</a></p>
 
@@ -663,11 +663,11 @@
 				<!-- - - - - - - - - - - - - - End footer section - - - - - - - - - - - - - - - - -->
 
 			</footer>
-			
+
 			<!-- - - - - - - - - - - - - - End Footer - - - - - - - - - - - - - - - - -->
 
 		</div><!--/ [layout]-->
-		
+
 		<!-- - - - - - - - - - - - - - End Main Wrapper - - - - - - - - - - - - - - - - -->
 
 		<!-- - - - - - - - - - - - - - Social feeds - - - - - - - - - - - - - - - - -->
@@ -679,7 +679,7 @@
 
 			<!-- - - - - - - - - - - - - - End of Facebook - - - - - - - - - - - - - - - - -->
 
-		
+
 
 			<!-- - - - - - - - - - - - - - Contact us - - - - - - - - - - - - - - - - -->
 
@@ -694,7 +694,7 @@
 						<h3 class="title">Contact Us</h3>
 
 					</div><!--/ .animated_item-->
-					 
+
 					<div class="animated_item">
 
 						{{-- <p class="form_caption">Lorem ipsum dolor sit amet, adipis mauris accumsan.</p> --}}
@@ -741,7 +741,7 @@
 									</div>
 
 								</li>
-								
+
 								<li class="row">
 
 									<div class="col-xs-12">
@@ -779,9 +779,9 @@
 						<h3 class="title">Store Location</h3>
 
 					</div><!--/ .animated_item-->
-					 
+
 					<div class="animated_item">
-						
+
 						<p class="c_info_location">{{$setting->address}}</p>
 
 						<div class="proportional_frame">
@@ -811,7 +811,7 @@
 					</div><!--/ .animated_item-->
 
 				</section><!--/ .dropdown-->
-			
+
 			</li>
 
 			<!-- - - - - - - - - - - - - - End google map - - - - - - - - - - - - - - - - -->
@@ -819,7 +819,7 @@
 		</ul>
 
 		<!-- - - - - - - - - - - - - - End Social feeds - - - - - - - - - - - - - - - - -->
-		
+
 		<!-- Include Libs & Plugins
 		============================================ -->
 		<script src="{{asset('js/jquery-2.1.1.min.js')}}"></script>
@@ -831,7 +831,7 @@
 		<script src="{{asset('js/jquery.countdown.plugin.min.js')}}"></script>
 		<script src="{{asset('js/jquery.countdown.min.js')}}"></script>
 		<script src="{{asset('js/arcticmodal/jquery.arcticmodal.js')}}"></script>
-		 <script src="{{asset('twitter/jquery.tweet.min.js')}}"></script> 
+		 <script src="{{asset('twitter/jquery.tweet.min.js')}}"></script>
 		<script src="{{asset('js/colorpicker/colorpicker.js')}}"></script>
 		<script src="{{asset('js/retina.min.js')}}"></script>
 		<script type="text/javascript" src="http://s7.addthis.com/js/300/addthis_widget.js"></script>
@@ -844,12 +844,12 @@
 		============================================ -->
 		<script src="{{ asset('app-assets/js/scripts/extensions/toastr.js')}}" type="text/javascript"></script>
 		<script src="{{ asset('app-assets/vendors/js/extensions/toastr.min.js')}}" type="text/javascript"></script>
-		
+
 	</body>
 	@yield('extra-js')
 	<script>
 		$(document).ready(function(){
-		$.ajax({        
+		$.ajax({
 			url : '/get-cart',
 			type: "GET",
 			success: function(data)
@@ -861,7 +861,7 @@
 		});
 	});
 	$('#open_shopping_cart').on('click',function(){
-		$.ajax({        
+		$.ajax({
 			url : '/cart-menu/',
 			type: "GET",
 			success: function(data)
@@ -872,22 +872,22 @@
 	});
 	function removeCartItem(id){
 	var route = $('#routes').val();
-	$.ajax({        
+	$.ajax({
         url : '/remove-cart/'+id,
         type: "GET",
         success: function(data)
         {
 			//if(route == 'cart'){
-			
+
 			//}
-			
+
 			CartMenuUpdate();
-			
+
         }
    });
 }
 function addCompare(id){
-	$.ajax({        
+	$.ajax({
 			url : '/add-compare/'+id,
 			type: "GET",
 			success: function(data)
@@ -905,12 +905,12 @@ function addCompare(id){
 function addWishlist(id){
 	try{
 
-	$.ajax({        
+	$.ajax({
 			url : '/add-wishlist/'+id,
 			type: "GET",
 			success: function(data)
 			{
-				
+
 				if(data[0] ==1){
 
 					toastr.success('Successfully', 'Product Added to Wishlist');
@@ -918,23 +918,23 @@ function addWishlist(id){
 					toastr.error('Exists', 'This Product Already Added');
 				}
 				$('.wishlist_button').attr("data-amount",data[1]);
-				
+
 			},error: function (data) {
-               
+
                     toastr.error('', 'Please Login to Access');
-                  
+
                 }
 	   });
 	}catch(e){
 		alert(e.message)
 	}
 }
-function addCart(id){
-                var qty  = $('#button_qty').val();
-			$.ajax({
+
+
+    function setCart(id,qty){
+        $.ajax({
 			  url : '/add-cart/'+id+'/'+qty,
               type: "GET",
-            dataType: "JSON",
              success: function(data)
 				{
 					if(data[0] == 0){
@@ -945,19 +945,17 @@ function addCart(id){
 						toastr.error('We Have a Limited Quantity, Please Enter Available Stock Only');
 					}
 					console.log(data);
-				//  $('.total_price').text(data[0]);
-				// 	 $('#open_shopping_cart').attr("data-amount",data[1]);
-					// window.location.href = "/cart";
-					// CartMenuUpdate();
 				},error: function (data) {
-               
+
 							 toastr.error('We Have a Limited Quantity, Please Enter Available Stock Only');
-						 
+
 					 }
 			});
-	}
+    }
+
+
 	function CartMenuUpdate(){
-		$.ajax({        
+		$.ajax({
 			url : '/get-cart',
 			type: "GET",
 			success: function(data)
@@ -979,7 +977,7 @@ function addCart(id){
 		processData: false,
 		dataType: "JSON",
 		success: function(data)
-		{          
+		{
 			 $("#contact_side_form")[0].reset();
 			 toastr.success('Mail Send Successfully', 'Successfully Send');
 		},

@@ -202,10 +202,21 @@
                                         <a class="nav-link" id="baseVerticalLeft2-tab7" data-toggle="tab" aria-controls="tabVerticalLeft27"
                                         href="#tabVerticalLeft27" aria-expanded="false"><i class="la la-bank"></i> TAX</a>
                                       </li>
+
                                       <li class="nav-item">
                                         <a class="nav-link" id="baseVerticalLeft2-tab8" data-toggle="tab" aria-controls="tabVerticalLeft28"
                                         href="#tabVerticalLeft28" aria-expanded="false"><i class="ft-layout"></i> Options</a>
                                       </li>
+                                      <li class="nav-item">
+                                            <a class="nav-link" id="baseVerticalLeft2-tab9" data-toggle="tab" aria-controls="tabVerticalLeft29"
+                                            href="#tabVerticalLeft29" aria-expanded="false"><i class="ft-layers"></i> Custom Qty</a>
+                                          </li>
+
+                                          <li class="nav-item">
+                                            <a class="nav-link" id="baseVerticalLeft2-tab10" data-toggle="tab" aria-controls="tabVerticalLeft30"
+                                            href="#tabVerticalLeft30" aria-expanded="false"><i class="ft-folder"></i> Units</a>
+                                          </li>
+
                                 <li class="nav-item">
                                     <a class="nav-link" id="baseVerticalLeft2-tab6" data-toggle="tab" aria-controls="tabVerticalLeft26" href="#tabVerticalLeft26" aria-expanded="false"><i class="la la-gear"></i> Advanced</a>
                                 </li>
@@ -221,6 +232,10 @@
                                     <div class="form-group" style="padding-left:10px">
                                         <label for="projectinput1">sales price</label>
                                         <input type="text" id="sales_price" class="form-control" name="sales_price" value="{{$product_find->sales_price}}">
+                                    </div>
+                                    <div class="form-group" style="padding-left:10px">
+                                        <label for="projectinput1">Order Limits</label>
+                                        <input type="text" id="order_limit" class="form-control" name="order_limit" value="{{$product_find->order_limit}}">
                                     </div>
 
                                 </div>
@@ -242,10 +257,23 @@
 
                                 </div>
                                 <div class="tab-pane tap4" id="tabVerticalLeft23" aria-labelledby="baseVerticalLeft2-tab3" style="padding:30px">
-                                    <div class="form-group">
-                                        <label for="projectinput1">Weight (kg)</label>
-                                        <input type="text" class="form-control" name="weight" id="weight" value="{{$product_find->weight}}">
+
+
+                                    <div class="row">
+                                            <div class="col-md-6">
+
+                                            <label for="projectinput1">Weight (kg)</label>
+                                            <input type="text" class="form-control" name="weight" id="weight" value="{{$product_find->weight}}">
+                                          </div>
+
+                                            <div class="col-md-6">
+
+                                            <label for="projectinput1">No of Items</label>
+                                            <input type="text" class="form-control" name="items" id="items" value="{{$product_find->items}}">
+                                          </div>
+
                                     </div>
+
                                     <div class="form-group" style="padding-left:10px">
                                         <label for="projectinput1">Dimensions (cm)</label>
                                         <div class="row">
@@ -349,15 +377,19 @@
                                                         </div>
                                                      </div>
                                                      <div class="option1">
+                                                         <?php $itMoreTwo = 1?>
                                                      @foreach($optionValue as $values)
                                                      @if($values->group_id == $row->id)
-                                                     @if($values->home_option == '1')
+                                                 @if($values->home_option == '1')
                                                     <div class="form-group row">
                                                     <div class="col-4">
                                                         <input type="text" class="form-control" name="optionName{{$line}}[]" value="{{$values->name}}">
                                                     </div>
                                                     </div>
                                                 @else
+
+                                                @if($itMoreTwo >2)
+                                                <div id="optionLine{{$line}}of{{$itMoreTwo}}"><i class="ft-minus-circle text-danger" style="float:right;cursor:pointer" onclick="removeOptionPage({{$line}},{{$itMoreTwo}},{{$values->id}})"></i>
                                                 <div class="form-group row">
                                                 <div class="col-4">
                                                     <input type="text" class="form-control" name="optionName{{$line}}[]" value="{{$values->name}}">
@@ -369,27 +401,43 @@
                                                     <input type="text" class="form-control" name="additional_price{{$line}}[]" value="{{$values->additional_price}}">
                                                 </div>
                                             </div>
+                                            </div>
+                                            @else
+                                            <div class="form-group row">
 
+                                                <div class="col-4">
+                                                    <input type="text" class="form-control" name="optionName{{$line}}[]" value="{{$values->name}}">
+                                                    </div>
+                                                <div class="col-4">
+                                                    <input type="text" class="form-control" name="current_price{{$line}}[]" value="{{$values->current_price}}">
+                                                    </div>
+                                                <div class="col-4">
+                                                    <input type="text" class="form-control" name="additional_price{{$line}}[]" value="{{$values->additional_price}}">
+                                                </div>
+                                            </div>
                                             @endif
                                             @endif
+                                            <?php $itMoreTwo +=1;?>
+                                            @endif
+
                                             @endforeach
 
                                             <div id="optionPlace{{$line}}">
                                                 </div>
                                                 <button class="btn btn-default" type="button" onclick="addOption({{$line}})">Add Option</button>
-                                                <button class="btn btn-danger float-right" type="button" onclick="removeOptionSet({{$line}})">Remove Option Set</button><hr></div>
+                                                <button class="btn btn-danger float-right" type="button" onclick="removeOptionPage({{$line}},{{$row->id}})">Remove Option Set</button><hr></div>
                                                 <?php
                                                 $line++;
                                                 ?>
                                                 @endforeach
 
-
-                                                @endif
+                                            </div>
                                         </div>
-                                    </div></div>
-                                </div>
+                                                @endif
 
 
+                                      </div>
+                            </div>
 
                                 <div class="tab-pane" id="tabVerticalLeft26" aria-labelledby="baseVerticalLeft2-tab6">
                                     <div class="dropdown-item">
@@ -417,6 +465,61 @@
                                         <label for="switchery5" class="card-title ml-1">Enable The Color Option</label>
                                     </div>
                                 </div>
+
+                                 {{-- Custom Quantity --}}
+                                 <div class="tab-pane p-2" id="tabVerticalLeft29" aria-labelledby="baseVerticalLeft2-tab9">
+                                        <button class="btn btn-primary float-right" type="button" id="addCustomQty"> Add Custom Qty</button>
+                                        @if(count($customqty) >0)
+                                        <?php $cx=1?>
+                                        @foreach($customqty as $data)
+                                 <div id="customQTY{{$cx}}">
+                                                <div class="form-group row">
+                                                <div class="col-4"><input type="text" class="form-control" name="customqty[]" value="{{$data->customqty}}"></div>
+                                                <div class="col-4"><i class="ft-minus-circle text-danger" onclick="removeCustomqtyLive({{$cx}},{{$data->id}})"></i></div>
+                                                </div></div>
+                                                <?php $cx++?>
+                                                @endforeach
+
+                                                @endif
+                                        <div id="CustomQtyPlace"></div>
+                                    </div>
+
+
+                                     {{-- Units Module --}}
+                                <div class="tab-pane p-2" id="tabVerticalLeft30" aria-labelledby="baseVerticalLeft2-tab10">
+
+                                    <div class="form-group">
+                                        <label for="projectinput6">Select Units</label>
+                                        <div class="">
+                                          <select style="width:100%" name="select_units" id="select_units" class="form-control col-md-12" >
+                                          <option value="">Select The Units</option>
+                                          @if(count($product_unit) > 0)
+                                            <?php
+                                        foreach ($product_unit as $key => $value) {
+                                           $unit_value[]= $value->unit_id;
+                                        }
+                                            ?>
+                                                @foreach($units as $unit)
+                                                <option {{in_array($unit->id, $unit_value) ? 'disabled' : ''}} value="{{$unit->id}}">{{$unit->unit_name}}</option>
+                                                @endforeach
+                                          @else
+                                          @foreach($units as $unit)
+                                          <option value="{{$unit->id}}">{{$unit->unit_name}}</option>
+                                          @endforeach
+                                          @endif
+
+                                          </select>
+                                        </div>
+                                        <br>
+                                        @foreach($product_unit as $data)
+                                        <div class="form-group" id="unitRow'.$data->unit_id.'"><label for="projectinput1">{{$data->unit_name}} QTY Price</label>
+                                            <a float="right" class="pull-right href="javascript:void(0)" onclick="RemoveUnitSpecial({{$data->unit_id}},{{$data->id}})"><i class="ft-trash-2"></i></a>
+                                        <input type="text" class="form-control" name="unit{{$data->unit_id}}" id="unit{{$data->unit_id}}" value="{{$data->unit_price}}">
+                                        </div>
+                                        @endforeach
+                                        <div id="show_units"></div>
+                                    </div>
+
 
                             </div>
                         </div>
@@ -563,16 +666,41 @@
 <script>
     var attributes = [];
     var addOptionSet = [];
+    var qtyData = []
+    var units = [];
+
     $('.catalog-menu').addClass('active');
+    var qtyid ="<?php echo count($customqty) ?>";
     var addOptionSetLocal = "<?php echo count($optionGroup) >0 ? count($optionGroup) +1 : '1' ?>";
 </script>
+
+@foreach($unit_value as $value)
+<script>
+units.push("<?php echo $value ?>");
+</script>
+@endforeach
+
+<script>
+if(qtyid >0){
+for(let i=1;i<qtyid;i++){
+    qtyData.push(i)
+}
+}else{
+    qtyid =1;
+}
+console.log(qtyData)
+</script>
+
 @if(count($optionGroup) > 0)
 <?php
 $xy=1;
 foreach ($optionGroup as $key => $value) {
  ?>
 <script>
+
+
         addOptionSet.push("<?php echo $xy ?>");
+
     </script>
 
 <?php
@@ -590,9 +718,8 @@ $xy++;
 </script>
 @endforeach
 <script>
-    setTimeout(()=>{
-        console.log(addOptionSet);
-    },5000)
+
+console.log(units)
    $(document).ready(function() {
    $.ajax({
             url:'/admin/get_edit_attribute/'+{!!$product_find->id!!},
@@ -622,6 +749,7 @@ $xy++;
         product_form_data.append("attribute", attributes);
         product_form_data.append("product_page_id", product_page_id);
         product_form_data.append("optionSet", addOptionSet);
+        product_form_data.append("units", units);
         //   product_form_data.append('regular_price',regular_price);
         //   product_form_data.append('sales_price',sales_price);
         //   product_form_data.append('sku',sku);
@@ -675,7 +803,7 @@ $xy++;
 
                 toastr.success('Product Store Successfully', 'Successfully Save');
                 //location.reload();
-              //  CallDropZone();
+                CallDropZone();
 
 
             },
@@ -917,6 +1045,126 @@ var option = '<div id="optionLine'+id+'of'+optionLineCount+'"><i class="ft-minus
 function removeOptionLabel(parent,child){
     $("#optionLine"+parent+'of'+child).remove();
 }
+function removeOptionPage(parent,child,id){
+    if(confirm('Are you sure? delete this Options?'))
+  {
+    $("#optionLine"+parent+'of'+child).remove();
+    $.ajax({
+            url:'/admin/remove-option/'+id,
+            type: "GET",
+            success: function(data) {
+                toastr.success(data['message']);
+            }
+    });
+  }
+}
+function removeOptionPage(id,group){
+    if(confirm('Are you sure? delete this Row?'))
+  {
+    addOptionSet = jQuery.grep(addOptionSet, function(value) {
+      return value != id;
+    });
+    $('#optionsetRow'+id).remove();
+    $.ajax({
+            url:'/admin/remove-option-group/'+group,
+            type: "GET",
+            success: function(data) {
+                toastr.success(data['message']);
+            }
+    });
+  }
+}
+
+// Custom Quantity
+
+$('#addCustomQty').click(()=>{
+    var qty = '<div id="customQTY'+qtyid+'">'+
+    '<div class="form-group row">'+
+    '<div class="col-4"><input type="text" class="form-control" name="customqty[]" placeholder="Enter Your Custom QTY"></div>'+
+    '<div class="col-4"><i class="ft-minus-circle text-danger" onclick="removeCustomqty('+qtyid+')"></i></div>'+
+    '</div></div>';
+    qtyData.push(qtyid);
+    qtyid++;
+    $('#CustomQtyPlace').append(qty);
+});
+
+function removeCustomqtyLive(row,id){
+    if(confirm('Are you sure delete this Custom Qty?'))
+  {
+    $.ajax({
+            url:'/admin/remove-custom-qty/'+id,
+            type: "GET",
+            success: function(data) {
+    qtyData = jQuery.grep(qtyData, function(value) {
+      return value != row;
+    });
+    $("#customQTY"+row).remove();
+            }
+    });
+}
+}
+
+function removeCustomqty(id){
+
+    if(confirm('Are you sure delete this Custom Qty?'))
+  {
+    qtyData = jQuery.grep(qtyData, function(value) {
+      return value != id;
+    });
+    $("#customQTY"+id).remove();
+  }
+}
+
+//units modules
+$("#select_units").on("change", function(){
+
+var id = $('#select_units').val();
+console.log(id)
+units.push(id);
+  $.ajax({
+      url : '/admin/get-unit/'+id,
+      type: "GET",
+      success: function(data)
+      {
+          $('#select_units').val('');
+        $("#select_units option[value=" + id + "]").prop("disabled", true);
+        $( "#show_units" ).after(function() {
+          //$('#show_units').html(data);
+          return "<div>" + data + "</div>";
+        });
+      }
+ });
+});
+
+function RemoveUnit(id){
+    if(confirm('Are you sure delete this row?'))
+  {
+    units = jQuery.grep(units, function(value) {
+      return value != id;
+    });
+    $( "#unitRow"+id ).remove();
+    $("#select_units option[value=" + id + "]").prop("disabled", false);
+  }
+}
+
+function RemoveUnitSpecial(unit_id,id){
+    if(confirm('Are you sure delete this row?'))
+  {
+    $.ajax({
+      url : '/admin/product-unit-delete/'+id,
+      type: "GET",
+      success: function(data)
+      {
+    units = jQuery.grep(units, function(value) {
+      return value != unit_id;
+    });
+    $( "#unitRow"+unit_id ).remove();
+    $("#select_units option[value=" + unit_id + "]").prop("disabled", false);
+      }
+    });
+}
+}
+
 </script>
 
 

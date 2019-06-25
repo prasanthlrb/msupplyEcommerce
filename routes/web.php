@@ -11,8 +11,9 @@
 |
 */
 use App\product;
-Route::get('/order-email', function () {
-return view('email.order');
+//Route::get('/order-email','AccountController@orderMail');
+Route::get('/order-email',function(){
+    return view('email.test');
 });
 
 Route::get('/event', 'PayController@index');
@@ -33,6 +34,18 @@ Route::get('/product/{id}','categoryController@getProduct');
 Route::get('/quick-view/{id}','pageController@quickModel');
 Route::get('/product-advance-filter/{product}/{attr}/{terms}','categoryController@advanceFilter');
 
+Route::get('/selected-color/{id}','pageController@selectedColor');
+Route::get('/get-colors','pageController@getColors');
+Route::get('/get-search-color','pageController@getSearchColors');
+Route::get('/get-color/{id}','pageController@getColorById');
+Route::get('/get-category','pageController@getColorCategory');
+Route::get('/get-color-modal','pageController@colorModals');
+
+
+
+//cart Page
+Route::post('/set-cart-item','cartController@postCartItem');
+Route::get('/set-cart-item','cartController@getCartItem');
 
 //Route::get('/wishlist','pageController@wishlist');
 // Route::get('/add-wishlist/{id}','pageController@addWishlist');
@@ -47,35 +60,36 @@ Route::get('/filter-brand/{id}','categoryController@filterBrand');
 Route::post('/filter','pageController@filter');
 
 //mail
-Route::post('/contact-mail/','pageController@contactMail');
+Route::post('/contact-mail','pageController@contactMail');
 
-Route::get('/sms-demo', function () {
-   try{
-$requestParams = array(
-    'route' => '2',
-    'api-token' => '25p83e9*wu.0szd_4),7hyaokirlfbnvgcxj1mqt',
-    'sender' => 'KASMDU',
-    'numbers' => '7010384622',
-    'message' => 'Hi Prasanth test'
-);
-//merge API url and parameters
-$apiUrl = "http://smspro.co.in/httpapi/v1/sendsms?";
-foreach($requestParams as $key => $val){
-    $apiUrl .= $key.'='.urlencode($val).'&';
-}
-$apiUrl = rtrim($apiUrl, "&");
+// Route::get('/sms-demo', function () {
+//    try{
+// $requestParams = array(
+//     'route' => '2',
+//     'api-token' => '25p83e9*wu.0szd_4),7hyaokirlfbnvgcxj1mqt',
+//     'sender' => 'KASMDU',
+//     'numbers' => '7010384622',
+//     'message' => 'Your Checkout Verification code is'
+// );
+// //merge API url and parameters
+// $apiUrl = "http://smspro.co.in/httpapi/v1/sendsms?";
+// foreach($requestParams as $key => $val){
+//     $apiUrl .= $key.'='.urlencode($val).'&';
+// }
+// $apiUrl = rtrim($apiUrl, "&");
 
-//API call
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, $apiUrl);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-curl_exec($ch);
-curl_close($ch);
-   }
-   catch(Exception  $e){
-       echo $e->getMessage();
-   }
-});
+// //API call
+// $ch = curl_init();
+// curl_setopt($ch, CURLOPT_URL, $apiUrl);
+// curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+// curl_exec($ch);
+// curl_close($ch);
+//    }
+//    catch(Exception  $e){
+//        echo $e->getMessage();
+//    }
+// });
+
 Route::get('/transport-popup/{id}','pageController@transportPopup');
 Auth::routes();
 Auth::routes(['verify' => true]);
@@ -146,6 +160,14 @@ Route::get('/edit-colors/{id}','productController@editColors');
 Route::get('/delete-colors/{id}','productController@deleteColors');
 Route::post('/colors-save','productController@colorsSave');
 Route::post('/colors-update','productController@colorsUpdate');
+
+
+//option Management
+Route::get('/remove-option/{id}','productController@removeOption');
+Route::get('/remove-option-group/{id}','productController@removeOptionGroup');
+
+//Custom QTY
+Route::get('/remove-custom-qty/{id}','productController@removeCustomQty');
 
 
 
@@ -277,6 +299,19 @@ Route::get('/search-order-log/{date1}/{date2}','reportController@searchOrderLog'
 Route::get('/product-log','reportController@productLog');
 Route::get('/get-product-log','reportController@getProductLog');
 Route::get('/search-product-log/{date1}/{date2}','reportController@searchProductLog');
+
+//Units
+Route::get('/units','productController@viewUnit');
+Route::get('/edit-unit/{id}','productController@editUnit');
+Route::get('/delete-unit/{id}','productController@deleteUnit');
+Route::post('/add-unit','productController@unitStore');
+Route::post('/update-unit','productController@unitUpdate');
+
+
+Route::get('/get-unit/{id}','productController@get_unit');
+Route::get('/product-unit-delete/{id}','productController@productUnitDelete');
+//Route::get('/product-unit-update/{id}/{data}','productController@productUnitUpdate');
+
 });
 
 Auth::routes();
@@ -299,6 +334,11 @@ Route::group(['prefix' => 'account'],function( ){
     Route::get('/company','AccountController@company');
     Route::get('/company-verify','AccountController@companyVerify');
 
+    //COD Checkout Verification
+    Route::get('/verify-order-sms','AccountController@verifyOrder');
+
+
+    //change Customer Account info
     Route::post('/change-account-info','AccountController@changeAccountInfo');
     Route::post('/change-account-info','AccountController@changeAccountInfo');
     Route::post('/update-billing','AccountController@updateBilling');
@@ -377,6 +417,8 @@ Route::get('/cart-item',function(){
 });
 
 Route::post('/transportDetails-save','pageController@transportDetails');
+
+
 Route::get('/cart-menu', function(){
     $cartCollection = Cart::getContent();
     $total = Cart::getTotal();
@@ -408,6 +450,7 @@ $output .='<div class="animated_item">
 </div>';
 echo $output;
 });
+
 Route::get('/cart-data', function(){
     $cartCollection = Cart::getContent();
     $total = Cart::getTotal();
@@ -559,6 +602,8 @@ Route::get('/cart-data', function(){
 }
 print $output;
 });
+
+
 Route::get('/checkout', 'AccountController@checkout');
 Route::get('/shipping', 'AccountController@shipping');
 Route::get('/billing', 'AccountController@billing');

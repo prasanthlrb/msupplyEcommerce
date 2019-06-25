@@ -207,6 +207,7 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
             @endif
 
             <li class="colors-menu"><a class="menu-item" href="/admin/colors-category/">Colors</a></li>
+            <li class="unit-menu"><a class="menu-item" href="/admin/units/">Units</a></li>
           </ul>
         </li>
 

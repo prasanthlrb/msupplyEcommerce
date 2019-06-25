@@ -207,6 +207,15 @@
                                     <a class="nav-link" id="baseVerticalLeft2-tab8" data-toggle="tab" aria-controls="tabVerticalLeft28"
                                     href="#tabVerticalLeft28" aria-expanded="false"><i class="ft-layout"></i> Options</a>
                                   </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="baseVerticalLeft2-tab9" data-toggle="tab" aria-controls="tabVerticalLeft29"
+                                    href="#tabVerticalLeft29" aria-expanded="false"><i class="ft-layers"></i> Custom Qty</a>
+                                  </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" id="baseVerticalLeft2-tab10" data-toggle="tab" aria-controls="tabVerticalLeft30"
+                                    href="#tabVerticalLeft30" aria-expanded="false"><i class="ft-folder"></i> Units</a>
+                                  </li>
 
                                 <li class="nav-item">
                                   <a class="nav-link" id="baseVerticalLeft2-tab6" data-toggle="tab" aria-controls="tabVerticalLeft26"
@@ -225,6 +234,10 @@
                                 <div class="form-group" style="padding-left:10px">
                                     <label for="projectinput1">sales price</label>
                                     <input type="text" id="sales_price" class="form-control" name="sales_price">
+                                  </div>
+                                <div class="form-group" style="padding-left:10px">
+                                    <label for="projectinput1">Minimum Order Limit</label>
+                                    <input type="text" id="order_limit" class="form-control" name="order_limit">
                                   </div>
 
                                 </div>
@@ -246,20 +259,35 @@
 
                                 </div>
                                 <div class="tab-pane tap4" id="tabVerticalLeft23" aria-labelledby="baseVerticalLeft2-tab3" style="padding:30px">
-                                    <div class="form-group">
-                                        <label for="projectinput1">Weight (kg)</label>
-                                        <input type="text" class="form-control" name="weight" id="weight">
-                                      </div>
-                                    <div class="form-group" style="padding-left:10px">
-                                        <label for="projectinput1">Dimensions (cm)</label>
+
+                                        <div class="row">
+                                                <div class="col-md-6">
+
+                                                <label for="projectinput1">Weight (kg)</label>
+                                                <input type="text" class="form-control" name="weight" id="weight">
+                                              </div>
+
+                                                <div class="col-md-6">
+
+                                                <label for="projectinput1">No of Items</label>
+                                                <input type="text" class="form-control" name="items" id="items">
+                                              </div>
+
+                                        </div>
+
+                                    <div class="form-group" style="padding-top:10px">
+
                                         <div class="row">
                                           <div class="col-md-4">
+                                                <label for="projectinput1">Dimensions length (cm)</label>
                                             <input type="text" class="form-control" name="length" id="length" placeholder="Length">
                                           </div>
                                           <div class="col-md-4">
+                                                <label for="projectinput1">Width</label>
                                             <input type="text" class="form-control" id="width" name="width" placeholder="Width">
                                           </div>
                                           <div class="col-md-4">
+                                                <label for="projectinput1">Height</label>
                                             <input type="text" class="form-control" name="height" id="height" placeholder="Height">
                                           </div>
                                         </div>
@@ -355,6 +383,29 @@
                                         <label for="switchery5" class="card-title ml-1">Enable Colors options</label>
                                       </div>
                                 </div>
+
+                                {{-- Custom Quantity --}}
+                                <div class="tab-pane p-2" id="tabVerticalLeft29" aria-labelledby="baseVerticalLeft2-tab9">
+                                        <button class="btn btn-primary float-right" type="button" id="addCustomQty"> Add Custom Qty</button>
+
+                                        <div id="CustomQtyPlace"></div>
+                                    </div>
+                                {{-- Units Module --}}
+                                <div class="tab-pane p-2" id="tabVerticalLeft30" aria-labelledby="baseVerticalLeft2-tab10">
+
+                                    <div class="form-group">
+                                        <label for="projectinput6">Select Units</label>
+                                        <div class="">
+                                          <select style="width:100%" name="select_units" id="select_units" class="form-control col-md-12" >
+                                          <option value="">Select The Units</option>
+                                            @foreach($units as $unit)
+                                            <option value="{{$unit->id}}">{{$unit->unit_name}}</option>
+                                            @endforeach
+                                          </select>
+                                        </div>
+                                        <br>
+                                        <div id="show_units"></div>
+                                    </div>
 
                           </div>
                         </div>
@@ -497,6 +548,7 @@
 
 <script>
 var attributes = [];
+var units = [];
 $('.catalog-menu').addClass('active');
 function Save_product(){
 
@@ -507,6 +559,7 @@ function Save_product(){
    product_form_data.append('product_description',product_description);
    product_form_data.append("optionSet", addOptionSet);
    product_form_data.append("attribute", attributes);
+   product_form_data.append("units", units);
    $("span").find('.text-danger').remove();
   $.ajax({
     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
@@ -518,17 +571,14 @@ function Save_product(){
     dataType: "JSON",
     success: function(data)
     {
-      //$('#product_get_id').val(data);
+      $('#product_get_id').val(data);
       console.log(data);
-      // $('input[name=pro_id]').val(data);
+       //$('input[name=pro_id]').val(data);
       // $('input[name=personal]').val(data);
       //$("#product_form_data")[0].reset();
-
       toastr.success('Product Store Successfully', 'Successfully Save');
       //location.reload();
-       //CallDropZone();
-
-
+       CallDropZone();
     },
     error: function (textStatus, errorThrown) {
       $("#btnSave").removeAttr("disabled");
@@ -755,6 +805,61 @@ var option = '<div id="optionLine'+id+'of'+optionLineCount+'"><i class="ft-minus
 }
 function removeOptionLabel(parent,child){
     $("#optionLine"+parent+'of'+child).remove();
+}
+var qtyid =1;
+var qtyData = [];
+$('#addCustomQty').click(()=>{
+    var qty = '<div id="customQTY'+qtyid+'">'+
+    '<div class="form-group row">'+
+    '<div class="col-4"><input type="text" class="form-control" name="customqty[]" placeholder="Enter Your Custom QTY"></div>'+
+    '<div class="col-4"><i class="ft-minus-circle text-danger" onclick="removeCustomqty('+qtyid+')"></i></div>'+
+    '</div></div>';
+    qtyData.push(qtyid);
+    qtyid++;
+    $('#CustomQtyPlace').append(qty);
+});
+
+function removeCustomqty(id){
+
+    if(confirm('Are you sure delete this Custom Qty?'))
+  {
+    qtyData = jQuery.grep(qtyData, function(value) {
+      return value != id;
+    });
+    $("#customQTY"+id).remove();
+  }
+}
+
+//units modules
+$("#select_units").on("change", function(){
+
+var id = $('#select_units').val();
+console.log(id)
+units.push(id);
+  $.ajax({
+      url : '/admin/get-unit/'+id,
+      type: "GET",
+      success: function(data)
+      {
+          $('#select_units').val('');
+        $("#select_units option[value=" + id + "]").prop("disabled", true);
+        $( "#show_units" ).after(function() {
+          //$('#show_units').html(data);
+          return "<div>" + data + "</div>";
+        });
+      }
+ });
+});
+
+function RemoveUnit(id){
+    if(confirm('Are you sure delete this row?'))
+  {
+    units = jQuery.grep(units, function(value) {
+      return value != id;
+    });
+    $( "#unitRow"+id ).remove();
+    $("#select_units option[value=" + id + "]").prop("disabled", false);
+  }
 }
 </script>
 

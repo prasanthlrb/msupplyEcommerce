@@ -65,7 +65,7 @@ var Core = (function(Core){
 
 			var addthis_config = addthis_config||{};
 			addthis_config.pubid = 'xa-5306f8f674bfda4c';
-			
+
 		},
 
 		/**
@@ -102,9 +102,9 @@ var Core = (function(Core){
 							options = select.children('option');
 
 
-						active.text( 
-							select.children('option[selected]').val() ? 
-								select.children('option[selected]').val() : 
+						active.text(
+							select.children('option[selected]').val() ?
+								select.children('option[selected]').val() :
 								options.eq(0).val()
 						);
 
@@ -121,7 +121,7 @@ var Core = (function(Core){
 
 
 							list.append(tpl);
-							
+
 						});
 
 						list.on("click", "a", function(event){
@@ -253,19 +253,19 @@ var Core = (function(Core){
 				afterResize : function(fn, delay, namespace){
 
 					var ns = namespace || "";
-            
+
 		            return this.each(function(){
-		            
+
 		                $(this).on('resize' + ns, function(){
 
 		                    setTimeout(function(){
 		                        fn();
 		                    }, delay);
-		                    
+
 		                });
-		                
+
 		            });
-		            
+
 		        },
 
 		        /**
@@ -281,9 +281,9 @@ var Core = (function(Core){
 		        			active = $this.children('dt.active').length ? $this.children('dt.active') : $this.children('dt:first').addClass('active');
 
 		        		$this.children('dt').not(active).next().hide();
-		        		
+
 		        		$this.on('click', 'dt', function(){
-		        			
+
 		        			if(!toggle){
 		        				$(this).addClass('active')
 		        						.siblings('dt')
@@ -316,7 +316,7 @@ var Core = (function(Core){
 
 				id : "back_to_top",
 				class : "def_icon_btn middle_btn theme_button animated transparent"
-				
+
 			}).appendTo($('body'));
 
 		},
@@ -380,7 +380,7 @@ var Core = (function(Core){
 						var delay = (self.attr("data-animation-delay") ? self.attr("data-animation-delay") : 1);
 
 						if(delay > 1) self.css("animation-delay", delay + "ms");
-						self.removeClass('transparent').addClass("visible " + self.attr("data-animation"));	
+						self.removeClass('transparent').addClass("visible " + self.attr("data-animation"));
 
 					}, {accX: 0, accY: -250});
 
@@ -501,7 +501,7 @@ var Core = (function(Core){
 			},
 
 			defaultState : function(container){
-				
+
 				var	items = container[container.data('fn')]('.animated_item');
 
 				items.each(function(i){
@@ -580,7 +580,7 @@ var Core = (function(Core){
 
 			},
 
-			backToTop : function(offset){	
+			backToTop : function(offset){
 
 				var w = $(window),
 					b = $('#back_to_top');
@@ -679,9 +679,12 @@ var Core = (function(Core){
 
 					$.arcticmodal({
 						url : $(this).data('modal-url')
-					});
-					perKm = $(this).data('modal-id');
-					event.preventDefault();
+                    });
+                    if($(this).data('modal-url') == '/modals/transport.php'){
+
+                        perKm = $(this).data('modal-id');
+                        event.preventDefault();
+                    }
 
 				});
 
@@ -790,7 +793,7 @@ var Core = (function(Core){
 						contentType: false,
 						processData: false,
 						success : function(data){
-							
+
 							cf.showMessage(data, container, data.indexOf('success') != -1 ? 'success' : 'error');
 
 							if(data.indexOf('success') != -1){
@@ -799,9 +802,9 @@ var Core = (function(Core){
 
 						},
 						error : function(data){
-							
+
 							cf.showMessage(data, container, 'error');
-							
+
 						}
 
 					});
@@ -878,7 +881,7 @@ var Core = (function(Core){
 						type: 'POST',
 						data: data,
 						success : function(data){
-							
+
 							cf.showMessage(data, container, data.indexOf('success') != -1 ? 'success' : 'error');
 
 							if(data.indexOf('success') != -1){
@@ -887,7 +890,7 @@ var Core = (function(Core){
 
 						},
 						error : function(data){
-							
+
 							cf.showMessage(data, container, 'error');
 
 						}
@@ -1140,7 +1143,7 @@ var Core = (function(Core){
 
 				}
 
-			},	
+			},
 
 			/**
 			** Tablet handler
@@ -1285,7 +1288,7 @@ var Core = (function(Core){
 
 				}
 
-			},	
+			},
 
 			/**
 			** Tablet handler
@@ -1383,7 +1386,7 @@ var Core = (function(Core){
 			},
 
 			/**
-			**	Method that checks scrollbar position and adds/removes 
+			**	Method that checks scrollbar position and adds/removes
 			**	fixed class on main navigation wrapper element
 			**/
 			activateSticky: function(){
@@ -1399,7 +1402,7 @@ var Core = (function(Core){
 					this.NAVIGATION.removeClass('sticky');
 					this.headerSizeCompensation(false);
 
-				}				
+				}
 
 			},
 

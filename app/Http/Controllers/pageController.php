@@ -22,6 +22,9 @@ use App\rating;
 use App\product_attribute;
 use App\attribute;
 use Cart;
+use App\color;
+use App\color_category;
+
 class pageController extends Controller
 {
 
@@ -111,16 +114,16 @@ class pageController extends Controller
             <div class="description">
             <a href="/product/' . $row->id . '">' . $row->product_name . '</a>
             <div class="clearfix product_info">';
-           
+
             $getRating = rating::where('item_id',$row->id)->get();
             $rating_count=0;
-            if(count($getRating) > 0){ 
+            if(count($getRating) > 0){
             $total=0;
             foreach($getRating as $rows){
                 $total +=$rows->rating;
             }
             $rating_count = $total/count($getRating);
-            
+
                 $output .= '<ul class="rating alignright">
 
                             <li class="active"></li>
@@ -155,7 +158,7 @@ class pageController extends Controller
 
 
                         </ul>';
-                       
+
             }
                         $output .= '<p class="product_price alignleft">';
 
@@ -171,7 +174,7 @@ class pageController extends Controller
             <div class="buttons_row">
             <a href="/product/' . $row->id . '" class="button_blue middle_btn">See Product Details</a>
 			<button class="button_dark_grey middle_btn def_icon_btn add_to_wishlist tooltip_container"><span class="tooltip top">Add to Wishlist</span></button>
-			
+
             </div></div>';
                             }
                             $output .= '</div>
@@ -196,7 +199,7 @@ class pageController extends Controller
                 <div class="owl_carousel carousel_in_tabs">';
                     $layout_prod = product::whereIn('id', $layout_prod_collection)->get();
                     foreach ($layout_prod as $row) {
-                        $output .= ' 
+                        $output .= '
                 <div class="product_item type_2">
                     <div class="image_wrap">
                     <img src="' . asset('product_img/' . $row->product_image . '') . '" alt="">
@@ -212,13 +215,13 @@ class pageController extends Controller
 
                         $getRating = rating::where('item_id',$row->id)->get();
             $rating_count=0;
-            if(count($getRating) > 0){ 
+            if(count($getRating) > 0){
             $total=0;
             foreach($getRating as $rows){
                 $total +=$rows->rating;
             }
             $rating_count = $total/count($getRating);
-            
+
                 $output .= '<ul class="rating alignright">
 
                             <li class="active"></li>
@@ -253,7 +256,7 @@ class pageController extends Controller
 
 
                         </ul>';
-                       
+
             }
                        $output.=' <p class="product_price alignleft">';
 
@@ -271,7 +274,7 @@ class pageController extends Controller
                 <div class="buttons_row">
                     <a href="/product/' . $row->id . '" class="button_blue middle_btn">See Product Details</a>
                     <button class="button_dark_grey middle_btn def_icon_btn add_to_wishlist tooltip_container"><span class="tooltip top">Add to Wishlist</span></button>
-                   
+
                 </div>
             </div>';
                     }
@@ -282,7 +285,7 @@ class pageController extends Controller
                     <a href="#" class="button_grey middle_btn">View All Products</a>
                     </footer>
 
-                   
+
                </section>';
                 }
             }
@@ -333,7 +336,7 @@ class pageController extends Controller
         //                          <li class='last'><a href='#'><span>Sub Product</span></a></li>
         //                          <li class='last'><a href='#'><span>Sub Product</span></a></li>
         //                          <li class='last'><a href='#'><span>Sub Product</span></a></li>
-        //                          <li class='last'><a href='#'><span>Sub Product</span></a></li>                                               
+        //                          <li class='last'><a href='#'><span>Sub Product</span></a></li>
         //                       </ul><!-- inner product menu -->
         //                 </li>
         //                 <li class='last'><a href='#'><span>Sub Product</span></a></li>
@@ -394,20 +397,20 @@ class pageController extends Controller
 
         $output = '
      <div id="quick_view" class="modal_window">
-     
+
      <button class="close arcticmodal-close"></button>
-     
+
      <div class="clearfix">
-     
+
            <div class="single_product">
-     
+
                  <div class="image_preview_container" id="qv_preview">';
         if ($product->product_image != "") {
             $output .= '<img id="img_zoom" data-zoom-image="images/product_img5.JPG" src="' . asset('/product_img') . '/' . $product->product_image . '" alt="">';
         } else {
             $output .= '<img src="images/qv_thumb_2.jpg" alt="">';
         }
-        $output .= '</div>         
+        $output .= '</div>
                  <div class="product_preview" data-output="#qv_preview">
                        <div class="owl_carousel" id="thumbnails">';
         $output .= '<img src="' . asset('/product_img') . '/' . $product->product_image . '" data-large-image="' . asset('/product_img') . '/' . $product->product_image . '" alt="">';
@@ -434,21 +437,21 @@ class pageController extends Controller
                              </div>
                              <!-- AddThis Button END -->
                        </div>
-                       
+
                  </div>
-                 
-     
+
+
            </div>
-     
-     
+
+
            <div class="single_product_description">
-     
+
                  <h3><a href="/product/' . $product->id . '">' . $product->product_name . '
                  </a></h3>
-     
+
                  <div class="description_section v_centered">
                  </div>
-     
+
                  <div class="description_section">
                        <table class="product_info">
                              <tbody>
@@ -474,7 +477,7 @@ class pageController extends Controller
                  </div>
                  <hr>
                  <div class="description_section">
-                     <p>' . $product->product_description . '</p> 
+                     <p>' . $product->product_description . '</p>
                  </div>
                  <hr>';
         if ($product->regular_price != "") {
@@ -491,12 +494,12 @@ class pageController extends Controller
                  <div class="buttons_row">
                      <a class="button_blue middle_btn" href="/product/' . $product->id . '">See product details</a>
                      <a href="/add-wishlist/' . $product->id . '"><button type="button" class="button_dark_grey def_icon_btn middle_btn add_to_wishlist tooltip_container"><span class="tooltip top">Add to Wishlist</span></button></a>
-                   
+
                  </div>
-     </form>   
+     </form>
            </div>
      </div>
-     
+
      </div>
      ';
 
@@ -579,7 +582,7 @@ class pageController extends Controller
         } else {
             $output .= '<img src="images/qv_thumb_2.jpg" alt="">';
         }
-        $output .= '</div>         
+        $output .= '</div>
              <div class="product_preview" data-output="#qv_preview">
              <div class="owl_carousel" id="thumbnails">';
         $output .= '<img src="' . asset('/product_img') . '/' . $product->product_image . '" data-large-image="' . asset('/product_img') . '/' . $product->product_image . '" alt="">';
@@ -592,7 +595,7 @@ class pageController extends Controller
         }
         $output .= '</div>
              </div>
-             
+
        </div>
        <div class="single_product_description">
 
@@ -607,7 +610,7 @@ class pageController extends Controller
                 <ul>
 
                     <li class="row">
-                        
+
                         <div class="col-xs-12">
 
                             <label>Country</label>
@@ -615,7 +618,7 @@ class pageController extends Controller
                             <div class="custom_select">
 
                                 <select>
-                                    
+
                                     <option value="Australia">Australia</option>
                                     <option value="Austria">Austria</option>
                                     <option value="Argentina">Argentina</option>
@@ -631,7 +634,7 @@ class pageController extends Controller
                     </li>
 
                     <li class="row">
-                        
+
                         <div class="col-lg-7 col-md-6">
 
                             <label>State/Province</label>
@@ -671,10 +674,10 @@ class pageController extends Controller
 
         </footer><!--/ .bottom_box -->
 
-    </section><!--/ [col] -->  
+    </section><!--/ [col] -->
        </div>
  </div>
- 
+
  </div>
  ';
 
@@ -701,20 +704,20 @@ class pageController extends Controller
         $category = $request->category;
         if($search != "" && $category !="All Categories"){
             $product = DB::table('products')
-            ->where('products.category', 'like', '%' . $category . '%')      
-            ->orWhere('product_name', 'like', '%' . $search . '%')      
+            ->where('products.category', 'like', '%' . $category . '%')
+            ->orWhere('product_name', 'like', '%' . $search . '%')
             ->orderBy('created_at','desc')
             ->paginate(9);
         }else if($search == "" && $category =="All Categories"){
             $product = [];
         }else if($search != "" && $category =="All Categories"){
-            $product = DB::table('products')   
-            ->where('product_name', 'like', '%' . $search . '%')      
+            $product = DB::table('products')
+            ->where('product_name', 'like', '%' . $search . '%')
             ->orderBy('created_at','desc')
             ->paginate(9);
         }else{
             $product = DB::table('products')
-            ->where('products.category', 'like', '%' . $category . '%')      
+            ->where('products.category', 'like', '%' . $category . '%')
             ->orderBy('created_at','desc')
             ->paginate(9);
         }
@@ -731,8 +734,8 @@ class pageController extends Controller
          $contactData = $request->all();
         Mail::to($contactData['cf_email'])->send(new SendMailable($contactData));
         //return 'Email was sent';
-        return response()->json(['message'=>'Successfully Send'],200); 
-        //return response()->json($contactData['cf_email']); 
+        return response()->json(['message'=>'Successfully Send'],200);
+        //return response()->json($contactData['cf_email']);
     }
 
     public function addToCart($id, $qty){
@@ -742,9 +745,9 @@ class pageController extends Controller
         if($product->stock_quantity >= $totalQty){
             $product_attribute = product_attribute::where('product_id','=',$id)->get();
             $data=array();
-             
+
                     foreach($product_attribute as $attributes){
-                        $attribute = attribute::find($attributes->attribute); 
+                        $attribute = attribute::find($attributes->attribute);
                         $data[] = array(
                             $attribute->name => $attributes->terms,
                         );
@@ -763,7 +766,83 @@ class pageController extends Controller
 
     $total = Cart::getTotal();
     $quantity = count(Cart::getContent());
-     return response()->json(array($status,$total,$quantity)); 
+     return response()->json(array($status,$total,$quantity));
    // return response()->json($totalQty);
+    }
+    public function colorModals(){
+        $category = color_category::where('status',0)->get();
+        $color = color::where('category',$category[0]->id)->get();
+        return view('modal.colors',compact('category','color'));
+    }
+
+
+
+    public function getColorById($id){
+        if($id == 0){
+        $category = color_category::where('status',0)->get();
+        $color = color::where('category',$category[0]->id)->get();
+        }else{
+
+            $color = color::where('category',$id)->get();
+        }
+        $output='';
+        if(count($color) > 0){
+            foreach($color as $data){
+            $output .='<div class="col-md-3">
+            <div class="card mb-1 color-item" id="color-item'.$data->id.'" onclick="getColors('.$data->id.')">
+              <div class="card-content">
+                <div class="bg-lighten-1 height-50" style="background-color:'.$data->color.'"></div>
+                <div class="p-1">
+                  <p class="mb-0">
+                    <strong>'.$data->name.'</strong>
+                    <p class="text-muted float-right price"><i class="icon-rupee"></i>'.$data->price.'</p>
+                  </p>
+                  <p class="mb-0">'.$data->code.'</p>
+                </div>
+              </div>
+            </div>
+          </div>';
+            }
+        }else{
+            $output .='<h3>Color Not Fount</h3>';
+        }
+        return response()->json($output);
+    }
+
+    public function getSearchColors(Request $request){
+        $color = color::where("name","LIKE","%{$request->result}%")
+        ->orWhere("code","LIKE","%{$request->result}%")
+        ->get();
+        $output='';
+        if(count($color) > 0){
+            foreach($color as $data){
+            $output .='<div class="col-md-3">
+            <div class="card mb-1 color-item" id="color-item'.$data->id.'" onclick="getColors('.$data->id.')">
+              <div class="card-content">
+                <div class="bg-lighten-1 height-50" style="background-color:'.$data->color.'"></div>
+                <div class="p-1">
+                  <p class="mb-0">
+                    <strong>'.$data->name.'</strong>
+                    <p class="text-muted float-right price"><i class="icon-rupee"></i>'.$data->price.'</p>
+                  </p>
+                  <p class="mb-0">'.$data->code.'</p>
+                </div>
+              </div>
+            </div>
+          </div>';
+            }
+        }else{
+            $output .='<h3>Color Not Fount</h3>';
+        }
+        return response()->json($output);
+    }
+
+    public function selectedColor($id){
+        $color = color::find($id);
+        return response()->json($color);
+    }
+
+    public function postCartItem(Request $request){
+        return response()->json("200");
     }
 }

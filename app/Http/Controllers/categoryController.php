@@ -13,7 +13,9 @@ use App\attribute;
 use DB;
 use App\review;
 use App\rating;
-
+use App\optionGroup;
+use App\optionValue;
+use App\custom_qty;
 class categoryController extends Controller
 {
     public function categoryProduct($id){
@@ -24,16 +26,16 @@ class categoryController extends Controller
        // return response()->json($product);
         return view('category',compact('product','brand','adModel','category'));
     }
-    
+
     public function getProduct($id){
         $product1 = product::find($id);
-        $Upload = Upload::where('product_id','=',$id)->get(); 
+        $Upload = Upload::where('product_id','=',$id)->get();
         $brand = brand::all();
         $reviews = review::where('item_id',$id)->get();
         // $review = DB::table('reviews as re')
         // ->where('re.item_id',$id)
         // ->join('rating as ra','re.order_item_id','=','ra.order_item_id')
-        
+
     $review = DB::table('reviews as r')
     ->where('r.item_id',$id)
     ->where('r.status',1)
@@ -41,7 +43,7 @@ class categoryController extends Controller
     ->join('users as u','r.user_id','=','u.id')
     ->select('r.review','r.updated_at','u.name','ra.rating')
     ->paginate(6);
-  
+
         $rating = rating::where('item_id',$id)->get();
         $related_product = [];
         if($product1->related_product){
@@ -50,9 +52,24 @@ class categoryController extends Controller
         $category_id = explode(',',$product1->category);
         $breadcrumbs = category::find($category_id[0]);
         $product_attribute = product_attribute::where('group_id','=',$product1->group)->get();
-        $attribute = attribute::all(); 
+        $attribute = attribute::all();
         //return response()->json($review);
-        return view('product',compact('product1','brand','Upload','related_product','breadcrumbs','product_attribute','attribute','review','reviews','rating'));
+
+        $optionGroup = optionGroup::where('product_id',$id)->get();
+        $optionData['group'] = $optionGroup;
+        if(count($optionGroup) >0){
+            foreach($optionGroup as $group){
+                $optionData[$group->id] = optionvalue::where('group_id',$group->id)->get();
+
+            }
+
+        }
+
+        $custom_qty = custom_qty::where('product_id',$id)->get();
+        //return response()->json($optionData[1][2]['name']);
+        //dd($optionData);
+
+        return view('product',compact('product1','optionData','brand','Upload','related_product','breadcrumbs','product_attribute','attribute','review','reviews','rating','custom_qty'));
 
     }
 
@@ -63,7 +80,7 @@ class categoryController extends Controller
         $checkAttr = null;
         $product_id_final = array();
         foreach($product_attribute as $attribute_val){
-          
+
         if($attr == $attribute_val->attribute ){
             $terms_val[]=$terms;
             $checkAttr=$terms;
@@ -90,7 +107,7 @@ class categoryController extends Controller
     return redirect('product/'.$redirectPage);
     //return $this->getProduct($redirectPage);
     }
-    
+
     public function filterBrand($id){
         $brandid = brand::find($id);
         $adModel = adModel::all();

@@ -74,7 +74,13 @@
               </div>
 
               <div class="form-group row">
-                <label class="col-md-3 label-control" for="projectinput4">Colors Code</label>
+                <label class="col-md-3 label-control" for="projectinput4">Color Code</label>
+                <div class="col-md-9">
+                  <input type="text" id="code" class="form-control" placeholder="Enter Color Code" name="code">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 label-control" for="projectinput4">Colors</label>
                 <div class="col-md-9">
                   <input type="text" id="color" class="form-control" placeholder="Enter Color Code" name="color">
                 </div>
@@ -176,6 +182,7 @@
           $('input[name=name]').val(data.name);
           $('input[name=price]').val(data.price);
           $('input[name=color]').val(data.color);
+          $('input[name=code]').val(data.code);
           $('input[name=id]').val(id);
           $('#color_model').modal('show');
           action_type = 2;

@@ -7,13 +7,13 @@
 	width: auto !important;
 	float: none !important;
 	}
-	
+
 	.address-align{
 	margin-left: 30px;
 	width: 50% !important;
 	float: none !important;
 	}
-   
+
 	.shipping-row{
 	  padding: 10px;
 	  margin-left: 10px;
@@ -69,62 +69,62 @@
 
 							<h3>Shipping Information</h3>
 
-					
+
 
 							<ul class="simple_vertical_list">
 								<div class="row">
 									<?php $x=1 ?>
 									@foreach ($shipping as $item)
-								
+
 									<li class="col-sm-4 col-md-4 col-lg-4  shipping-row">
 											<div class="col-xs-12">
 												<label for="radio_<?php echo $x?>" class="item-align-left-shipping">{{$item->first_name}}</label>
 												<label for="radio_<?php echo $x?>" class="item-align-left-shipping">{{$item->last_name}}</label><br>
 												<label for="radio_<?php echo $x?>" class="item-align-left-shipping">{{$item->email}}</label><br>
-										
+
 												@if($x == 1)
 												<input type="radio" checked name="ship" id="radio_<?php echo $x?>" value="{{$item->id}}">
 												@else
 												<input type="radio" name="ship" id="radio_<?php echo $x?>" value="{{$item->id}}">
 												@endif
-												
+
 												<label for="radio_<?php echo $x?>" class="address-align">{{$item->address}}</label><br>
 												<label for="radio_<?php echo $x?>" class="item-align-left-shipping">{{$item->state}}</label> <label class="item-align-left-shipping" for="radio_<?php echo $x?>">{{$item->zip}}</label>
-												
+
 											</div>
-		
-										</li>	
-										
-								
-									
-										
-										<?php 
-										
-										
+
+										</li>
+
+
+
+
+										<?php
+
+
 										$x++?>
-										
+
 									@endforeach
-									
+
 								</div>
-							
+
 							</ul>
 							<br>
 							<div class="left_side">
 
 									<a href="/shipping" class="button_blue middle_btn">Create New Shipping Details</a>
-	
+
 								</div>
-	
+
 							<br>
 							<h3>Billing Information</h3>
 
-					
+
 
 							<ul class="simple_vertical_list">
 									<div class="row">
 										<?php $x=1 ?>
 										@foreach ($billing as $item)
-									
+
 										<li class="col-sm-4 col-md-4 col-lg-4 shipping-row">
 												<div class="col-xs-12">
 													<label for=billing_<?php echo $x?>" class="item-align-left-shipping">{{$item->first_name}}</label>
@@ -138,34 +138,34 @@
 													<label for=billing_<?php echo $x?>" class="item-align-left-shipping">{{$item->telephone}}</label><br>
 													<label for=billing_<?php echo $x?>" class="address-align">{{$item->address}}</label><br>
 													<label for=billing_<?php echo $x?>" class="item-align-left-shipping">{{$item->state}}</label>  <label class="item-align-left-shipping" for=billing_<?php echo $x?>">{{$item->zip}}</label>
-													
+
 												</div>
-											
-													
-												
-											</li>	
-											
-									
-										
-											
-											<?php 
-											
-											
+
+
+
+											</li>
+
+
+
+
+											<?php
+
+
 											$x++?>
-											
+
 										@endforeach
-										
+
 									</div>
-								
+
 								</ul>
 								<br>
 								<div class="left_side">
-	
+
 										<a href="/billing" class="button_blue middle_btn">Create New Billing Details</a>
-		
+
 									</div>
 							<br>
-							
+
 							<h3>Transport </h3>
 
 							<?php echo $output; ?>
@@ -182,7 +182,7 @@
 						<br>
 						<h3>Select Payment Type</h3>
 							<ul class="simple_vertical_list">
-													
+
 									<li>
 
 										<input value="cod" type="radio" checked name="payment_type" id="radio_button_1">
@@ -198,17 +198,17 @@
 									</li>
 
 								</ul>
-				
 
-					
+
+
 						<br>
 						<br>
 						<br>
-					
-				
+
+
 						<h3>Order Review</h3>
 
-						
+
 
 						<div class="table_wrap">
 
@@ -228,7 +228,7 @@
 								<tbody>
 									<?php echo $result?>
 								</tbody>
-								
+
 								<tfoot>
 									@if(Session::has('transport'))
 								<tr>
@@ -239,11 +239,11 @@
 									@endif
 									{{-- <tr>
 										<td colspan="5" class="bold"> Exclusive Tax (GST)</td>
-									
+
 										<td class="total">₹ </td>
 									</tr> --}}
-								
-                       
+
+
 									<tr>
 										<td colspan="5" class="grandtotal">Grand Total</td>
 										<td class="grandtotal" style="text-align:center">₹ {{$totalPrice}}</td>
@@ -292,13 +292,32 @@
 				pay_type = 2;
 				$('#order_button').text('PROCEED TO PAY')
 			});
-
+            var otpValue = 666333;
 		$('#order_button').click(function(){
-			var shipping = $('input[name=ship]:checked').val();
+            if($('input[name=payment_type]:checked').val() == 'cod'){
+                $.ajax({
+                    url:'/account/verify-order-sms',
+                    method:'GET',
+                    success:function(data){
+                        $.arcticmodal({
+                        url : 'modals/otp.html'
+                    });
+                    }
+                })
+            }else{
+                var shipping = $('input[name=ship]:checked').val();
 			var billing = $('input[name=billing]:checked').val();
       window.location.href = '/order-placed/'+pay_type+'/'+shipping+'/'+billing;
-               
-			})
+            }
+
+
+            })
+
+            function otpVerified(){
+        var shipping = $('input[name=ship]:checked').val();
+	    var billing = $('input[name=billing]:checked').val();
+      window.location.href = '/order-placed/'+pay_type+'/'+shipping+'/'+billing;
+            }
 
 			</script>
 			@endsection

@@ -17,6 +17,7 @@ class CreateColorsTable extends Migration
             $table->increments('id');
             $table->string('category');
             $table->string('name');
+            $table->string('code')->nullable();
             $table->string('color')->nullable();
             $table->string('price')->nullable();
             $table->timestamps();

@@ -27,7 +27,7 @@ class PayController extends Controller
             "send_email" => true,
             "email" => "$request->email",
             "phone" => "$request->mobile_number",
-            "redirect_url" => "http://127.0.0.1:5600/pay-success"
+            "redirect_url" => "http://127.0.0.1:8000/pay-success"
             ));
 
             header('Location: ' . $response['longurl']);
