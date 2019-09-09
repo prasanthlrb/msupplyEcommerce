@@ -188,6 +188,8 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
             </span></a>
         </li>
         @endif
+
+
         <li class=" nav-item"><a href="#"><i class="icon-handbag"></i><span class="menu-title">Products</span></a>
           <ul class="menu-content">
               @if($role->category == 1)
@@ -210,6 +212,7 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
             <li class="unit-menu"><a class="menu-item" href="/admin/units/">Units</a></li>
           </ul>
         </li>
+
 
         <li class=" nav-item"><a href="#"><i class="ft-shopping-cart"></i><span class="menu-title">Order</span><span class="badge badge badge-info badge-pill float-right mr-2">
           {{count(App\order::where('order_status',0)->get())}}
@@ -263,10 +266,46 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
           </ul>
         </li>
         @endif
+         
+        <li class="nav-item"><a href="#">
+          <i class="la la-adjust"></i><span class="menu-title">Color Master</span></a>
+         <ul class="menu-content">
+           <li class="contact_info">
+              <a class="menu-item" href="/admin/color-master">Color Bank</a>
+            </li>
+           <li class="contact_info">
+              <a class="menu-item" href="/admin/color-bulk-upload">Color Bank Bulk Upload</a>
+            </li>
+           <li class="contact_info">
+              <a class="menu-item" href="/admin/color-products">Products</a>
+            </li>
+           {{-- <li class="contact_info">
+              <a class="menu-item" href="/admin/color-price">Price Management</a>
+            </li> --}}
+         </ul>
+        </li>
+
+        <li class="nav-item"><a href="#">
+          <i class="ft ft-layers"></i><span class="menu-title">Tiles</span></a>
+         <ul class="menu-content">
+           <li class="update-tiles">
+              <a class="menu-item" href="/admin/tiles-upload/">Update Tiles</a>
+            </li>
+           <li class="tiles">
+              <a class="menu-item" href="/admin/tiles">Tiles</a>
+            </li>
+         
+         </ul>
+        </li>
+       
+
         @if($role->transport == 1)
         <li class="transports nav-item"><a href="/admin/transport"><i class="la la-truck"></i><span class="menu-title">Transport</span></a>
         </li>
         @endif
+
+
+
         @if($role->setting == 1)
         <li class=" nav-item"><a href="#"><i class="la la-gear"></i><span class="menu-title">Settings</span></a>
           <ul class="menu-content">
@@ -281,6 +320,9 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
               <a class="menu-item" href="/admin/social-details/">Social Media Management</a>
             </li>
             @endif
+            {{-- <li class="update-tiles">
+                <a class="menu-item" href="/admin/tiles-upload/">Update Tiles</a>
+              </li> --}}
 
               <!-- <ul class="menu-content">
                 <li>
@@ -358,9 +400,9 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
     e.preventDefault();
     window.location.href = "/admin/add-contact";
   });
-  $('form input').on('keypress', function(e) {
-    return e.which !== 13;
-});
+//   $('form input').on('keypress', function(e) {
+//     return e.which !== 13;
+// });
 </script>
 <script src="{{ asset('app-assets/js/scripts/extensions/toastr.js')}}" type="text/javascript"></script>
 <script src="{{ asset('app-assets/vendors/js/extensions/toastr.min.js')}}" type="text/javascript"></script>

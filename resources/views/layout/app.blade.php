@@ -71,14 +71,9 @@
 						<div class="row">
 
 							<div class="col-lg-6 col-md-7 col-sm-8">
-
-								<!-- - - - - - - - - - - - - - Login - - - - - - - - - - - - - - - - -->
-
-
-
-
-
-												@if(Auth::user())
+								<div class="row">
+									<div class="col-md-6">
+											@if(Auth::user())
 												<p><b>Hello </b> <i style="color:#ff4557">{{Auth::user()->name}}</i>
 												<a href="{{ route('logout') }}" onclick="event.preventDefault();
 													document.getElementById('logout-form').submit();">
@@ -90,9 +85,27 @@
 																		</form>
 												@else
 												<p>Welcom visitor <a href="/login">Login</a> or <a href="/register">Register</a></p>
+												
 												@endif
 
+									</div>
+									<div class="col-md-6">
 
+											<div class="location-postion">
+																<p>Your Location is {{Session::get('locations') }}, <a href="javascript:void(null)" data-modal-url="/get-location-page">Change</a></p>
+
+																		</div>
+
+									</div>
+								</div>
+								<!-- - - - - - - - - - - - - - Login - - - - - - - - - - - - - - - - -->
+
+
+
+
+
+											
+																	
 								<!-- - - - - - - - - - - - - - End login - - - - - - - - - - - - - - - - -->
 
 							</div> <!--/ [col]-->
@@ -336,7 +349,7 @@
 											<ul>
 
 												<li class="home_menu"><a href="/">Home</a></li>
-
+												{{-- <li class="offer_menu"><a href="/offers">Offers</a></li> --}}
 												<li class="account_menu"><a href="/account/dashboard">My Account</a></li>
 												<li class="cart_menu"><a href="/cart">Shopping Cart</a></li>
 												<li class="checkout_menu"><a href="/transports">Checkout</a></li>
@@ -672,7 +685,7 @@
 
 		<!-- - - - - - - - - - - - - - Social feeds - - - - - - - - - - - - - - - - -->
 
-		<ul class="social_feeds">
+		{{-- <ul class="social_feeds">
 
 			<!-- - - - - - - - - - - - - - Facebook - - - - - - - - - - - - - - - - -->
 
@@ -699,7 +712,7 @@
 
 						{{-- <p class="form_caption">Lorem ipsum dolor sit amet, adipis mauris accumsan.</p> --}}
 
-						<form class="contactform" novalidate id="contact_side_form">
+						{{-- <form class="contactform" novalidate id="contact_side_form">
 								{{csrf_field()}}
 							<ul>
 
@@ -760,13 +773,13 @@
 
 				</section><!--/ .dropdown-->
 
-			</li>
+			</li> --}}
 
 			<!-- - - - - - - - - - - - - - End contact us - - - - - - - - - - - - - - - - -->
 
 			<!-- - - - - - - - - - - - - - Google map - - - - - - - - - - - - - - - - -->
 
-			<li>
+			{{-- <li>
 
 				<button class="icon_btn middle_btn social_gmap open_"><i class="icon-location-4"></i></button>
 
@@ -812,11 +825,11 @@
 
 				</section><!--/ .dropdown-->
 
-			</li>
+			</li> --}}
 
 			<!-- - - - - - - - - - - - - - End google map - - - - - - - - - - - - - - - - -->
 
-		</ul>
+		
 
 		<!-- - - - - - - - - - - - - - End Social feeds - - - - - - - - - - - - - - - - -->
 

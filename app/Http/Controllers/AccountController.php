@@ -899,7 +899,7 @@ class AccountController extends Controller
             $six_digit_random_number = mt_rand(100000, 999999);
             $msg = 'Your Checkout Verification code is '.$six_digit_random_number;
             $requestParams = array(
-                'route' => '2',
+                'route' => '3',
                 'api-token' => '25p83e9*wu.0szd_4),7hyaokirlfbnvgcxj1mqt',
                 'sender' => 'KASMDU',
                 'numbers' => Auth::user()->phone,
@@ -924,6 +924,10 @@ class AccountController extends Controller
                    return response()->json($e->getMessage());
                }
 
+    }
+
+    public function deals(){
+        return view('customer.deals');
     }
 
 }

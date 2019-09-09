@@ -291,17 +291,28 @@
 
                                     <div class="image_wrap">
 
-                                        <?php if($product1->product_image != ""){ ?>
-	                                        <img style="width:200px" src="{{asset('product_img/').'/'.$product1->product_image}}" alt="">
-                                        <?php } else{ ?>
-	                                        <img style="width:200px" src="../../images/product_img_7.jpg" alt="">
+
+                                        <?php if($product1->category == 1){ ?>
+                                               <img style="width:200px" src="http://www.kagtech.net/KAGAPP/Partsupload/{{$product1->product_image}}" alt="">
+                                            <?php } else{ ?>
+                                                <img style="width:200px" src="{{asset('product_img/').'/'.$product1->product_image}}" alt="">
+	                                      
                                         <?php } ?>                             
+                                  
+	                                     
+                                                      
 
                                         <div class="actions_wrap">
 
                                             <div class="centered_buttons">
-
+                                             
+                                                @if($product1->category == 1)
+                                                
+                                                <a href="#" class="button_dark_grey middle_btn quick_view" data-modal-url="/quick-view-tiles/{{$product1->id}}">Quick View</a>
+                                                @else
+                                                
                                                 <a href="#" class="button_dark_grey middle_btn quick_view" data-modal-url="/quick-view/{{$product1->id}}">Quick View</a>
+                                                @endif
 
                                                 <!-- <a href="#" class="button_blue middle_btn add_to_cart">Add to Cart</a> -->
                                                 <!-- <button onclick="addCart({{$product1->id}})" class="button_blue middle_btn add_to_cart">Add to Cart</button> -->
@@ -321,15 +332,13 @@
                                         <a href="/product/{{$product1->id}}">{{$product1->product_name}}</a>
 
                                         <div class="clearfix product_info">
-
+                                            @if($product1->category != 21)
                                             <p class="product_price alignleft"><b>₹{{$product1->sales_price}}</b></p>
-
+                                            @endif
                                             <?php 
                                             $getRating = App\rating::where('item_id',$product1->id)->get();
                                             if(count($getRating) > 0){
                                                 $rating_count;
-                                            
-                                               
                                             $total=0;
                                             foreach($getRating as $row){
                                                 $total +=$row->rating;
@@ -439,8 +448,22 @@
 
                     </div><!--/ .table_layout -->
 
-                    <footer class="bottom_box on_the_sides">
-
+                    <footer class="bottom_box" style="padding-bottom:38px">
+@if ($product->lastPage() > 1)
+<ul class="pags">
+    <li class="{{ ($product->currentPage() == 1) ? ' disabled' : '' }}">
+        <a href="{{ $product->url(1) }}">Previous</a>
+    </li>
+    @for ($i = 1; $i <= $product->lastPage(); $i++)
+        <li class="{{ ($product->currentPage() == $i) ? ' active' : '' }}">
+            <a href="{{ $product->url($i) }}">{{ $i }}</a>
+        </li>
+    @endfor
+    <li class="{{ ($product->currentPage() == $product->lastPage()) ? ' disabled' : '' }}">
+        <a href="{{ $product->url($product->currentPage()+1) }}" >Next</a>
+    </li>
+</ul>
+@endif
                         <div class="left_side">
 
                             <!-- <p>Showing 1 to 3 of 45 (15 Pages)</p> -->
@@ -458,21 +481,7 @@
                                 <li><a href="#"></a></li>
 
                             </ul> -->
-@if ($product->lastPage() > 1)
-<ul class="pags">
-    <li class="{{ ($product->currentPage() == 1) ? ' disabled' : '' }}">
-        <a href="{{ $product->url(1) }}">Previous</a>
-    </li>
-    @for ($i = 1; $i <= $product->lastPage(); $i++)
-        <li class="{{ ($product->currentPage() == $i) ? ' active' : '' }}">
-            <a href="{{ $product->url($i) }}">{{ $i }}</a>
-        </li>
-    @endfor
-    <li class="{{ ($product->currentPage() == $product->lastPage()) ? ' disabled' : '' }}">
-        <a href="{{ $product->url($product->currentPage()+1) }}" >Next</a>
-    </li>
-</ul>
-@endif
+
                         </div>
 
                     </footer>

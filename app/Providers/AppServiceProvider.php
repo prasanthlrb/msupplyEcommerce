@@ -21,7 +21,7 @@ class AppServiceProvider extends ServiceProvider
             $category = DB::table('categories')
             ->where('parent_id',0)
             ->get();
-            $view->with(compact('setting','social','category'));
+            $view->with(compact('setting','social','category','location'));
         });
     }
 

@@ -216,6 +216,14 @@
                                             <a class="nav-link" id="baseVerticalLeft2-tab10" data-toggle="tab" aria-controls="tabVerticalLeft30"
                                             href="#tabVerticalLeft30" aria-expanded="false"><i class="ft-folder"></i> Units</a>
                                           </li>
+                                               <li class="nav-item">
+                                  <a class="nav-link" id="baseVerticalLeft2-tab12" data-toggle="tab" aria-controls="tabVerticalLeft32"
+                                  href="#tabVerticalLeft32" aria-expanded="false"><i class="la la-gear"></i> Discount / high</a>
+                                </li>
+                                              <li class="nav-item">
+                                  <a class="nav-link" id="baseVerticalLeft2-tab11" data-toggle="tab" aria-controls="tabVerticalLeft31"
+                                  href="#tabVerticalLeft31" aria-expanded="false"><i class="la la-gear"></i> Distance Price</a>
+                                </li>
 
                                 <li class="nav-item">
                                     <a class="nav-link" id="baseVerticalLeft2-tab6" data-toggle="tab" aria-controls="tabVerticalLeft26" href="#tabVerticalLeft26" aria-expanded="false"><i class="la la-gear"></i> Advanced</a>
@@ -438,6 +446,57 @@
 
                                       </div>
                             </div>
+
+                              <div class="tab-pane p-2" id="tabVerticalLeft32" aria-labelledby="baseVerticalLeft2-tab12">
+                                  <div class="row">
+                            <div class="col-md-4">                            <div class="form-group">
+                                <label class="label-control" for="projectinput1">Dis / High</label>
+                                  <select name="sub_category" id="sub_category" class="form-control">
+                                        <option value="" selected="" disabled="">Select </option>
+                                          <option value="discount">Discount </option>
+                                          <option value="high">High </option>
+                                        </select>
+                              </div></div>
+                            <div class="col-md-4">                            <div class="form-group">
+                                <label class="label-control" for="projectinput1">Type</label>
+                                  <select name="sub_category"  class="form-control">
+                                        <option value="" selected="" disabled="">Select </option>
+                                          <option value="percentage">Percentage </option>
+                                          <option value="amount">Amount </option>
+                                        </select>
+                              </div></div>
+                            <div class="col-md-4"><div class="form-group">
+                                <label class="label-control" for="projectinput1">Value</label>
+                                  <input type="text" id="coverage" class="form-control" placeholder="Product Name"
+                                  name="coverage">
+                              </div></div>
+                          </div>
+
+
+                                  </div>
+
+
+                              <div class="tab-pane p-2" id="tabVerticalLeft31" aria-labelledby="baseVerticalLeft2-tab11">
+                                    <div class="row">
+                                      <div class="col-md-12">
+                                        <button type="button" class="btn btn-primary" id="add_distance_price">Add New</button>
+
+                                    </div>
+                                            <div class="col-md-12 pt-4" id="distance-price">
+                                      @if(count($distance_price) >0)
+                                      @foreach($distance_price as $dist)
+                                        <div class="row pb-2" id="distance_price_old{{$dist->id}}">
+                                            <div class="col-md-6">
+  <label for="projectinput1">Distance</label><input type="text" class="form-control" value={{$dist->distance}} disabled>
+  </div><div class="col-md-6"><i class="ft-minus-circle text-danger" style="float:right;cursor:pointer" onclick="removeDistanceHandleOld({{$dist->id}})"></i><label for="projectinput1">Price</label>
+  <input type="text" class="form-control" value={{$dist->price}} disabled></div></div>
+                                        @endforeach
+                                        @endif
+
+                                      </div>
+                                    </div>
+
+                                  </div>
 
                                 <div class="tab-pane" id="tabVerticalLeft26" aria-labelledby="baseVerticalLeft2-tab6">
                                     <div class="dropdown-item">
@@ -664,6 +723,7 @@
     <script src="{{ url('/dropzone/config-dropzone.js') }}"></script>
 
 <script>
+    var distance_price_data = [];
     var attributes = [];
     var addOptionSet = [];
     var qtyData = []
@@ -673,13 +733,13 @@
     var qtyid ="<?php echo count($customqty) ?>";
     var addOptionSetLocal = "<?php echo count($optionGroup) >0 ? count($optionGroup) +1 : '1' ?>";
 </script>
-
+@if(isset($unit_value))
 @foreach($unit_value as $value)
 <script>
 units.push("<?php echo $value ?>");
 </script>
 @endforeach
-
+@endif
 <script>
 if(qtyid >0){
 for(let i=1;i<qtyid;i++){
@@ -1163,6 +1223,43 @@ function RemoveUnitSpecial(unit_id,id){
       }
     });
 }
+}
+
+
+var distance_count_handle = 1;
+$('#add_distance_price').on('click', function(){
+  let template ='<div class="row pb-2" id="distance_handle'+distance_count_handle+'"><div class="col-md-6">'+
+  '<label for="projectinput1">Distance</label><input type="text" class="form-control" name="price_distance[]">'+
+  '</div><div class="col-md-6"><i class="ft-minus-circle text-danger" style="float:right;cursor:pointer" onclick="removeDistanceHandle('+distance_count_handle+')"></i><label for="projectinput1">Price</label>'+
+  '<input type="text" class="form-control" name="distance_price[]"></div></div>';
+  distance_price_data.push(distance_count_handle);
+  distance_count_handle++;
+$('#distance-price').append(template);
+});
+
+function removeDistanceHandle(id){
+    if(confirm('Are you sure delete this row?'))
+  {
+    distance_price_data = jQuery.grep(distance_price_data, function(value) {
+      return value != id;
+    });
+    $( "#distance_handle"+id ).remove();
+  }
+}
+
+function removeDistanceHandleOld(id){
+    if(confirm('Are you sure delete this row?'))
+  {
+      $.ajax({
+      url : '/admin/delete-distance_price/'+id,
+      type: "GET",
+      success: function(data)
+      {
+          $('#distance_price_old'+id).remove();
+        toastr.success(data.message);
+      }
+ });
+  }
 }
 
 </script>

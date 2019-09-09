@@ -24,9 +24,16 @@ use App\attribute;
 use Cart;
 use App\color;
 use App\color_category;
+use App\paint_price;
+use App\tiles_stock_location;
 
 class pageController extends Controller
 {
+    public function __construct()
+    {
+      // $this->middleware('location');
+    }
+    
 
     public function about()
     {
@@ -62,6 +69,7 @@ class pageController extends Controller
         return view('contact', compact('contact_info'));
     }
 
+    
     public function home()
     {
         try {
@@ -70,7 +78,12 @@ class pageController extends Controller
             $category = category::all();
             $product = product::all();
             $adModel = adModel::all();
-            $product_today = product::where('featured', 'on')->orderBy('id', 'DESC')->take(10)->get();
+            if(Session::get('locations') == 'Madurai'){
+
+                $product_today = product::where('featured', 'on')->orderBy('id', 'DESC')->take(10)->get();
+            }else{
+                $product_today = product::where('featured', 'on')->where('category','!=',7)->orderBy('id', 'DESC')->take(10)->get();
+            }
             $output = '';
             foreach ($layouts as $layout) {
                 if ($layout->type == 'category') {
@@ -289,7 +302,25 @@ class pageController extends Controller
                </section>';
                 }
             }
-            return view('home', compact('slider', 'layouts', 'output', 'product_today', 'adModel'));
+            
+            //$location_data = Session::get('locations');
+            // $floor = product::where('sub_category',3)
+            // ->where('sales_price','!=',null)
+            // ->where('stock_quantity','>',200)
+            // ->orderBy('stock_quantity','DESC')
+            // ->take(20)
+            // ->get();
+            // $wall = product::where('sub_category',2)
+            // ->where('sales_price','!=',null)
+            // ->where('stock_quantity','>',200)
+            // ->orderBy('stock_quantity','DESC')
+            // ->take(20)
+            // ->get();
+            $floor = $this->tilesLocationBasedData()->where('sub_category',3)->take(20);
+            $wall = $this->tilesLocationBasedData()->where('sub_category',2)->take(20);
+            //return response()->json($datas);
+            $paint = product::where('category',21)->get();
+            return view('home', compact('slider', 'layouts', 'output', 'product_today', 'adModel','floor','wall','paint'));
 
             //  foreach($product_today as $row){
             //     return response()->json($row);
@@ -299,96 +330,6 @@ class pageController extends Controller
         }
     }
 
-    public function categoryTree()
-    {
-        $category = category::all();
-        foreach ($category as $row) {
-            $sub_data = array(
-                'id' => $row->id,
-                'name' => $row->category_name,
-                'text' => $row->category_name,
-                'parent_id' => $row->parent_id
-            );
-            $data[] = $sub_data;
-        }
-        foreach ($data as $key => &$value) {
-            $output[$value['id']] = &$value;
-        }
-        foreach ($data as $key => &$value) {
-            if ($value["parent_id"] && isset($output[$value["parent_id"]])) {
-                $output[$value["parent_id"]]["nodes"][] = &$value;
-            }
-        }
-        foreach ($data as $key => &$value) {
-            if ($value["parent_id"] && isset($output[$value["parent_id"]])) {
-                unset($data[$key]);
-            }
-        }
-        //     <ul>
-        //     <li><a href='#'><span>Home</span></a></li>
-        //     <li class='has-sub has-new-sub'><a href='#'><span>Products</span></a>
-        //        <ul class="first-child"><!-- over all child bro -->
-        //           <li class='has-sub has-new-sub'><a href='#'><span>Product 1</span></a>
-        //              <ul class="second-child">
-        //                 <li class="has-sub has-new-sub"><a href='#'class='has-sub has-new-sub'><span>Sub Product</span></a>
-        //                       <ul class="second-child">
-        //                          <li><a href='#'><span>Sub Product</span></a></li>
-        //                          <li class='last'><a href='#'><span>Sub Product</span></a></li>
-        //                          <li class='last'><a href='#'><span>Sub Product</span></a></li>
-        //                          <li class='last'><a href='#'><span>Sub Product</span></a></li>
-        //                          <li class='last'><a href='#'><span>Sub Product</span></a></li>
-        //                       </ul><!-- inner product menu -->
-        //                 </li>
-        //                 <li class='last'><a href='#'><span>Sub Product</span></a></li>
-        //              </ul>
-        //           </li><!-- 2nd level menu end here -->
-        //           <li class='has-sub has-new-sub'><a href='#'><span>Product 2</span></a>
-        //              <ul class="second-child">
-        //                 <li><a href='#'><span>Sub Product</span></a></li>
-        //                 <li class='last'><a href='#'><span>Sub Product</span></a></li>
-        //              </ul>
-        //           </li>
-        //           <li><a href='#'><span>Product 3</span></a></li>
-        //        </ul>
-        //     </li>
-        //     <li><a href='#'><span>About</span></a></li>
-        //     <li class='last'><a href='#'><span>Contact</span></a></li>
-        //  </ul>
-        //     $output ='<div id="cssmenu" class="animated_item"><ul>';
-        // foreach($data as $menu1){
-        //     $m1 = count($menu1['nodes']);
-        //     if($m1 > 0){
-        //         $output .='<li><a href=""><span>'.$menu1['name'].'</span></a></li>';
-        //     }else{
-        //         $output .='<li class="has-sub has-new-sub"><a href="#"><span>'.$menu1['name'].'</span></a>
-        //         <ul class="first-child">';
-        //         foreach($menu1 as $menu2){
-        //             if(response()->json(count($menu2['nodes'])) > 0){
-        //                 $output .='<li class="last"><a href="#"><span>menu2</span></a></li></li>';
-        //             }else{
-        //                 $output .='<li class="active has-sub has-new-sub"><a href="#"><span>menu2</span></a>
-        //                 <ul class="second-child">';
-        //                 foreach($menu2 as $menu3){
-        //                     if(response()->json(count($menu3['nodes'])) > 0){
-        //                         $output .='<li class="last"><a href="#"><span>menu2</span></a></li></li>';
-        //                     }else{
-        //                         $output .='<li class="active has-sub has-new-sub"><a href="#"><span>menu2</span></a>
-        //                         <ul class="second-child">';
-        //                     }
-
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
-
-        //   $output .='</ul>';
-        echo '<pre>';
-        echo '</pre>';
-        foreach ($data as $d1) {
-            echo count($d1['nodes']);
-        }
-    }
 
     public function quickModel($id)
     {
@@ -505,7 +446,192 @@ class pageController extends Controller
 
         echo $output;
     }
+    public function quickModelTiles($id)
+    {
+        $upload = upload::where('product_id', $id)->get();
+        $product = product::find($id);
 
+        $output = '
+     <div id="quick_view" class="modal_window">
+
+     <button class="close arcticmodal-close"></button>
+
+     <div class="clearfix">
+
+           <div class="single_product">
+
+                 <div class="image_preview_container" id="qv_preview">';
+        if ($product->product_image != "") {
+            $output .= '<img id="img_zoom" data-zoom-image="images/product_img5.JPG" src="http://www.kagtech.net/KAGAPP/Partsupload/' . $product->product_image . '" alt="">';
+        } else {
+            $output .= '<img src="images/qv_thumb_2.jpg" alt="">';
+        }
+        $output .= '</div>';
+    
+        $output .= '
+                 <div class="v_centered">
+                       <span class="title">Share this:</span>
+                       <div class="addthis_widget_container">
+                             <!-- AddThis Button BEGIN -->
+                             <div class="addthis_toolbox addthis_default_style addthis_32x32_style">
+                             <a class="addthis_button_preferred_1"></a>
+                             <a class="addthis_button_preferred_2"></a>
+                             <a class="addthis_button_preferred_3"></a>
+                             <!-- <a class="addthis_button_preferred_4"></a> -->
+                             <a class="addthis_button_compact"></a>
+                             <a class="addthis_counter addthis_bubble_style"></a>
+                             </div>
+                             <!-- AddThis Button END -->
+                       </div>
+
+                 </div>
+
+
+           </div>
+
+
+           <div class="single_product_description">
+
+                 <h3><a href="/product/' . $product->id . '">' . $product->product_name . '
+                 </a></h3>
+
+                 <div class="description_section v_centered">
+                 </div>
+
+                 <div class="description_section">
+                       <table class="product_info">
+                             <tbody>
+                                   <tr>
+                                         <td>Availability: </td>
+                             ';
+        if ($product->stock_quantity != "") {
+            $output .= '<td><span class="in_stock">in stock</span> ' . $product->stock_quantity . ' item(s)</td>';
+        } else {
+            $output .= '<td><span style="color:red;">Out of Stock</span></td>';
+        }
+        $output .='</tr></tbody>
+                       </table>
+                 </div>';
+       
+        if ($product->regular_price != "") {
+            $output .= ' <p class="product_price"><s>₹' . $product->regular_price . '</s> <b class="theme_color">₹' . $product->sales_price . '</b></p>';
+        } else {
+            $output .= ' <p class="product_price"><b class="theme_color">₹' . $product->sales_price . '</b></p>';
+        }
+       
+        $output .= '<ul class="specifications">
+       
+                                                   <li><span>Brand:</span> KAG</li>
+                                                       <li><span>Size:</span> '.$product->width.'</li>
+                                                       <li><span>Weight:</span> '.$product->weight.'</li>
+                                                       <li><span>Total Coverage in Sqft:</span> '.$product->length.'</li>
+                                                       <li><span>No of Pieces:</span> '.$product->items.'</li>
+                                                       <li><span>Description :</span> '.$product->product_description.'</li>
+                                                
+                                                   </ul>';
+     
+        $output .= '<form method="post" id="termsData">' . csrf_field() . '
+     ';
+
+        $output .= '
+                 <input type="hidden" id="shipping_amount" name="shipping_amount" value="' . $product->shipping_amount . '">
+                 
+                 <div class="buttons_row">
+                     <a class="button_blue middle_btn" href="/product/' . $product->id . '">See product details</a>
+                     <a href="/add-wishlist/' . $product->id . '"><button type="button" class="button_dark_grey def_icon_btn middle_btn add_to_wishlist tooltip_container"><span class="tooltip top">Add to Wishlist</span></button></a>
+
+                 </div>
+     </form>
+           </div>
+     </div>
+
+     </div>
+     ';
+
+        echo $output;
+    }
+
+    public function quickModelPaint($id)
+    {
+        $upload = upload::where('product_id', $id)->get();
+        $product = product::find($id);
+
+        $output = '
+     <div id="quick_view" class="modal_window">
+
+     <button class="close arcticmodal-close"></button>
+
+     <div class="clearfix">
+
+           <div class="single_product">
+
+                 <div class="image_preview_container" id="qv_preview">';
+        if ($product->product_image != "") {
+            $output .= '<img id="img_zoom" data-zoom-image="images/product_img5.JPG" src="' . asset('/product_img') . '/' . $product->product_image . '" alt="">';
+        } else {
+            $output .= '<img src="images/qv_thumb_2.jpg" alt="">';
+        }
+        $output .= '</div>
+                 <div class="product_preview" data-output="#qv_preview">
+                       <div class="owl_carousel" id="thumbnails">';
+        $output .= '<img src="' . asset('/product_img') . '/' . $product->product_image . '" data-large-image="' . asset('/product_img') . '/' . $product->product_image . '" alt="">';
+     
+        $output .= '</div>
+                 </div>
+                 <div class="v_centered">
+                       <span class="title">Share this:</span>
+                       <div class="addthis_widget_container">
+                             <!-- AddThis Button BEGIN -->
+                             <div class="addthis_toolbox addthis_default_style addthis_32x32_style">
+                             <a class="addthis_button_preferred_1"></a>
+                             <a class="addthis_button_preferred_2"></a>
+                             <a class="addthis_button_preferred_3"></a>
+                             <!-- <a class="addthis_button_preferred_4"></a> -->
+                             <a class="addthis_button_compact"></a>
+                             <a class="addthis_counter addthis_bubble_style"></a>
+                             </div>
+                             <!-- AddThis Button END -->
+                       </div>
+
+                 </div>
+
+
+           </div>
+
+
+           <div class="single_product_description">
+
+                 <h3><a href="/product/' . $product->id . '">' . $product->product_name . '
+                 </a></h3>
+
+                 <div class="description_section v_centered">
+                 </div>
+
+                 <hr>
+                 <div class="description_section">
+                     <p>' . $product->product_description . '</p>
+                 </div>
+                 <hr>';
+       
+
+      
+
+        $output .= '
+                 
+                 <div class="buttons_row">
+                     <a class="button_blue middle_btn" href="/product/' . $product->id . '">See product details</a>
+                     <a href="/add-wishlist/' . $product->id . '"><button type="button" class="button_dark_grey def_icon_btn middle_btn add_to_wishlist tooltip_container"><span class="tooltip top">Add to Wishlist</span></button></a>
+
+                 </div>
+     
+           </div>
+     </div>
+
+     </div>
+     ';
+
+        echo $output;
+    }
 
 
     public function getCompare($id)
@@ -543,8 +669,29 @@ class pageController extends Controller
         $pAlready = 0;
         if (Session::has('compare')) {
             if (!in_array($id, Session::get('compare'))) {
-                Session::push('compare', $id);
-                $pAlready = 1;
+                $pro1 = product::find($id);
+                $pro2 = product::find(Session::get('compare')[0]);
+                if($pro1->category == $pro2->category){
+                    if($pro1->sub_category != null){
+                        if($pro1->sub_category == $pro2->sub_category){
+                          Session::push('compare', $id);
+                        $pAlready = 1;  
+                        }else{
+                    Session::forget('compare');
+                    Session::push('compare', $id);
+                    $pAlready = 1;
+                        }
+
+                    }else{
+                         Session::push('compare', $id);
+                        $pAlready = 1;
+                    }
+                }else{
+                    Session::forget('compare');
+                    Session::push('compare', $id);
+                    $pAlready = 1;
+                }
+               
             }
         } else {
             Session::push('compare', $id);
@@ -769,21 +916,39 @@ class pageController extends Controller
      return response()->json(array($status,$total,$quantity));
    // return response()->json($totalQty);
     }
-    public function colorModals(){
-        $category = color_category::where('status',0)->get();
-        $color = color::where('category',$category[0]->id)->get();
-        return view('modal.colors',compact('category','color'));
+    public function colorModals($id){
+        //
+
+
+        $color_ids = collect(DB::table('paint_prices')->select('colors_id')->where('product_id',$id)->groupBy('colors_id')->orderBy('colors_id','asc')->get());
+            
+            foreach($color_ids as $ids){
+                $colors[]=$ids->colors_id;
+            }
+            $color = color::whereIn('id',$colors)->get();
+            $collection = collect($color);
+            $sorted = $collection->groupBy('shade_family_id');
+            foreach($sorted->toArray() as $cats){
+                $categorys[]=$cats[0]['shade_family_id'];
+            }
+            $category = color_category::whereIn('id',$categorys)->get();
+        //return response()->json($category);
+         return view('modal.colors',compact('category','color','id'));
     }
 
 
 
-    public function getColorById($id){
-        if($id == 0){
-        $category = color_category::where('status',0)->get();
-        $color = color::where('category',$category[0]->id)->get();
-        }else{
+    public function getColorById($product_id,$category_id){
+         $color_ids = collect(DB::table('paint_prices')->select('colors_id')->where('product_id',$product_id)->groupBy('colors_id')->orderBy('colors_id','asc')->get());
+            
+            foreach($color_ids as $ids){
+                $colors[]=$ids->colors_id;
+            }
 
-            $color = color::where('category',$id)->get();
+        if($category_id == 0){
+         $color = color::whereIn('id',$colors)->get();
+        }else{
+             $color = color::whereIn('id',$colors)->where('shade_family_id',$category_id)->get();
         }
         $output='';
         if(count($color) > 0){
@@ -791,13 +956,13 @@ class pageController extends Controller
             $output .='<div class="col-md-3">
             <div class="card mb-1 color-item" id="color-item'.$data->id.'" onclick="getColors('.$data->id.')">
               <div class="card-content">
-                <div class="bg-lighten-1 height-50" style="background-color:'.$data->color.'"></div>
+                <div class="bg-lighten-1 height-50" style="background-color:'.$data->shade_code.'"></div>
                 <div class="p-1">
                   <p class="mb-0">
-                    <strong>'.$data->name.'</strong>
-                    <p class="text-muted float-right price"><i class="icon-rupee"></i>'.$data->price.'</p>
+                    <strong>'.$data->shade_name.'</strong>
+                   
                   </p>
-                  <p class="mb-0">'.$data->code.'</p>
+                  <p class="mb-0">'.$data->code_name.'</p>
                 </div>
               </div>
             </div>
@@ -810,8 +975,14 @@ class pageController extends Controller
     }
 
     public function getSearchColors(Request $request){
-        $color = color::where("name","LIKE","%{$request->result}%")
-        ->orWhere("code","LIKE","%{$request->result}%")
+         $color_ids = collect(DB::table('paint_prices')->select('colors_id')->where('product_id',$request->product_id)->groupBy('colors_id')->orderBy('colors_id','asc')->get());
+            
+            foreach($color_ids as $ids){
+                $colors[]=$ids->colors_id;
+            }
+
+        $color = color::where("shade_name","LIKE","%{$request->result}%")
+        ->orWhere("code_name","LIKE","%{$request->result}%")->whereIn('id',$colors)
         ->get();
         $output='';
         if(count($color) > 0){
@@ -819,13 +990,13 @@ class pageController extends Controller
             $output .='<div class="col-md-3">
             <div class="card mb-1 color-item" id="color-item'.$data->id.'" onclick="getColors('.$data->id.')">
               <div class="card-content">
-                <div class="bg-lighten-1 height-50" style="background-color:'.$data->color.'"></div>
+                <div class="bg-lighten-1 height-50" style="background-color:'.$data->shade_code.'"></div>
                 <div class="p-1">
                   <p class="mb-0">
-                    <strong>'.$data->name.'</strong>
-                    <p class="text-muted float-right price"><i class="icon-rupee"></i>'.$data->price.'</p>
+                    <strong>'.$data->shade_name.'</strong>
+                    
                   </p>
-                  <p class="mb-0">'.$data->code.'</p>
+                  <p class="mb-0">'.$data->code_name.'</p>
                 </div>
               </div>
             </div>
@@ -837,12 +1008,72 @@ class pageController extends Controller
         return response()->json($output);
     }
 
-    public function selectedColor($id){
-        $color = color::find($id);
+    public function selectedColor(Request $request){
+       $color = paint_price::select('price')->where("product_id",$request->product_id)->where("lit",$request->lit)->where("colors_id",$request->colors_id)->first();
         return response()->json($color);
     }
 
     public function postCartItem(Request $request){
         return response()->json("200");
+    }
+    public function tileStock($id){
+        $data = product::where('product_name',$id)->get();
+        return view('tilesStock',compact('data'));
+    }
+
+    public function setLocations($data){
+       // Session::push('locations', $data);
+        //Session::forget('locations');
+        Session::put('locations', $data);
+        return response()->json(Session::get('locations'));
+    }
+    public function tilesLocationBasedData(){
+        $location = Session::get('locations');
+        //$location = 'Salem';
+        $data = array(
+            'Ariyalur'=>['Trichy','Karaikal'],
+            'Chennai'=>['Perungalthur','Pallavaram','Vadapalani','Tambaram'],
+            'Coimbatore'=>['Coimbatore'],
+            'Cuddalore'=>['Pondicherry'],
+            'Dindigul'=>['Madurai','Trichy'],
+            'Dharmapuri'=>['Salem','Vellore'],
+            'Erode'=>['Coimbatore','Salem'],
+            'Karur'=>['Trichy'],
+            'Kanniyakumari'=>['Tirunelveli'],
+            'Kanchipuram'=>['Perungalthur','Pallavaram','Vadapalani','Tambaram'],
+            'Krishnagiri'=>['Vellore'],
+            'Madurai'=>['Madurai','Trichy'],
+            'Nillgiris'=>['Coimbatore'],
+            'Namakkal'=>['Salem','Trichy'],
+            'Nagapattinam'=>['Karaikal'],
+            'Perambalur'=>['Salem','Trichy'],
+            'Pudukottai'=>['Trichy'],
+            'Ramanathapuram'=>['Madurai','Tirunelveli'],
+            'Salem'=>['Salem'],
+            'Sivaganga'=>['Madurai','Trichy'],
+            'Thanjavur'=>['Trichy'],
+            'Theni'=>['Madurai'],
+            'Thoothukudi'=>['Tirunelveli'],
+            'Tiruppur'=>['Coimbatore'],
+            'Tirunelveli'=>['Tirunelveli'],
+            'Tiruchirappalli'=>['Trichy','Madurai'],
+            'Tiruvannamalai'=>['Vellore','Pondicherry'],
+            'Tiruvallur'=>['Perungalthur','Pallavaram','Vadapalani','Tambaram'],
+            'Tiruvarur'=>['Karaikal'],
+            'Virudunagar'=>['Madurai','Tirunelveli'],
+            'Vellore'=>['Vellore'],
+            'Viluppuram'=>['Pondicherry'],
+        );
+      
+            $stock = DB::table('tiles_stock_locations as tsl')
+                    ->select(DB::raw('sum(tsl.stock) as stocks, tsl.product_id,p.product_name,p.product_image,p.sub_category,p.sales_price'))
+                    ->whereIn('tsl.location', $data[$location])
+                    ->join('products as p','p.id','=','tsl.product_id')
+                    ->groupBy('tsl.product_id')
+                    ->orderBy('stocks','desc')
+                    ->get();
+            //$stock = tiles_stock_location::whereIn('location',$data[$location])->get();
+        
+        return $stock;
     }
 }

@@ -24,6 +24,8 @@ use App\optionValue;
 use App\custom_qty;
 use App\unit;
 use App\product_unit;
+use App\tiles_stock_location;
+use App\distance_price;
 class ProductController extends Controller
 {
     //Brand Edit Delete View Update Process Function Start Here
@@ -372,7 +374,7 @@ class ProductController extends Controller
     }
     public function productSave(Request $request){
         $request->validate([
-            'imgInp'=>'required',
+            //'imgInp'=>'required',
             'category'=>'required',
             'product_name'=>'required|unique:products',
         ]);
@@ -468,6 +470,18 @@ class ProductController extends Controller
                 $optionValue->save();
             }
         }
+
+    }
+    
+    if(isset($request->price_distance)){
+        foreach ($request->price_distance as $key => $value) {
+            $data = new distance_price;
+            $data->product_id = $product->id;
+            $data->distance = $value;
+            $data->price = $request->distance_price[$key];
+            $data->save();
+            
+    }
 
     }
     if(count($request->customqty) > 0){
@@ -687,22 +701,55 @@ class ProductController extends Controller
         }
         }
 
-        //units module
-       if(isset($request->units)){
-        foreach(explode(',',$request->units) as $id) {
-            $unit_data[] = unit::find($id);
-        }
-       }
-       if(count($unit_data) > 0){
-        foreach($unit_data as $units){
-            $product_unit = new product_unit;
-            $product_unit->unit_price = $request['unit'.$units->id];
-            $product_unit->unit_name = $units->unit_name;
-            $product_unit->product_id = $product->id;
-            $product_unit->unit_id = $units->id;
-            $product_unit->save();
-        }
+          if(isset($request->price_distance)){
+        foreach ($request->price_distance as $key => $value) {
+            $data = new distance_price;
+            $data->product_id = $product->id;
+            $data->distance = $value;
+            $data->price = $request->distance_price[$key];
+            $data->save();
+            
     }
+
+    }
+
+        //units module
+    //    if(isset($request->units)){
+    //     foreach(explode(',',$request->units) as $id) {
+    //         $unit_data[] = unit::find($id);
+    //     }
+    //    }
+    //    $product_unit = product_unit::where('product_id',$request->product_page_id)->get();
+    //    if(count($product_unit) > 0){
+    //     foreach($unit_data as $key => $units){
+    //         $product_unit1 = product_unit::where('product_id',$request->product_page_id)->where('unit_id',$units->id)->get();
+    //         if(count($product_unit1) >0){
+    //             $product_unit2 = product_unit::find($product_unit1[0]->id);
+    //             $product_unit2->unit_price = $request['unit'.$units->id];
+    //             $product_unit2->save();
+    //         }else{
+    //             $product_unit = new product_unit;
+    //             $product_unit->unit_price = $request['unit'.$units->id];
+    //             $product_unit->unit_name = $units->unit_name;
+    //             $product_unit->product_id = $request->product_page_id;
+    //             $product_unit->unit_id = $units->id;
+    //             $product_unit->save();
+    //         }
+    //     }
+
+    //    }else{
+    //     if(count($unit_data) > 0){
+    //         foreach($unit_data as $units){
+    //             $product_unit = new product_unit;
+    //             $product_unit->unit_price = $request['unit'.$units->id];
+    //             $product_unit->unit_name = $units->unit_name;
+    //             $product_unit->product_id = $request->product_page_id;
+    //             $product_unit->unit_id = $units->id;
+    //             $product_unit->save();
+    //         }
+    //     }
+    //    }
+
 
         return response()->json($request->product_page_id);
     }
@@ -770,6 +817,8 @@ class ProductController extends Controller
 
         }
 
+        distance_price::where('product_id',$id)->delete();
+
 
         return response()->json(['message'=>'Successfully Delete'],200);
     }
@@ -788,11 +837,11 @@ class ProductController extends Controller
         $product = product::all();
         $brand = brand::all();
         $optionGroup = optionGroup::where('product_id',$id)->get();
-
-
-        foreach(explode(',', $product_find->category) as $row) {
-            $tree_category[] = $row;
+        $distance_price = distance_price::where('product_id',$id)->get();
+        foreach(explode(',', $product_find->category) as $row1) {
+            $tree_category[] = $row1;
         }
+
         foreach(explode(',', $product_find->related_product) as $row) {
             $related_product[] = $row;
         }
@@ -805,10 +854,16 @@ class ProductController extends Controller
        if(count($optionGroup) > 0){
         $optionGroupGetter = optionGroup::where('product_id',$id)->select('id')->get();
         $optionValue = optionValue::whereIn('group_id',$optionGroupGetter)->get();
-        return view('admin/editProduct',compact('optionGroup','optionValue','group','brand','product','category','attribute','product_attribute','product_find','tree_category','related_product','role','customqty','product_unit','units'));
+        return view('admin/editProduct',compact('distance_price','optionGroup','optionValue','group','brand','product','category','attribute','product_attribute','product_find','tree_category','related_product','role','customqty','product_unit','units'));
     }else{
-        return view('admin/editProduct',compact('optionGroup','group','brand','product','category','attribute','product_attribute','product_find','tree_category','related_product','role','customqty','product_unit','units'));
+        return view('admin/editProduct',compact('distance_price','optionGroup','group','brand','product','category','attribute','product_attribute','product_find','tree_category','related_product','role','customqty','product_unit','units'));
     }
+
+    }
+
+    public function distancePriceDeleteById($id){
+            distance_price::find($id)->delete();
+            return response()->json(['message'=>'Successfully Delete'],200);
 
     }
 
@@ -866,7 +921,7 @@ public function getServerImages($id)
 }
 
 public function getProduct(){
-    $product = product::all();
+    $product = product::where('category','!=',1)->where('category','!=',21)->get();
     return Datatables::of($product)
     ->addColumn('product_name', function($product){
 
@@ -875,7 +930,13 @@ public function getProduct(){
         </td>';
         })
     ->addColumn('product_image', function($product){
-        return '<td><img src="/product_img/'.$product->product_image.'" alt="" style="width: 80px"></td>';
+
+        if($product->category == 1){
+            return '<td><img src="http://www.kagtech.net/KAGAPP/Partsupload/'.$product->product_image.'" alt="" style="width: 80px"></td>';
+        }else{
+            return '<td><img src="/product_img/'.$product->product_image.'" alt="" style="width: 80px"></td>';
+        }
+
         })
         ->addColumn('delete', function($product){
             return '<td class="text-center"><i class="ft-trash-2 deleteIcon" onclick="Delete('.$product->id.')"></i></td>';
@@ -959,7 +1020,10 @@ public function getProduct(){
         $colors = color::where('category',$id)->get();
         if(count($colors) > 0){
             foreach($colors as $row){
-                $output .='  <div class="card mb-1 col-md-3">
+                $output .=' 
+                
+                
+                <div class="card mb-1 col-md-3">
                 <div class="card-content">
                   <div class="bg-lighten-1 height-50" style="background-color:'.$row->color.'">
                   <span style="color: #fff;
@@ -1071,5 +1135,154 @@ public function getProduct(){
         $product_unit->unit_price = $data;
         $product_unit->save();
         return response()->json(['message'=>'Unit Update Successfully'],200);
+    }
+
+    public function uploadTilesJSON(Request $request){
+        try{
+        $getData = json_decode($request->datas);
+        foreach($getData as $row){
+             $product = product::where('product_name',$row->Product)->get();
+            if(count($product) >0){
+                $change_product = product::find($product[0]->id);
+                 $change_product->sales_price = $row->Price;
+                // $change_product->stock_quantity = $row->ClosingBalance;
+                 $change_product->save();
+                 $location = tiles_stock_location::where('location',$request->location)->where('product_id',$change_product->id)->first();
+                 if(isset($location)){
+                    $loc = tiles_stock_location::find($location->id);
+                    $loc->stock = $row->ClosingBalance;
+                    $loc->save();
+                 }else{
+                     $loc = new tiles_stock_location;
+                     $loc->product_id = $change_product->id;
+                     $loc->location = $request->location;
+                    $loc->stock = $row->ClosingBalance;
+                    $loc->save();
+                 }
+            //$result[]=$change_product;
+            }
+            // else{
+            //     $balance[]=$row;
+            // }
+        }
+            }
+        catch (\Exception $e) {
+            return response()->json($e);
+            //return $e->getMessage();
+        }
+        return response()->json(['message'=>'Tiles Update Successfully'],200);
+    }
+    public function updateTilesJSON(Request $request){
+        try{
+        $getData = json_decode($request->datas);
+        foreach($getData as $row){
+            // $product = product::where('product_name',$row->ProductName)->get();
+            // if(count($product) >0){
+                if($row->subcategory == "Floor"){
+                    $subcategory = 3;
+                }else{
+                    $subcategory = 2;
+                }
+                $new_product = new product;
+                $new_product->product_name = $row->ProductName;
+                $new_product->category =1;
+                $new_product->brand_name =2;
+                $new_product->sub_category = $subcategory;
+                $new_product->width = $row->ProductSize;
+                $new_product->weight = $row->Productweight;
+                $new_product->items = $row->Noofpics;
+                $new_product->product_description = $row->description;
+                $new_product->product_image = $row->image;
+                $new_product->length = $row->Squarefeet;
+                $new_product->save();
+             
+            //}
+        }
+        //return response()->json(['message'=>'Upload Update Successfully'],200);
+        return response()->json($result);
+    }
+        catch (\Exception $e) {
+            return response()->json($e);
+            //return $e->getMessage();
+        }
+    }
+
+    public function viewTitle(){
+        $subcategory = category::whereIn('parent_id',['2','3'])->get();
+        return view('admin.tiles',compact('subcategory'));
+    }
+
+    public function updateTilesSubCategory(Request $request){
+        $product = product::find($request->subcategoryProduct_id);
+        $product->second_sub_category = $request->subcategory;
+        $product->save();
+        return response()->json(['message'=>'SubCategory Update Successfully'],200);
+    }
+
+    public function getTilesProduct(){
+        $product = product::where('category',1)->get();
+    return Datatables::of($product)
+    ->addColumn('product_name', function($product){
+
+        return '<td><a href="javascript:void(null)" onclick="getProduct('.$product->id.')">
+       '.$product->product_name.'</a>
+        </td>';
+        })
+    ->addColumn('product_image', function($product){
+
+        if($product->category == 1){
+            return '<td><img src="http://www.kagtech.net/KAGAPP/Partsupload/'.$product->product_image.'" alt="" style="width: 80px"></td>';
+        }else{
+            return '<td><img src="/product_img/'.$product->product_image.'" alt="" style="width: 80px"></td>';
+        }
+
+        })
+        ->addColumn('category', function($product){
+
+        if($product->sub_category ==  3){
+            return '<td class="text-success"><a href="javascript:void(null)" onclick="applySecondCategory('.$product->id.')">Floor Tiles</a></td>';
+        }else{
+            return '<td class="text-success"><a href="javascript:void(null)" onclick="applySecondCategory('.$product->id.')">Wall Tiles</a></td>';
+        }
+
+        })
+
+        ->addColumn('delete', function($product){
+            return '<td class="text-center"><i class="ft-trash-2 deleteIcon" onclick="Delete('.$product->id.')"></i></td>';
+        })
+        ->addIndexColumn()
+    ->rawColumns(['product_name','product_image','category','delete'])
+    ->make(true);
+    }
+    public function deleteAll(){
+       product::where("category",1)->delete();
+        return response()->json(['message'=>'Upload Update Successfully'],200);
+    }
+
+    public function getSingleTilesProduct($id){
+        $product = product::find($id);
+        $stock = tiles_stock_location::where('product_id',$product->id)->get();
+        $output ='';
+        $subcategory = 'Null';
+        if($product->second_sub_category !=0){
+            $category = category::find($product->second_sub_category);
+            if(isset($category)){
+                $subcategory = $category->category_name;
+            }
+        }
+        if(count($stock) >0){
+            foreach($stock as $row){
+                $output .=' <tr>
+                             <td>Stock Of '.$row->location.'</td>
+                                    <td class="font-weight-bold">'.$row->stock.'</td>
+                                </tr>';
+            }
+        }else{
+            $output .=' <tr>
+                             <td>Stock </td>
+                                    <td class="font-weight-bold">No Stock</td>
+                                </tr>';
+        }
+        return response()->json(array($product,$output,$subcategory));
     }
 }

@@ -216,11 +216,19 @@
                                     <a class="nav-link" id="baseVerticalLeft2-tab10" data-toggle="tab" aria-controls="tabVerticalLeft30"
                                     href="#tabVerticalLeft30" aria-expanded="false"><i class="ft-folder"></i> Units</a>
                                   </li>
-
+                                     <li class="nav-item">
+                                  <a class="nav-link" id="baseVerticalLeft2-tab11" data-toggle="tab" aria-controls="tabVerticalLeft31"
+                                  href="#tabVerticalLeft31" aria-expanded="false"><i class="la la-gear"></i> Distance Price</a>
+                                </li>
+                                     <li class="nav-item">
+                                  <a class="nav-link" id="baseVerticalLeft2-tab12" data-toggle="tab" aria-controls="tabVerticalLeft32"
+                                  href="#tabVerticalLeft32" aria-expanded="false"><i class="la la-gear"></i> Discount / high</a>
+                                </li>
                                 <li class="nav-item">
                                   <a class="nav-link" id="baseVerticalLeft2-tab6" data-toggle="tab" aria-controls="tabVerticalLeft26"
                                   href="#tabVerticalLeft26" aria-expanded="false"><i class="la la-gear"></i> Advanced</a>
                                 </li>
+                             
                               </ul>
                               <div class="tab-content px-1">
                                 <div role="tabpanel" class="tab-pane active tap1" id="tabVerticalLeft21" aria-expanded="true"
@@ -332,6 +340,7 @@
 
                                 {{-- </form> --}}
                                 </div>
+
                                 <div class="tab-pane" id="tabVerticalLeft27" aria-labelledby="baseVerticalLeft2-tab7">
                                     <div class="form-group">
                                         <label for="projectinput6">Tax Type</label>
@@ -354,6 +363,50 @@
                                       <button class="btn btn-primary float-right" type="button" id="addOptionSet"> Add Options Set</button>
 
                                       <div id="optionSetPlace"></div>
+                                  </div>
+
+                                  <div class="tab-pane p-2" id="tabVerticalLeft31" aria-labelledby="baseVerticalLeft2-tab11">
+                                    <div class="row">
+                                      <div class="col-md-12">
+                                        <button type="button" class="btn btn-primary" id="add_distance_price">Add New</button>
+
+                                      </div>
+                                      <div class="col-md-12 pt-4" id="distance-price">
+
+                                          
+
+                                      </div>
+                                    </div>
+
+                                  </div>
+
+
+                                <div class="tab-pane p-2" id="tabVerticalLeft32" aria-labelledby="baseVerticalLeft2-tab12">
+                                  <div class="row">
+                            <div class="col-md-4">                            <div class="form-group">
+                                <label class="label-control" for="projectinput1">Dis / High</label>
+                                  <select name="sub_category" id="sub_category" class="form-control">
+                                        <option value="" selected="" disabled="">Select </option>
+                                          <option value="discount">Discount </option>
+                                          <option value="high">High </option>
+                                        </select>
+                              </div></div>
+                            <div class="col-md-4">                            <div class="form-group">
+                                <label class="label-control" for="projectinput1">Type</label>
+                                  <select name="sub_category"  class="form-control">
+                                        <option value="" selected="" disabled="">Select </option>
+                                          <option value="percentage">Percentage </option>
+                                          <option value="amount">Amount </option>
+                                        </select>
+                              </div></div>
+                            <div class="col-md-4"><div class="form-group">
+                                <label class="label-control" for="projectinput1">Value</label>
+                                  <input type="text" id="coverage" class="form-control" placeholder="Product Name"
+                                  name="coverage">
+                              </div></div>
+                          </div>
+
+
                                   </div>
 
                                 <div class="tab-pane" id="tabVerticalLeft26" aria-labelledby="baseVerticalLeft2-tab6">
@@ -547,6 +600,8 @@
     <script src="{{ url('/dropzone/config-dropzone.js') }}"></script>
 
 <script>
+
+var distance_price_data = [];
 var attributes = [];
 var units = [];
 $('.catalog-menu').addClass('active');
@@ -572,7 +627,7 @@ function Save_product(){
     success: function(data)
     {
       $('#product_get_id').val(data);
-      console.log(data);
+      //console.log(data);
        //$('input[name=pro_id]').val(data);
       // $('input[name=personal]').val(data);
       //$("#product_form_data")[0].reset();
@@ -861,6 +916,28 @@ function RemoveUnit(id){
     $("#select_units option[value=" + id + "]").prop("disabled", false);
   }
 }
+
+var distance_count_handle = 1;
+$('#add_distance_price').on('click', function(){
+  let template ='<div class="row pb-2" id="distance_handle'+distance_count_handle+'"><div class="col-md-6">'+
+  '<label for="projectinput1">Distance</label><input type="text" class="form-control" name="price_distance[]">'+
+  '</div><div class="col-md-6"><i class="ft-minus-circle text-danger" style="float:right;cursor:pointer" onclick="removeDistanceHandle('+distance_count_handle+')"></i><label for="projectinput1">Price</label>'+
+  '<input type="text" class="form-control" name="distance_price[]"></div></div>';
+  distance_price_data.push(distance_count_handle);
+  distance_count_handle++;
+$('#distance-price').append(template);
+});
+
+function removeDistanceHandle(id){
+    if(confirm('Are you sure delete this row?'))
+  {
+    distance_price_data = jQuery.grep(distance_price_data, function(value) {
+      return value != id;
+    });
+    $( "#distance_handle"+id ).remove();
+  }
+}
+
 </script>
 
 

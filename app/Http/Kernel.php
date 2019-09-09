@@ -61,6 +61,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'utype' => \App\Http\Middleware\UserType::class,
+        'location' => \App\Http\Middleware\Locations::class,
     ];
      /**
      * The priority-sorted list of middleware.

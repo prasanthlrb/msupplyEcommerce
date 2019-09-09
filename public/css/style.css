@@ -1847,7 +1847,8 @@
 		/* orders table */
 
 		.orders_table .ship_col,
-		.orders_table .product_action_col{ width: 175px; }
+		.orders_table .product_action_col{ width: 110px; }
+		.orders_table .product_action_col1{ width: 150px; }
 
 		.orders_table .order_number_col,
 		.order_table th{ width: 141px; }
@@ -3289,7 +3290,7 @@ transition-duration:0.1s;
 			.single_product_description{
 				position: relative;
 				padding-top: 10px;
-				/* overflow: hidden; */
+				overflow: hidden;
 			}
 
 			.image_preview_container{
@@ -6658,4 +6659,14 @@ top: 40px!important;
     visibility: hidden!important;
 }*/
 
+}
+
+/* custom css in home page */
+.location-postion {
+    /* text-align: center; */
+    /* margin-top: -20px; */
+}
+.fixedSideImage{
+	position: fixed;
+	top: 75px;
 }

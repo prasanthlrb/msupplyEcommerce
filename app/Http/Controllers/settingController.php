@@ -8,6 +8,7 @@ use App\home_setting;
 use Illuminate\Http\Request;
 use App\role;
 use Auth;
+use GuzzleHttp\Client;
 class settingController extends Controller
 {
     public function about(){
@@ -28,7 +29,7 @@ class settingController extends Controller
         return view('/admin/setting/shipping_detail',compact('data'));
     }
 
-    // update 
+    // update
     public function homeSettingabout(Request $request){
         if(!empty($request->id)){
             $data = home_setting::find($request->id);
@@ -55,7 +56,7 @@ class settingController extends Controller
         if(!empty($request->id)){
         $data = home_setting::find($request->id);
     }else{
-        $data = new home_setting; 
+        $data = new home_setting;
     }
         $data->terms = $request->terms;
         $data->save();
@@ -92,7 +93,7 @@ class settingController extends Controller
             //return response()->json($data['email']);
             return view('admin.setting.contact',compact('data'));
         }
-        //       
+        //
     }
     public function contactUpdate(Request $request){
         if($request->id == 0){
@@ -131,12 +132,12 @@ class settingController extends Controller
     }
     public function editFaq($id){
         $faq = faq::find($id);
-        return response()->json($faq); 
+        return response()->json($faq);
     }
     public function deleteFaq($id){
         $faq = faq::find($id);
         $faq->delete();
-        return response()->json($id); 
+        return response()->json($id);
     }
     public function socialMedia(){
         $data = socialMedia::all();
@@ -221,13 +222,13 @@ class settingController extends Controller
         $editRole->role_name = $request->role_name;
         unset($tb[0],$tb[1]);
         foreach($tb as $row){
-       
+
                 if(in_array($row,$request->role)){
                     $editRole[$row] =1;
                 }else{
                     $editRole[$row] =null;
                 }
-          
+
 
         }
         $editRole->save();
@@ -236,6 +237,18 @@ class settingController extends Controller
 
     public function deleteRole($id){
       role::find($id)->delete();
-        return response()->json("200"); 
+        return response()->json("200");
+    }
+    public function tilesUpload(){
+        return view('admin.setting.tiles');
+        // $client = new Client();
+        // $res = $client->request('GET','http://www.kagtiles.com/stockapp/user/getproductdetailsbybranch/Madurai');
+        // //echo $res->getStatusCode();
+        // // 200
+        //  $res->getHeader('content-type');
+        // // 'application/json; charset=utf8'
+        // //echo $res->getBody();
+        // echo $res->getBody()->getContents();
+        // //dd($res);
     }
 }

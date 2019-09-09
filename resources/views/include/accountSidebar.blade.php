@@ -11,8 +11,9 @@
             <li class="profileInformation"><a href="/account/dashboard" class="dashboard"><i class="fas fa-address-card"></i> Profile Information</a></li>
             <li class="accOrders"><a href="/account/orders" class="orders"><i class="fas fa-shopping-cart"></i> Orders</a></li>
             <li class="accTransport"><a href="/account/transport" class="transport"><i class="la la-truck"></i> Transport</a></li>
+            <li class="accDeals"><a href="/account/deals" class="deals"><i class="fas fa-clipboard-list"></i> Deals</a></li>
             <li class="accWishlist"><a href="/account/wishlist" class="wishlist"><i class="fas fa-clipboard-list"></i> Wishlist</a></li>
-            
+
             <li class="accAddress"><a href="/account/address" class="address"><i class="fas fa-address-book"></i> Manage Address</a></li>
             <li> <a href="{{ route('logout') }}" onclick="event.preventDefault();
                 document.getElementById('logout-form').submit();">

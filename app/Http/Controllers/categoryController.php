@@ -16,27 +16,94 @@ use App\rating;
 use App\optionGroup;
 use App\optionValue;
 use App\custom_qty;
+use App\painting_guides as painting_guide;
+use App\product_feature;
+use App\paint_price;
+use App\product_unit;
+use Session;
 class categoryController extends Controller
 {
     public function categoryProduct($id){
         $category  = category::find($id);
         $adModel = adModel::all();
-        $product = product::where('category','LIKE',"%{$id}%")->paginate(9);
+        
         $brand = brand::all();
        // return response()->json($product);
+       if($id == 21 || $id == 22 || $id == 23 || $id == 24 || $id == 25){
+           if($id == 21){
+            $product = product::where('category',$id)->paginate(9);
+           }else{
+            $product = product::where('sub_category',$id)->paginate(9);
+           }
+       }else if($id == 1 || $id == 2 || $id == 3){
+        $product = $this->tilesLocationBasedData($id);
+        return view('categoryTiles',compact('product','brand','adModel','category'));
+       }
+       else if($id == 14){
+        $getBrandId = product::select('brand_name')->where('category',$id)->groupBy('brand_name')->get();
+        if(count($getBrandId) >0){
+            foreach($getBrandId as $row){
+                $brandId[]=$row->brand_name;
+            }
+            $brands = brand::whereIn('id',$brandId)->get();
+        }else{
+            $brands =[];
+        }
+        return view('steelCategory',compact('brands','adModel','category','brand'));
+       }
+       else{
+             $product = product::where('category',$id)->paginate(9);
+       
+       }
         return view('category',compact('product','brand','adModel','category'));
     }
 
     public function getProduct($id){
         $product1 = product::find($id);
+        if($product1->category == 21){
+        $subCategoty = category::find($product1->sub_category);
+        $guide = painting_guide::where('product_id',$product1->id)->first();
+        $feature = product_feature::where('product_id',$product1->id)->get();
+        //$paint_price = paint_price::where('product_id',$product1->id)->groupBy('lit')->get();
+        $liter = DB::table('paint_prices')->select('lit',DB::raw('count(*) as total'))->where('product_id',$id)->groupBy('lit')->get();
+        $relatedProducts = product::where('sub_category',$product1->sub_category)->where('id','!=',$product1->id)->get();
+         //return response()->json($relatedProducts);
+        return view('paint_product',compact('product1','subCategoty','guide','feature','liter','relatedProducts'));
+    }else if($product1->category == 1){
+
+         $subCategoty = category::find($product1->sub_category);
+         $divider = explode(' ',$product1->product_name, 2);
+        if(count($divider) >1){
+            $relatedProducts = product::where('sub_category',$product1->sub_category)
+            ->where('id','!=',$product1->id)
+            ->where('product_name','like',substr($product1->product_name, 0, strlen($divider[0])).'%')
+            ->where('stock_quantity','>',200)
+            ->take(20)->get();
+            if(count($relatedProducts) == 0){
+            $relatedProducts = product::where('sub_category',$product1->sub_category)
+            ->where('id','!=',$product1->id)
+            ->where('stock_quantity','>',200)
+            ->take(20)->get();
+            }
+        }else{
+            $relatedProducts = product::where('sub_category',$product1->sub_category)
+            ->where('id','!=',$product1->id)
+            ->where('stock_quantity','>',200)
+            ->take(20)->get();
+        }
+         //return response()->json();
+         //return response()->json($relatedProducts);
+         return view('tilesProduct',compact('product1','subCategoty','relatedProducts'));
+    }
+    else if($product1->category == 7){
+        $custom_qty = custom_qty::where('product_id',$product1->id)->get();
+        return view('bricksProduct',compact('product1','custom_qty'));
+    }
+    else{
         $Upload = Upload::where('product_id','=',$id)->get();
         $brand = brand::all();
         $reviews = review::where('item_id',$id)->get();
-        // $review = DB::table('reviews as re')
-        // ->where('re.item_id',$id)
-        // ->join('rating as ra','re.order_item_id','=','ra.order_item_id')
-
-    $review = DB::table('reviews as r')
+        $review = DB::table('reviews as r')
     ->where('r.item_id',$id)
     ->where('r.status',1)
     ->join('ratings as ra','r.order_item_id','=','ra.order_item_id')
@@ -70,7 +137,20 @@ class categoryController extends Controller
         //dd($optionData);
 
         return view('product',compact('product1','optionData','brand','Upload','related_product','breadcrumbs','product_attribute','attribute','review','reviews','rating','custom_qty'));
+    
+    }
+    }
 
+    public function steelProduct($id){
+        $brands = brand::find($id);
+        $product = product::where('brand_name',$id)->get();
+        foreach($product as $pro){
+            $product_id[] = $pro->id;
+            $unit[] = product_unit::where('product_id',$pro->id)->get();
+        }
+        $unit_title = product_unit::select('unit_name')->whereIn('product_id',$product_id)->groupBy('unit_name')->get();
+        //return response()->json($unit_title);
+        return view('steelProduct',compact('product','brands','unit','unit_title'));
     }
 
     public function advanceFilter($product_id,$attr,$terms){
@@ -116,5 +196,63 @@ class categoryController extends Controller
        // return response()->json($product);
         return view('brandView',compact('product','brand','adModel','brandid'));
      }
-
+       public function tilesLocationBasedData($id){
+        $location = Session::get('locations');
+        //$location = 'Salem';
+        $data = array(
+            'Ariyalur'=>['Trichy','Karaikal'],
+            'Chennai'=>['Perungalthur','Pallavaram','Vadapalani','Tambaram'],
+            'Coimbatore'=>['Coimbatore'],
+            'Cuddalore'=>['Pondicherry'],
+            'Dindigul'=>['Madurai','Trichy'],
+            'Dharmapuri'=>['Salem','Vellore'],
+            'Erode'=>['Coimbatore','Salem'],
+            'Karur'=>['Trichy'],
+            'Kanniyakumari'=>['Tirunelveli'],
+            'Kanchipuram'=>['Perungalthur','Pallavaram','Vadapalani','Tambaram'],
+            'Krishnagiri'=>['Vellore'],
+            'Madurai'=>['Madurai','Trichy'],
+            'Nillgiris'=>['Coimbatore'],
+            'Namakkal'=>['Salem','Trichy'],
+            'Nagapattinam'=>['Karaikal'],
+            'Perambalur'=>['Salem','Trichy'],
+            'Pudukottai'=>['Trichy'],
+            'Ramanathapuram'=>['Madurai','Tirunelveli'],
+            'Salem'=>['Salem'],
+            'Sivaganga'=>['Madurai','Trichy'],
+            'Thanjavur'=>['Trichy'],
+            'Theni'=>['Madurai'],
+            'Thoothukudi'=>['Tirunelveli'],
+            'Tiruppur'=>['Coimbatore'],
+            'Tirunelveli'=>['Tirunelveli'],
+            'Tiruchirappalli'=>['Trichy','Madurai'],
+            'Tiruvannamalai'=>['Vellore','Pondicherry'],
+            'Tiruvallur'=>['Perungalthur','Pallavaram','Vadapalani','Tambaram'],
+            'Tiruvarur'=>['Karaikal'],
+            'Virudunagar'=>['Madurai','Tirunelveli'],
+            'Vellore'=>['Vellore'],
+            'Viluppuram'=>['Pondicherry'],
+        );
+            if($id ==1){
+                $stock = DB::table('tiles_stock_locations as tsl')
+                        ->select(DB::raw('sum(tsl.stock) as stocks, tsl.product_id,p.product_name,p.product_image,p.sub_category,p.sales_price,p.product_description,p.category'))
+                        ->whereIn('tsl.location', $data[$location])
+                        ->join('products as p','p.id','=','tsl.product_id')
+                        ->groupBy('tsl.product_id')
+                        ->orderBy('stocks','desc')
+                       ->paginate(9);
+            }else{
+                $stock = DB::table('tiles_stock_locations as tsl')
+                        ->select(DB::raw('sum(tsl.stock) as stocks, tsl.product_id,p.product_name,p.product_image,p.sub_category,p.sales_price,p.product_description,p.category'))
+                        ->whereIn('tsl.location', $data[$location])
+                        ->where('p.sub_category',$id)
+                        ->join('products as p','p.id','=','tsl.product_id')
+                        ->groupBy('tsl.product_id')
+                        ->orderBy('stocks','desc')
+                       ->paginate(9);
+            }
+            //$stock = tiles_stock_location::whereIn('location',$data[$location])->get();
+        
+        return $stock;
+    }
 }

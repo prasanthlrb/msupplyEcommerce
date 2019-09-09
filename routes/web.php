@@ -15,31 +15,49 @@ use App\product;
 Route::get('/order-email',function(){
     return view('email.test');
 });
-
-Route::get('/event', 'PayController@index');
- Route::post('/pay', 'PayController@pay');
- Route::get('/pay-success', 'PayController@success');
-
+Route::group(['middleware' => ['location']], function () {
 Route::get('/','pageController@home');
-//pages route
 Route::get('/about','pageController@about');
 Route::get('/terms','pageController@terms');
 Route::get('/privacy','pageController@privacy');
 Route::get('/shipping_details','pageController@shipping_details');
 Route::get('/faq','pageController@faq');
 Route::get('/contact','pageController@contact');
+});
+
+Route::get('/event', 'PayController@index');
+ Route::post('/pay', 'PayController@pay');
+ Route::get('/pay-success', 'PayController@success');
+
+ //paint quick modal
+ Route::get('/quick-model-paint/{id}', 'pageController@quickModelPaint');
+//tiles stock filder
+Route::get('/tiles/stock/{id}','pageController@tileStock');
+
+
+
+//steel calculator
+Route::get('/calculator/steel/{id}','CalculatorController@steelCalc');
+
+
+//bricks predict
+Route::get('/bricks-price-predict','CalculatorController@bricksPredict');
+//pages route
+
 Route::get('/category-tree','pageController@categoryTree');
 Route::get('/category/{id}','categoryController@categoryProduct');
 Route::get('/product/{id}','categoryController@getProduct');
+Route::get('/steel-product/{id}','categoryController@steelProduct');
 Route::get('/quick-view/{id}','pageController@quickModel');
+Route::get('/quick-view-tiles/{id}','pageController@quickModelTiles');
 Route::get('/product-advance-filter/{product}/{attr}/{terms}','categoryController@advanceFilter');
 
-Route::get('/selected-color/{id}','pageController@selectedColor');
+Route::get('/selected-color','pageController@selectedColor');
 Route::get('/get-colors','pageController@getColors');
 Route::get('/get-search-color','pageController@getSearchColors');
-Route::get('/get-color/{id}','pageController@getColorById');
+Route::get('/get-color/{product}/{category}','pageController@getColorById');
 Route::get('/get-category','pageController@getColorCategory');
-Route::get('/get-color-modal','pageController@colorModals');
+Route::get('/get-color-modal/{id}','pageController@colorModals');
 
 
 
@@ -211,6 +229,12 @@ Route::get('/delete_faq/{id}','settingController@deleteFaq');
 Route::post('/faq_data','settingController@faqStore');
 Route::post('/update_faq','settingController@faqUpdate');
 
+//tiles Upload
+Route::get('/tiles-upload','settingController@tilesUpload');
+Route::get('/tiles','productController@viewTitle');
+Route::get('/get-tiles-product','productController@getTilesProduct');
+Route::post('/update-secondSubcategory','productController@updateTilesSubCategory');
+
 
 
 //Home Page
@@ -310,8 +334,34 @@ Route::post('/update-unit','productController@unitUpdate');
 
 Route::get('/get-unit/{id}','productController@get_unit');
 Route::get('/product-unit-delete/{id}','productController@productUnitDelete');
-//Route::get('/product-unit-update/{id}/{data}','productController@productUnitUpdate');
+Route::post('/upload-tiles-json','productController@uploadTilesJSON');
+Route::post('/update-tiles-json','productController@updateTilesJSON');
+Route::get('/delete-all-tiles','productController@deleteAll');
+Route::get('/get-single-tiles-product/{id}','productController@getSingleTilesProduct');
 
+
+//colors
+Route::get('/color-master','colorMasterController@viewColors');
+Route::get('/onload_shade','colorMasterController@onloadShade');
+Route::get('/delete_shade_family/{id}','colorMasterController@deleteShadeFamily');
+Route::get('/delete_shade_color/{id}','colorMasterController@deleteShadeColor');
+Route::post('/save-shade-family','colorMasterController@saveShadeFamily');
+Route::post('/save-shade-color','colorMasterController@saveShadeColor');
+Route::get('/color-bulk-upload','colorMasterController@colorBulkUpload');
+Route::get('/color-products','colorMasterController@colorProduct');
+Route::get('/new-color-product','colorMasterController@newColorProduct');
+Route::get('/edit-paint-product/{id}','colorMasterController@editColorProduct');
+Route::get('/delete-product-feature','colorMasterController@deleteProductFeature');
+Route::post('/color-bulk-data','colorMasterController@bulkUploadColor');
+Route::post('/color-product-save','colorMasterController@colorProductSave');
+
+
+Route::get('/delete-distance_price/{id}','productController@distancePriceDeleteById');
+
+
+//paint product_edit lit
+Route::get('/delete-product-paint_lit/{id}','colorMasterController@productPaintLit');
+Route::get('/change-paint-lit','colorMasterController@changePaintLit');
 });
 
 Auth::routes();
@@ -359,6 +409,9 @@ Route::post('createBilling', 'AccountController@accCreateBilling');
 Route::get('order-cancel/{id}', 'AccountController@orderCancel');
 //order Print
 Route::get('order-print/{id}', 'AccountController@orderPrint');
+
+//deals
+Route::get('deals','AccountController@deals');
 });
 Route::post('/submit-company','AccountController@submitCompany')->name('submit.company');
 Route::get('/get-compare','pageController@compare');
@@ -368,10 +421,15 @@ Route::get('/compare',function(){
     if(Session::has('compare')){
 
         $product = product::whereIn('id',Session::get('compare'))->get();
+        if($product[0]->sub_category != null){
+            $related = product::where('sub_category',$product[0]->sub_category)->take(10)->get();
+        }else{
+             $related = product::where('category',$product[0]->category)->take(10)->get();
+        }
     }else{
         $product= [];
     }
-    return view('compare',compact('product'));
+    return view('compare',compact('product','related'));
 });
 
 //Cart Management
@@ -611,3 +669,43 @@ Route::post('createShipping', 'AccountController@createShipping');
 Route::post('createBilling', 'AccountController@createBilling');
 Route::get('menu-data', 'pageController@menuData');
 Route::get('order-placed/{id}/{ship}/{bill}', 'AccountController@orderPlaced');
+
+//location
+Route::get('/get-location-page', function(){
+    $data = [
+        'Ariyalur',
+        'Chennai',
+        'Coimbatore',
+        'Cuddalore',
+        'Dharmapuri',
+        'Dindigul',
+        'Erode',
+        'Kanchipuram',
+        'Kanniyakumari',
+        'Karur',
+        'Krishnagiri',
+        'Madurai',
+        'Nagapattinam',
+        'Namakkal',
+        'Nilgiris',
+        'Perambalur',
+        'Pudukkottai',
+        'Ramanathapuram',
+        'Salem',
+        'Sivaganga',
+        'Thanjavur',
+        'Theni',
+        'Thoothukudi',
+        'Tiruchirappalli',
+        'Tirunelveli',
+        'Tiruppur',
+        'Tiruvallur',
+        'Tiruvannamalai',
+        'Tiruvarur',
+        'Vellore',
+        'Viluppuram',
+        'Virudhunagar',
+        ];
+    return view('modal.location',compact('data'));
+});
+Route::get('/set-location/{data}','pageController@setLocations');
