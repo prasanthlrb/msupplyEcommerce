@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use App\socialMedia;
 use App\faq;
-use App\ContactInfo;
+use App\contactInfo;
 use App\home_setting;
 use Illuminate\Http\Request;
 use App\role;
@@ -75,7 +75,7 @@ class settingController extends Controller
     }
 
     public function contactView(){
-        $data = ContactInfo::all();
+        $data = contactInfo::all();
         if(count($data)>=1){
            // return view('admin.setting.contact',compact('data'));
            $data = $data[0];
@@ -97,10 +97,10 @@ class settingController extends Controller
     }
     public function contactUpdate(Request $request){
         if($request->id == 0){
-            $data = new ContactInfo;
+            $data = new contactInfo;
         }else{
 
-            $data = ContactInfo::find($request->id);
+            $data = contactInfo::find($request->id);
         }
         $data->email = $request->email;
         $data->phone = $request->phone;

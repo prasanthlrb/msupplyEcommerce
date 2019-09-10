@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Contactinfo;
+use App\contactinfo;
 use App\Admin;
 use Illuminate\Support\Facades\Hash;
 
@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         //$this->call(UsersTableSeeder::class);
-        // Contactinfo::create([
+        // contactinfo::create([
         //     'email'=> 'kashousing@gmail.com',
         //     'phone'=> '8870050001',
         //     'address'=> '3/408-f,1st floor,Near Malarmaligai, Krishna Nagar,Iyer Bungalow,Madurai - 625014',

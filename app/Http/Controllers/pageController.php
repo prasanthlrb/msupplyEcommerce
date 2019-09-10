@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\home_setting;
-use App\ContactInfo;
+use App\contactInfo;
 use App\faq;
 use App\adModel;
 use App\homeSlider;
@@ -65,7 +65,7 @@ class pageController extends Controller
 
     public function contact()
     {
-        $contact_info = ContactInfo::all();
+        $contact_info = contactInfo::all();
         return view('contact', compact('contact_info'));
     }
 

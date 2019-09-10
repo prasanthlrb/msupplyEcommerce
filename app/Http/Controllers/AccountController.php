@@ -26,7 +26,7 @@ use App\rating;
 use App\Mail\OrderMailable;
 use Illuminate\Support\Facades\Mail;
 use PDF;
-use App\Contactinfo;
+use App\contactinfo;
 
 class accountController extends Controller
 {
@@ -886,7 +886,7 @@ class accountController extends Controller
     public function orderPrint($id){
         $order = order::find($id);
         $billing = billing::find($order->billing);
-        $info = Contactinfo::find(1);
+        $info = contactInfo::find(1);
         $item = order_item::where('order_id',$order->id)->get();
         $pdf = PDF::loadView('customer.printOrder', compact('order','billing','info','item'));
         $pdf->setPaper('A4', 'portrait');
