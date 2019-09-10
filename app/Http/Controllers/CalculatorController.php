@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\product;
 use App\distance_price;
-class CalculatorController extends Controller
+class calculatorController extends Controller
 {
     public function steelCalc($id){
         $product = product::where('brand_name',$id)->get();

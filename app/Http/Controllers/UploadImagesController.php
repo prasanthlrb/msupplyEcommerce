@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Intervention\Image\Facades\Image;
 
-class UploadImagesController extends Controller
+class uploadImagesController extends Controller
 {
 
     private $photos_path;

@@ -66,7 +66,7 @@ class userController extends Controller
 
         }
         //return response()->json($customerData);
-        return view('admin/dashboard',compact('product','user','order','low','cMonth','pMonth','topProduct','customerData','topCustomer'));
+        return view('admin/dashboard',compact('product','user','order','low','cMonth','pMonth','topProduct','topCustomer'));
     }
     public function user(){
         //$emp = Admin::all();

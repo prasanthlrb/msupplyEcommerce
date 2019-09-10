@@ -28,7 +28,7 @@ use Illuminate\Support\Facades\Mail;
 use PDF;
 use App\Contactinfo;
 
-class AccountController extends Controller
+class accountController extends Controller
 {
     public function __construct()
     {

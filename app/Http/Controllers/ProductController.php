@@ -26,7 +26,7 @@ use App\unit;
 use App\product_unit;
 use App\tiles_stock_location;
 use App\distance_price;
-class ProductController extends Controller
+class productController extends Controller
 {
     //Brand Edit Delete View Update Process Function Start Here
     public function __construct()
