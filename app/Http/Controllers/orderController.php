@@ -318,7 +318,7 @@ class orderController extends Controller
         $orderChange->status = $request->status;
         $orderChange->save();
         return response()->json(["Successfully Update"],200);
-    }`
+    }
     public function orderMail($id){
         //$all = $request->all();
         // Mail::send('mail',compact('all'),function($message) use($all){
