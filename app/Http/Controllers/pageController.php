@@ -65,7 +65,7 @@ class pageController extends Controller
 
     public function contact()
     {
-        $contact_info = Contactinfo::all();
+        $contact_info = ContactInfo::all();
         return view('contact', compact('contact_info'));
     }
 
