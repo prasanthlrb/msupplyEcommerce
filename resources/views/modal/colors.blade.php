@@ -80,7 +80,7 @@
                                                 <div class="p-1">
                                                   <p class="mb-0">
                                                     <strong>{{$data->shade_name}}</strong>
-                                                    <p class="text-muted float-right price"><i class="icon-rupee"></i></p>
+                                                
                                                   </p>
                                                   <p class="mb-0">{{$data->code_name}}</p>
                                                 </div>
@@ -127,6 +127,16 @@ $.ajax({
     success:function(datas){
         $('#placed_colors').html(datas);
 
+    }
+})
+}
+
+function setColors(id){
+  $.ajax({
+    url:'/set-color/'+id,
+    method:'GET',
+    success:function(data){
+      getColors(data)
     }
 })
 }

@@ -42,12 +42,15 @@ class CreateProductsTable extends Migration
             $table->string('new_product')->nullable();
             $table->string('recommended')->nullable();
             $table->string('featured')->nullable();
-            $table->string('colors')->nullable();
+            $table->string('group_product')->nullable();
             $table->string('related_product')->nullable();
             $table->string('tax')->nullable();
             $table->number('items')->nullable();
             $table->number('order_limit')->nullable();
             $table->string('tax_type')->nullable();
+            $table->string('price_type')->nullable();
+            $table->string('value_type')->nullable();
+            $table->string('amount')->nullable();
             $table->string('active')->default(0);
             $table->timestamps();
         });

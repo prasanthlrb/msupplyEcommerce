@@ -46,6 +46,7 @@ Route::get('/bricks-price-predict','CalculatorController@bricksPredict');
 
 Route::get('/category-tree','pageController@categoryTree');
 Route::get('/category/{id}','categoryController@categoryProduct');
+Route::get('/category/{id}/{sort}','categoryController@categorySortProduct');
 Route::get('/product/{id}','categoryController@getProduct');
 Route::get('/steel-product/{id}','categoryController@steelProduct');
 Route::get('/quick-view/{id}','pageController@quickModel');
@@ -56,6 +57,7 @@ Route::get('/selected-color','pageController@selectedColor');
 Route::get('/get-colors','pageController@getColors');
 Route::get('/get-search-color','pageController@getSearchColors');
 Route::get('/get-color/{product}/{category}','pageController@getColorById');
+Route::get('/set-color/{id}','pageController@setColorById');
 Route::get('/get-category','pageController@getColorCategory');
 Route::get('/get-color-modal/{id}','pageController@colorModals');
 
@@ -362,6 +364,12 @@ Route::get('/delete-distance_price/{id}','productController@distancePriceDeleteB
 //paint product_edit lit
 Route::get('/delete-product-paint_lit/{id}','colorMasterController@productPaintLit');
 Route::get('/change-paint-lit','colorMasterController@changePaintLit');
+
+//tiles price update
+Route::get('/update-price_type','productController@updatePriceType');
+Route::get('/update-value_type','productController@updateValueType');
+Route::get('/update-amount','productController@updateAmount');
+
 });
 
 Auth::routes();

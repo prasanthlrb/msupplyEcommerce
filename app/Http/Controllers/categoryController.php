@@ -57,6 +57,45 @@ class categoryController extends Controller
        }
         return view('category',compact('product','brand','adModel','category'));
     }
+    public function categorySortProduct($id,$sort){
+        $category  = category::find($id);
+        $adModel = adModel::all();
+        if($sort == 1){
+            $orderType = 'ASC';
+        }else{
+            $orderType = 'DESC';
+        }
+        $brand = brand::all();
+       // return response()->json($product);
+       if($id == 21 || $id == 22 || $id == 23 || $id == 24 || $id == 25){
+           if($id == 21){
+            $product = product::where('category',$id)->paginate(9);
+           }else{
+            $product = product::where('sub_category',$id)->paginate(9);
+           }
+       }else if($id == 1 || $id == 2 || $id == 3){
+        $product = $this->tilesLocationBasedSort($id,$orderType);
+       // return response()->json($product);
+        return view('categoryTiles',compact('product','brand','adModel','category'));
+       }
+       else if($id == 14){
+        $getBrandId = product::select('brand_name')->where('category',$id)->groupBy('brand_name')->get();
+        if(count($getBrandId) >0){
+            foreach($getBrandId as $row){
+                $brandId[]=$row->brand_name;
+            }
+            $brands = brand::whereIn('id',$brandId)->get();
+        }else{
+            $brands =[];
+        }
+        return view('steelCategory',compact('brands','adModel','category','brand'));
+       }
+       else{
+             $product = product::where('category',$id)->paginate(9);
+       
+       }
+        return view('category',compact('product','brand','adModel','category'));
+    }
 
     public function getProduct($id){
         $product1 = product::find($id);
@@ -70,7 +109,7 @@ class categoryController extends Controller
          //return response()->json($relatedProducts);
         return view('paint_product',compact('product1','subCategoty','guide','feature','liter','relatedProducts'));
     }else if($product1->category == 1){
-
+            $stock = $this->tilesSingleLocation($product1->id);
          $subCategoty = category::find($product1->sub_category);
          $divider = explode(' ',$product1->product_name, 2);
         if(count($divider) >1){
@@ -91,9 +130,9 @@ class categoryController extends Controller
             ->where('stock_quantity','>',200)
             ->take(20)->get();
         }
-         //return response()->json();
+         //return response()->json($stock);
          //return response()->json($relatedProducts);
-         return view('tilesProduct',compact('product1','subCategoty','relatedProducts'));
+         return view('tilesProduct',compact('product1','subCategoty','relatedProducts','stock'));
     }
     else if($product1->category == 7){
         $custom_qty = custom_qty::where('product_id',$product1->id)->get();
@@ -199,7 +238,77 @@ class categoryController extends Controller
        public function tilesLocationBasedData($id){
         $location = Session::get('locations');
         //$location = 'Salem';
-        $data = array(
+        $data = $this->locationValues();
+            if($id ==1){
+                $stock = DB::table('tiles_stock_locations as tsl')
+                        ->select(DB::raw('sum(tsl.stock) as stocks, tsl.product_id,p.product_name,p.product_image,p.sub_category,p.sales_price,p.product_description,p.category'))
+                        ->whereIn('tsl.location', $data[$location])
+                         ->where('stock','>',25)
+                        ->join('products as p','p.id','=','tsl.product_id')
+                        ->groupBy('tsl.product_id')
+                        ->orderBy('stocks','desc')
+                       ->paginate(9);
+            }else{
+                $stock = DB::table('tiles_stock_locations as tsl')
+                        ->select(DB::raw('sum(tsl.stock) as stocks, tsl.product_id,p.product_name,p.product_image,p.sub_category,p.sales_price,p.product_description,p.category'))
+                        ->whereIn('tsl.location', $data[$location])
+                        ->where('stock','>',25)
+                        ->where('p.sub_category',$id)
+                        ->join('products as p','p.id','=','tsl.product_id')
+                        ->groupBy('tsl.product_id')
+                        ->orderBy('stocks','desc')
+                       ->paginate(9);
+            }
+            //$stock = tiles_stock_location::whereIn('location',$data[$location])->get();
+        
+        return $stock;
+    }
+
+    public function tilesLocationBasedSort($id,$sort){
+        $location = Session::get('locations');
+        //$location = 'Salem';
+        $data = $this->locationValues();
+            if($id ==1){
+                $stock = DB::table('tiles_stock_locations as tsl')
+                        ->select(DB::raw('sum(tsl.stock) as stocks , sum(p.sales_price + 2000) as sales_price, tsl.product_id,p.product_name,p.product_image,p.sub_category,p.product_description,p.category'))
+                        ->whereIn('tsl.location', $data[$location])
+                        ->where('stock','>',25)
+                        ->join('products as p','p.id','=','tsl.product_id')
+                        ->groupBy('tsl.product_id')
+                        ->orderBy('sales_price',$sort)
+                       ->paginate(9);
+            }else{
+                $stock = DB::table('tiles_stock_locations as tsl')
+                        ->select(DB::raw('sum(tsl.stock) as stocks, tsl.product_id,p.product_name,p.product_image,p.sub_category,p.sales_price,p.product_description,p.category'))
+                        ->whereIn('tsl.location', $data[$location])
+                        ->where('p.sub_category',$id)
+                        ->where('stock','>',25)
+                        ->join('products as p','p.id','=','tsl.product_id')
+                        ->groupBy('tsl.product_id')
+                        ->orderBy('sales_price',$sort)
+                       ->paginate(9);
+            }
+            //$stock = tiles_stock_location::whereIn('location',$data[$location])->get();
+        
+        return $stock;
+    }
+
+    public function tilesSingleLocation($id){
+        $location = Session::get('locations');
+         $data = $this->locationValues();
+
+
+             return $stock = DB::table('tiles_stock_locations as tsl')
+                        ->select(DB::raw('sum(tsl.stock) as stocks'))
+                        ->whereIn('tsl.location', $data[$location])
+                        ->where('tsl.product_id',$id)
+                        ->groupBy('tsl.product_id')
+                        ->orderBy('stocks','desc')
+                       ->first();
+    }
+
+    public function locationValues(){
+        return  $data = array(
             'Ariyalur'=>['Trichy','Karaikal'],
             'Chennai'=>['Perungalthur','Pallavaram','Vadapalani','Tambaram'],
             'Coimbatore'=>['Coimbatore'],
@@ -233,26 +342,5 @@ class categoryController extends Controller
             'Vellore'=>['Vellore'],
             'Viluppuram'=>['Pondicherry'],
         );
-            if($id ==1){
-                $stock = DB::table('tiles_stock_locations as tsl')
-                        ->select(DB::raw('sum(tsl.stock) as stocks, tsl.product_id,p.product_name,p.product_image,p.sub_category,p.sales_price,p.product_description,p.category'))
-                        ->whereIn('tsl.location', $data[$location])
-                        ->join('products as p','p.id','=','tsl.product_id')
-                        ->groupBy('tsl.product_id')
-                        ->orderBy('stocks','desc')
-                       ->paginate(9);
-            }else{
-                $stock = DB::table('tiles_stock_locations as tsl')
-                        ->select(DB::raw('sum(tsl.stock) as stocks, tsl.product_id,p.product_name,p.product_image,p.sub_category,p.sales_price,p.product_description,p.category'))
-                        ->whereIn('tsl.location', $data[$location])
-                        ->where('p.sub_category',$id)
-                        ->join('products as p','p.id','=','tsl.product_id')
-                        ->groupBy('tsl.product_id')
-                        ->orderBy('stocks','desc')
-                       ->paginate(9);
-            }
-            //$stock = tiles_stock_location::whereIn('location',$data[$location])->get();
-        
-        return $stock;
     }
 }

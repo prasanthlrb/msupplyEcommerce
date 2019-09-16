@@ -133,6 +133,13 @@
             </div>
           </div>
           <div class="form-group row">
+            <label class="col-md-3 label-control" for="projectinput1">Vehicle Capacity</label>
+            <div class="col-md-9">
+              <input type="text" class="form-control" placeholder="Enter Capacity in Kg"
+              name="capacity" id="capacity">
+            </div>
+          </div>
+          <div class="form-group row">
             <label class="col-md-3 label-control" for="projectinput1">vehicle Image</label>
             <div class="col-md-9">
               <input type="hidden" name="vehicle_image1" id="vehicle_image1">
@@ -229,6 +236,7 @@
           $('input[name=price]').val(data.price);
           $('input[name=vehicle_image1]').val(data.vehicle_image);
           $('input[name=other_rate]').val(data.other);
+          $('input[name=capacity]').val(data.capacity);
           $('input[name=id]').val(id);
           $('#brand_model').modal('show');
           action_type = 2;

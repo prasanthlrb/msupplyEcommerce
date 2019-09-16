@@ -142,6 +142,7 @@
                     </table>
                     <table style="width:100%;" class="product-specs-table table table-bordered" cellpadding="0" cellspacing="0">
                             <thead>
+                             
                                 <tr>
                                     <td colspan="2" class="bg-primary text-center" style="padding:15px;color:#fff;">
                                         Product Specification
@@ -193,15 +194,15 @@
                               <tbody id="location-stock"></tbody>
                               <tr>
                                 <td>Discount / High</td>
-                                <td>   <select name="sub_category" id="sub_category" class="form-control">
+                                <td>   <select name="price_type" id="price_type" class="form-control">
                                         <option value="" selected="" disabled="">Select </option>
                                           <option value="discount">Discount </option>
                                           <option value="high">High </option>
                                         </select></td>
                               </tr>
                               <tr>
-                                <td>Value Convert</td>
-                                <td> <select name="sub_category" id="sub_category" class="form-control">
+                                <td>Value Type</td>
+                                <td> <select name="value_type" id="value_type" class="form-control">
                                         <option value="" selected="" disabled="">Select </option>
                                           <option value="percentage">Percentage </option>
                                           <option value="amount">Amount </option>
@@ -209,7 +210,7 @@
                               </tr>
                               <tr>
                                 <td>Value</td>
-                                <td><input type="text" style="width:100%"></td>
+                                <td><input type="text" style="width:100%" name="amount" id="amount"></td>
                               </tr>
                         </table>
                        
@@ -278,8 +279,11 @@ $(".clickable-Product-row").click(function() {
     }
     ClickEvent = 0;
     });
-
+var product_id;
 function getProduct(id){
+  $('select[name=price_type]').val("");
+  $('select[name=value_type]').val("");
+  $('#amount').val('');
        $.ajax({
         url : '/admin/get-single-tiles-product/'+id,
         type: "GET",
@@ -291,6 +295,15 @@ function getProduct(id){
             $('#width').text(data[0].width);
             $('#weight').text(data[0].weight);
             $('#items').text(data[0].items);
+            //$('#product_id').val(data[0].id);
+            product_id = data[0].id;
+            if(data[0].price_type != null){
+              $('select[name=price_type]').val(data[0].price_type);
+            }
+            if(data[0].value_type != null){
+              $('select[name=value_type]').val(data[0].value_type);
+            }
+            $('#amount').val(data[0].amount);
             $('#product_description').text(data[0].product_description);
             $('#product_name').text(data[0].product_name);
             $('#length').text(data[0].length);
@@ -326,6 +339,45 @@ $('#update_tiles_category').on('click',function(){
             toastr.error('Subcategory Required', 'Required!');
         }
       });
+})
+$('#price_type').change(function(){
+  let price_type = $('#price_type').val();
+   $.ajax({
+        url: '/admin/update-price_type',
+        method: "GET",
+        data: { product_id: product_id, data: price_type },
+        dataType: "JSON",
+        success: function (data) {
+            //console.log(data);
+            toastr.success(data.message);
+        }
+    })
+})
+$('#value_type').change(function(){
+ let value_type = $('#value_type').val();
+   $.ajax({
+        url: '/admin/update-value_type',
+        method: "GET",
+        data: { product_id: product_id, data: value_type },
+        dataType: "JSON",
+        success: function (data) {
+            //console.log(data);
+          toastr.success(data.message);
+        }
+    })
+})
+$('#amount').change(function(){
+  let amount = $('#amount').val();
+   $.ajax({
+        url: '/admin/update-amount',
+        method: "GET",
+        data: { product_id: product_id, data: amount },
+        dataType: "JSON",
+        success: function (data) {
+            //console.log(data);
+            toastr.success(data.message);
+        }
+    })
 })
 </script>
 

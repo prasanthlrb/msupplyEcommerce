@@ -138,16 +138,33 @@ $final=array();
  foreach($colorMaster as $colors){
     $color = color::where('code_name',$colors['code_name'])->first();
     if(isset($color)){
-        
-        foreach($paint_lit as $liter){
-            $paint = new paint_price;
-            $paint->colors_id = $color->id;
-            $paint->lit = $liter->paint_lit;
-            $paint->price = $colors[$liter->paint_lit];
-            $paint->product_id = $request->product_id;
-            $paint->save();
-            $final[]=$paint;
-        }
+      //  if($colors[4] < $colors[10]){
+            foreach($paint_lit as $liter){
+                $paint = new paint_price;
+                $paint->colors_id = $color->id;
+                $paint->lit = $liter->paint_lit;
+                $paint->price = $colors[$liter->paint_lit];
+                $paint->product_id = $request->product_id;
+                $paint->save();
+                //$final[]=$paint;
+            }
+
+        // }else{
+        //      $paint = new paint_price;
+        //         $paint->colors_id = $color->id;
+        //         $paint->lit = 1;
+        //         $paint->price = $colors[1];
+        //         $paint->product_id = $request->product_id;
+        //         $paint->save();
+
+        //          $paint = new paint_price;
+        //         $paint->colors_id = $color->id;
+        //         $paint->lit = 4;
+        //         $paint->price = $colors[4];
+        //         $paint->product_id = $request->product_id;
+        //         $paint->save();
+
+        // }
         
  }
  }

@@ -173,7 +173,7 @@
                                         <option <?php echo $data->price_type == null ? 'selected' : '' ?> value="" selected="" disabled="">Select </option>
                                        
                                           <option value="discount" <?php echo $data->price_type == 'discount' ? 'selected' : '' ?>>Discount </option>
-                                          <option value="high" <?php echo $data->price_type == 'high' ? 'high' : '' ?>>High </option>
+                                          <option value="high" <?php echo $data->price_type == 'high' ? 'selected' : '' ?>>High </option>
                                           
                                         </select>
                               </div></div>

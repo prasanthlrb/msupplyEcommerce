@@ -111,9 +111,9 @@ p.productdesc{
                                         </tr> -->
 
                                         <tr>
-                                        @if($product1->stock_quantity !="" && $product1->stock_quantity !=0)
+                                        @if($stock->stocks !="" && $stock->stocks  !=0)
                                             <td>Availability: </td>
-                                            <td><span class="in_stock">in stock</span> {{$product1->stock_quantity}} item(s)</td>
+                                            <td><span class="in_stock">in stock</span> {{$stock->stocks}} item(s)</td>
                                         @else
                                             <td>Availability: </td>
                                             <td><span style="color:red;">Out of Stock</span></td>
@@ -337,21 +337,21 @@ p.productdesc{
 
 					<div class="row">
 
-						<div class="more-detail-btn" style="margin-top:100px;margin-bottom:100px;text-align:center"> 
+						{{-- <div class="more-detail-btn" style="margin-top:100px;margin-bottom:100px;text-align:center"> 
 							<button class="button_blue middle_btn" style="position:absolute;right:40%" id="more-detail-btn">
 								More Details About this Product
 								
 							</button>
 							<img src="{{asset('/riva/riva0.png')}}" alt="" width="75%" style="max-height:100px;over-flow:hidden">
-						</div>
+						</div> --}}
 
-						<div style="text-align:center;margin-top:100px;margin-bottom:100px" class="more-tiles-details hide-details">
+						{{-- <div style="text-align:center;margin-top:100px;margin-bottom:100px" class="more-tiles-details hide-details">
 							<img src="{{asset('/riva/riva0.png')}}" alt="" width="75%">
 							<img src="{{asset('/riva/riva1.png')}}" alt="" width="75%">
 							<img src="{{asset('/riva/riva2.png')}}" alt="" width="75%">
 							<img src="{{asset('/riva/riva3.png')}}" alt="" width="75%">
 							<img src="{{asset('/riva/riva4.png')}}" alt="" width="75%">
-						</div>
+						</div> --}}
 							
 						
 

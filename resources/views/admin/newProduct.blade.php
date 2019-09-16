@@ -385,7 +385,7 @@
                                   <div class="row">
                             <div class="col-md-4">                            <div class="form-group">
                                 <label class="label-control" for="projectinput1">Dis / High</label>
-                                  <select name="sub_category" id="sub_category" class="form-control">
+                                  <select name="price_type" id="price_type" class="form-control">
                                         <option value="" selected="" disabled="">Select </option>
                                           <option value="discount">Discount </option>
                                           <option value="high">High </option>
@@ -393,7 +393,7 @@
                               </div></div>
                             <div class="col-md-4">                            <div class="form-group">
                                 <label class="label-control" for="projectinput1">Type</label>
-                                  <select name="sub_category"  class="form-control">
+                                  <select name="value_type"  class="form-control">
                                         <option value="" selected="" disabled="">Select </option>
                                           <option value="percentage">Percentage </option>
                                           <option value="amount">Amount </option>
@@ -401,8 +401,8 @@
                               </div></div>
                             <div class="col-md-4"><div class="form-group">
                                 <label class="label-control" for="projectinput1">Value</label>
-                                  <input type="text" id="coverage" class="form-control" placeholder="Product Name"
-                                  name="coverage">
+                                  <input type="text" id="amount" class="form-control" placeholder="Product Name"
+                                  name="amount">
                               </div></div>
                           </div>
 
@@ -432,8 +432,8 @@
                                       </div>
 
                                       <div class="dropdown-item">
-                                        <input type="checkbox" name="colors" class="switchery-xs" />
-                                        <label for="switchery5" class="card-title ml-1">Enable Colors options</label>
+                                        <input type="checkbox" name="group_product" class="switchery-xs" />
+                                        <label for="switchery5" class="card-title ml-1">Enable Group Product options</label>
                                       </div>
                                 </div>
 

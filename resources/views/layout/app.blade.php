@@ -652,21 +652,21 @@
 
 						<ul class="payments">
 
-							<li><img src="/images/payment_1.png" alt=""></li>
+							{{-- <li><img src="/images/payment_1.png" alt=""></li> --}}
 							<li><img src="/images/payment_2.png" alt=""></li>
 							<li><img src="/images/payment_3.png" alt=""></li>
-							<li><img src="/images/payment_4.png" alt=""></li>
+							{{-- <li><img src="/images/payment_4.png" alt=""></li>
 							<li><img src="/images/payment_5.png" alt=""></li>
 							<li><img src="/images/payment_6.png" alt=""></li>
 							<li><img src="/images/payment_7.png" alt=""></li>
-							<li><img src="/images/payment_8.png" alt=""></li>
+							<li><img src="/images/payment_8.png" alt=""></li> --}}
 
 						</ul>
 
 						<!-- - - - - - - - - - - - - - End of payments - - - - - - - - - - - - - - - - -->
 
 
-						<p class="copyright">&copy; {{date('Y')}} <a href="index.html">K.A.S Housing Pvt Ltd</a>. All Rights Reserved.</p>
+						<p class="copyright">&copy; {{date('Y')}} <a href="http://kashousing.com">K.A.S Housing Pvt Ltd</a>. All Rights Reserved.</p>
 						<p>Development &amp; Maintenance By <a href="http://lrbtech.com"> LRB INFO TECH</a></p>
 
 					</div><!--/ .container -->

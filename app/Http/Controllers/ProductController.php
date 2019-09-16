@@ -416,7 +416,10 @@ class productController extends Controller
         $product->new_product = $request->new_product;
         $product->recommended = $request->recommended;
         $product->featured = $request->featured;
-        $product->colors = $request->colors;
+        $product->group_product = $request->group_product;
+        $product->price_type = $request->price_type;
+        $product->value_type = $request->value_type;
+        $product->amount = $request->amount;
         $product->items = $request->items;
         $product->order_limit = $request->order_limit;
         $product->save();
@@ -484,6 +487,7 @@ class productController extends Controller
     }
 
     }
+    if(isset($request->customqty)){
     if(count($request->customqty) > 0){
         foreach($request->customqty as $data){
             $custom_qty = new custom_qty;
@@ -492,6 +496,7 @@ class productController extends Controller
             $custom_qty->save();
         }
 
+    }
     }
     if(isset($request->units)){
         foreach(explode(',',$request->units) as $id) {
@@ -556,7 +561,10 @@ class productController extends Controller
         $product->new_product = $request->new_product;
         $product->recommended = $request->recommended;
         $product->featured = $request->featured;
-        $product->colors = $request->colors;
+        $product->group_product = $request->group_product;
+        $product->price_type = $request->price_type;
+        $product->value_type = $request->value_type;
+        $product->amount = $request->amount;
         $product->items = $request->items;
         $product->order_limit = $request->order_limit;
         $product->save();
@@ -714,41 +722,41 @@ class productController extends Controller
     }
 
         //units module
-    //    if(isset($request->units)){
-    //     foreach(explode(',',$request->units) as $id) {
-    //         $unit_data[] = unit::find($id);
-    //     }
-    //    }
-    //    $product_unit = product_unit::where('product_id',$request->product_page_id)->get();
-    //    if(count($product_unit) > 0){
-    //     foreach($unit_data as $key => $units){
-    //         $product_unit1 = product_unit::where('product_id',$request->product_page_id)->where('unit_id',$units->id)->get();
-    //         if(count($product_unit1) >0){
-    //             $product_unit2 = product_unit::find($product_unit1[0]->id);
-    //             $product_unit2->unit_price = $request['unit'.$units->id];
-    //             $product_unit2->save();
-    //         }else{
-    //             $product_unit = new product_unit;
-    //             $product_unit->unit_price = $request['unit'.$units->id];
-    //             $product_unit->unit_name = $units->unit_name;
-    //             $product_unit->product_id = $request->product_page_id;
-    //             $product_unit->unit_id = $units->id;
-    //             $product_unit->save();
-    //         }
-    //     }
+       if(isset($request->units)){
+        foreach(explode(',',$request->units) as $id) {
+            $unit_data[] = unit::find($id);
+        }
+       }
+       $product_unit = product_unit::where('product_id',$request->product_page_id)->get();
+       if(count($product_unit) > 0){
+        foreach($unit_data as $key => $units){
+            $product_unit1 = product_unit::where('product_id',$request->product_page_id)->where('unit_id',$units->id)->get();
+            if(count($product_unit1) >0){
+                $product_unit2 = product_unit::find($product_unit1[0]->id);
+                $product_unit2->unit_price = $request['unit'.$units->id];
+                $product_unit2->save();
+            }else{
+                $product_unit = new product_unit;
+                $product_unit->unit_price = $request['unit'.$units->id];
+                $product_unit->unit_name = $units->unit_name;
+                $product_unit->product_id = $request->product_page_id;
+                $product_unit->unit_id = $units->id;
+                $product_unit->save();
+            }
+        }
 
-    //    }else{
-    //     if(count($unit_data) > 0){
-    //         foreach($unit_data as $units){
-    //             $product_unit = new product_unit;
-    //             $product_unit->unit_price = $request['unit'.$units->id];
-    //             $product_unit->unit_name = $units->unit_name;
-    //             $product_unit->product_id = $request->product_page_id;
-    //             $product_unit->unit_id = $units->id;
-    //             $product_unit->save();
-    //         }
-    //     }
-    //    }
+       }else{
+        if(count($unit_data) > 0){
+            foreach($unit_data as $units){
+                $product_unit = new product_unit;
+                $product_unit->unit_price = $request['unit'.$units->id];
+                $product_unit->unit_name = $units->unit_name;
+                $product_unit->product_id = $request->product_page_id;
+                $product_unit->unit_id = $units->id;
+                $product_unit->save();
+            }
+        }
+       }
 
 
         return response()->json($request->product_page_id);
@@ -1284,5 +1292,26 @@ public function getProduct(){
                                 </tr>';
         }
         return response()->json(array($product,$output,$subcategory));
+    }
+
+    //tiles price update
+
+    public function updatePriceType(Request $request){
+        $product = product::find($request->product_id);
+        $product->price_type = $request->data;
+        $product->save();
+        return response()->json(['message'=>'Upload Successfully'],200);
+    }
+    public function updateValueType(Request $request){
+       $product = product::find($request->product_id);
+        $product->value_type = $request->data;
+        $product->save();
+        return response()->json(['message'=>'Upload Successfully'],200);
+    }
+    public function updateAmount(Request $request){
+       $product = product::find($request->product_id);
+        $product->amount = $request->data;
+        $product->save();
+        return response()->json(['message'=>'Upload Successfully'],200);
     }
 }

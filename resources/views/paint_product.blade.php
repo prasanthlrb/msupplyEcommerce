@@ -120,7 +120,7 @@ p.productdesc{
 
                             <div class="form_el">
 									@foreach($liter as $lit)
-									<a href="javascript:void(null)" class="button_grey mini_btn litBtn" onclick="setLitre({{$lit->lit}})" id="lit{{$lit->lit}}">{{$lit->lit}} Litre</a>
+									<a href="javascript:void(null)" class="button_grey mini_btn litBtn" onclick="setLitre({{$lit->lit}})" id="lit{{$lit->lit}}">{{$lit->lit}} <?php echo $lit->lit == '500' ? 'ML' : 'Litre'?></a>
                        
                                 @endforeach
                             </div>
@@ -133,7 +133,7 @@ p.productdesc{
 
 										<div class="buttons_row">
 
-											<button class="button_blue middle_btn">Add to Cart</button>
+											<button class="button_blue middle_btn" id="addToCardPaint" disabled="true">Add to Cart</button>
 
 											<button class="button_dark_grey def_icon_btn middle_btn add_to_wishlist tooltip_container"><span class="tooltip top">Add to Wishlist</span></button>
 
@@ -510,8 +510,8 @@ function addCart(id){
         }
 		function getPrice(){
 		
-			console.log(lit)
-			console.log(colors_id)
+			// console.log(lit)
+			// console.log(colors_id)
 if(lit !=0 && colors_id !=0){
 	let product_id = $('#product_id').val();
 	console.log(product_id)
@@ -520,9 +520,15 @@ if(lit !=0 && colors_id !=0){
                 method:'GET',
 				data:{product_id:product_id,lit:lit,colors_id:colors_id},
                 success:function(result){
-                    console.log(result);
+                    //console.log(result);
                     //$('#inputColor').remove();
-                    $(".product_price .theme_color").text("Rs : "+result.price);
+					if(result ==0){
+                    $(".product_price .theme_color").text("Not Available");
+					$('#addToCardPaint').prop('disabled',true);
+					}else{
+                    $(".product_price .theme_color").text("Rs : "+ Math.ceil(result.price));
+					$('#addToCardPaint').prop('disabled',false);
+					}
                     //$('#colorButtonModule').append('<input type="hidden" name="inputColor" id="inputColor" value="'+result.id+'">')
                 }
             });

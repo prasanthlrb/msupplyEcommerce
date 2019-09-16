@@ -26,7 +26,7 @@ use App\color;
 use App\color_category;
 use App\paint_price;
 use App\tiles_stock_location;
-
+use App\paint_lit;
 class pageController extends Controller
 {
     public function __construct()
@@ -925,8 +925,9 @@ class pageController extends Controller
             foreach($color_ids as $ids){
                 $colors[]=$ids->colors_id;
             }
-            $color = color::whereIn('id',$colors)->get();
-            $collection = collect($color);
+            $color = color::whereIn('id',$colors)->where('shade_family_id',1)->get();
+            $colors = color::whereIn('id',$colors)->get();
+            $collection = collect($colors);
             $sorted = $collection->groupBy('shade_family_id');
             foreach($sorted->toArray() as $cats){
                 $categorys[]=$cats[0]['shade_family_id'];
@@ -936,7 +937,10 @@ class pageController extends Controller
          return view('modal.colors',compact('category','color','id'));
     }
 
-
+    public function setColorById($id){
+        $color = color::find($id);
+        return response()->json($color);
+    }
 
     public function getColorById($product_id,$category_id){
          $color_ids = collect(DB::table('paint_prices')->select('colors_id')->where('product_id',$product_id)->groupBy('colors_id')->orderBy('colors_id','asc')->get());
@@ -954,7 +958,7 @@ class pageController extends Controller
         if(count($color) > 0){
             foreach($color as $data){
             $output .='<div class="col-md-3">
-            <div class="card mb-1 color-item" id="color-item'.$data->id.'" onclick="getColors('.$data->id.')">
+            <div class="card mb-1 color-item" id="color-item'.$data->id.'" onclick="setColors('.$data->id.')">
               <div class="card-content">
                 <div class="bg-lighten-1 height-50" style="background-color:'.$data->shade_code.'"></div>
                 <div class="p-1">
@@ -988,7 +992,7 @@ class pageController extends Controller
         if(count($color) > 0){
             foreach($color as $data){
             $output .='<div class="col-md-3">
-            <div class="card mb-1 color-item" id="color-item'.$data->id.'" onclick="getColors('.$data->id.')">
+            <div class="card mb-1 color-item" id="color-item'.$data->id.'" onclick="setColors('.$data->id.')">
               <div class="card-content">
                 <div class="bg-lighten-1 height-50" style="background-color:'.$data->shade_code.'"></div>
                 <div class="p-1">
@@ -1010,7 +1014,30 @@ class pageController extends Controller
 
     public function selectedColor(Request $request){
        $color = paint_price::select('price')->where("product_id",$request->product_id)->where("lit",$request->lit)->where("colors_id",$request->colors_id)->first();
-        return response()->json($color);
+       if(isset($color)){
+            $lit = paint_lit::where('product_id',$request->product_id)->where('paint_lit',$request->lit)->first();
+            if(isset($lit)){
+            if($lit->amount != null){
+                if($lit->price_type == "discount"){
+                    if($lit->value_type == "percentage"){
+                        $discount = $color->price / $lit->amount;
+                        $color->price = $color->price - $discount;
+                    }else{
+                        $color->price = $color->price - $lit->amount;;
+                    }
+                }else{
+                     if($lit->value_type == "percentage"){
+                         $discount = $color->price / $lit->amount;
+                        $color->price = $color->price + $discount; 
+                    }else{
+                        $color->price = $color->price + $lit->amount; 
+                    }
+                }
+            }
+        }
+           return response()->json($color);
+        }
+        return response()->json(0);
     }
 
     public function postCartItem(Request $request){

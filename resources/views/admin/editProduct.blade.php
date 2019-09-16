@@ -451,24 +451,24 @@
                                   <div class="row">
                             <div class="col-md-4">                            <div class="form-group">
                                 <label class="label-control" for="projectinput1">Dis / High</label>
-                                  <select name="sub_category" id="sub_category" class="form-control">
-                                        <option value="" selected="" disabled="">Select </option>
-                                          <option value="discount">Discount </option>
-                                          <option value="high">High </option>
+                                  <select name="price_type" id="price_type" class="form-control">
+                                       <option <?php echo $product_find->price_type == null ? 'selected' : '' ?> value="" selected="" disabled="">Select </option>
+                                          <option value="discount" <?php echo $product_find->price_type == 'discount' ? 'selected' : '' ?>>Discount </option>
+                                          <option value="high" <?php echo $product_find->price_type == 'high' ? 'selected' : '' ?>>High </option>
                                         </select>
                               </div></div>
                             <div class="col-md-4">                            <div class="form-group">
                                 <label class="label-control" for="projectinput1">Type</label>
-                                  <select name="sub_category"  class="form-control">
-                                        <option value="" selected="" disabled="">Select </option>
-                                          <option value="percentage">Percentage </option>
-                                          <option value="amount">Amount </option>
+                                  <select name="value_type"  class="form-control">
+                                        <option <?php echo $product_find->value_type == null ? 'selected' : '' ?> selected="" disabled="">Select </option>
+                                          <option <?php echo $product_find->value_type == 'percentage' ? 'selected' : '' ?> value="percentage">Percentage </option>
+                                          <option <?php echo $product_find->value_type == 'amount' ? 'selected' : '' ?> value="amount">Amount </option>
                                         </select>
                               </div></div>
                             <div class="col-md-4"><div class="form-group">
                                 <label class="label-control" for="projectinput1">Value</label>
-                                  <input type="text" id="coverage" class="form-control" placeholder="Product Name"
-                                  name="coverage">
+                            <input type="text" id="amount" class="form-control" value="{{$product_find->amount}}"
+                                  name="amount">
                               </div></div>
                           </div>
 
@@ -520,8 +520,8 @@
                                         <label for="switchery5" class="card-title ml-1">Enable as a product review</label>
                                     </div>
                                     <div class="dropdown-item">
-                                        <input <?php echo $product_find->colors == 'on' ? 'checked' : '' ?> type="checkbox" name="colors" id="colors" class="switchery-xs" />
-                                        <label for="switchery5" class="card-title ml-1">Enable The Color Option</label>
+                                        <input <?php echo $product_find->group_product == 'on' ? 'checked' : '' ?> type="checkbox" name="colors" id="colors" class="switchery-xs" />
+                                        <label for="switchery5" class="card-title ml-1">Enable The Group Product Option</label>
                                     </div>
                                 </div>
 
@@ -571,7 +571,7 @@
                                         </div>
                                         <br>
                                         @foreach($product_unit as $data)
-                                        <div class="form-group" id="unitRow'.$data->unit_id.'"><label for="projectinput1">{{$data->unit_name}} QTY Price</label>
+                                        <div class="form-group" id="unitRow{{$data->unit_id}}"><label for="projectinput1">{{$data->unit_name}} QTY Price</label>
                                             <a float="right" class="pull-right href="javascript:void(0)" onclick="RemoveUnitSpecial({{$data->unit_id}},{{$data->id}})"><i class="ft-trash-2"></i></a>
                                         <input type="text" class="form-control" name="unit{{$data->unit_id}}" id="unit{{$data->unit_id}}" value="{{$data->unit_price}}">
                                         </div>
@@ -771,15 +771,22 @@ $xy++;
 
 @endif
 
-
+@if(count($product_attribute) > 0)
 @foreach($product_attribute as $data1)
 <script>
         attributes.push("<?php echo $data1->attribute; ?>");
 </script>
 @endforeach
+@endif
+@if(count($product_unit) > 0)
+@foreach($product_unit as $data)
+<script>
+        units.push("<?php echo $data->unit_id; ?>");
+</script>
+@endforeach
+@endif
 <script>
 
-console.log(units)
    $(document).ready(function() {
    $.ajax({
             url:'/admin/get_edit_attribute/'+{!!$product_find->id!!},

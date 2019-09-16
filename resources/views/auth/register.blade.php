@@ -12,16 +12,12 @@
                 
 
                 <div class="relative">
-
-                    <a class="icon_btn button_dark_grey edit_button" href="#"><i class="icon-pencil"></i></a>
-
-
                     <div class="table_layout">
 
                         <div class="table_row">
 
                             <div class="row">
-                               <div class="col-sm-6">
+                               <div class="col-sm-8">
                             
                             <div class="table_cell">
 
@@ -172,7 +168,9 @@
                 </section>
                 
             </div><!--/ .table_cell -->
+
         </div>
+      
     </div>
         </div><!--/ .table_row -->
 

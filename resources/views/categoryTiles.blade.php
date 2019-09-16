@@ -232,17 +232,13 @@
 
                                 <span>Sort by:</span>
 
-                                <div class="custom_select sort_select">
-                                    
-                                    <select name="">
-                                            
-                                        <option value="Default">Default</option>
-                                        <option value="Price">Price</option>
-                                        <option value="Name">Name</option>
-                                        <option value="Date">Date</option>
-
-                                    </select>
-
+                                <div class="sort_select">
+                                    <input type="hidden" id="urlPath" value="{{ Request::segment(2) }}">
+    <select class="form-control" name="sorter" id="sorter" style="height:35px">
+    <option disabled <?php echo Request::segment(3) == null ? 'selected' : ''?>>Default</option>
+   <option value="1" <?php echo Request::segment(3) == 1 ? 'selected' : ''?>>Low to High</option>
+    <option value="2" <?php echo Request::segment(3) == 2 ? 'selected' : ''?>>High to Low</option>
+  </select>
                                 </div>
 
                             </div>
@@ -499,6 +495,11 @@
 @endsection
 @section('extra-js')
 <script>
+    $('#sorter').change(function(){
+        let sorted = $(this).val();
+        var urlPath = $('#urlPath').val();
+        window.location.href="/category/"+urlPath+"/"+sorted;
+    })
     function routeCat(id){
         window.location.href="/filter-product/"+id;
     }
