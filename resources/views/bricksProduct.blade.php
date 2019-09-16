@@ -85,7 +85,26 @@ p.productdesc{
 
 										<!-- - - - - - - - - - - - - - End of image preview container - - - - - - - - - - - - - - - - -->
 
+                                <div class="product_preview">
 
+                                <div class="owl_carousel" id="thumbnails">
+                                <a href="#" data-image="{{asset('/product_img').'/'.$product1->product_image}}" data-zoom-image="{{asset('/product_img').'/'.$product1->product_image}}">
+                                    <img src="{{asset('/product_img').'/'.$product1->product_image}}" data-large-image="{{asset('/product_img').'/'.$product1->product_image}}" alt="">
+                                </a>
+                                @foreach($Upload as $upload1)
+                                    @if(!empty($upload1))
+                                    <a href="#" data-image="{{asset('/product_gallery').'/'.$upload1->filename}}" data-zoom-image="{{asset('/product_gallery').'/'.$upload1->filename}}">
+
+                                        <img src="{{asset('/product_gallery').'/'.$upload1->resized_name}}" data-large-image="{{asset('/product_gallery').'/'.$upload1->filename}}" alt="">
+                                    </a>
+
+                                    @endif
+                                @endforeach
+
+                                </div><!--/ .owl-carousel-->
+
+
+                            </div><!--/ .product_preview-->
 										<!-- - - - - - - - - - - - - - Share - - - - - - - - - - - - - - - - -->
 										
 										<div class="v_centered">

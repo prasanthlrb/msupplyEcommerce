@@ -99,6 +99,7 @@ class categoryController extends Controller
 
     public function getProduct($id){
         $product1 = product::find($id);
+        $Upload = Upload::where('product_id','=',$id)->get();
         if($product1->category == 21){
         $subCategoty = category::find($product1->sub_category);
         $guide = painting_guide::where('product_id',$product1->id)->first();
@@ -135,11 +136,12 @@ class categoryController extends Controller
          return view('tilesProduct',compact('product1','subCategoty','relatedProducts','stock'));
     }
     else if($product1->category == 7){
+       // return response()->json($Upload);
         $custom_qty = custom_qty::where('product_id',$product1->id)->get();
-        return view('bricksProduct',compact('product1','custom_qty'));
+        return view('bricksProduct',compact('product1','custom_qty','Upload'));
     }
     else{
-        $Upload = Upload::where('product_id','=',$id)->get();
+        
         $brand = brand::all();
         $reviews = review::where('item_id',$id)->get();
         $review = DB::table('reviews as r')

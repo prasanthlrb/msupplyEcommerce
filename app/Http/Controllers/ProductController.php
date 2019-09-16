@@ -722,6 +722,7 @@ class productController extends Controller
     }
 
         //units module
+         $unit_data = array();
        if(isset($request->units)){
         foreach(explode(',',$request->units) as $id) {
             $unit_data[] = unit::find($id);

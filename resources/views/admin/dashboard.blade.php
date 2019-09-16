@@ -162,6 +162,7 @@
                                 <div class="table-responsive">
                                   <table class="table mb-0">
                                     <tbody>
+                                      @if(isset($customerData))
                                         @foreach($customerData as $row)
                                       <tr>
                                             <th scope="row" class="border-top- 0">{{$row['customer_name']}}</th>
@@ -169,6 +170,7 @@
 
                                       </tr>
                                      @endforeach
+                                     @endif
                                     </tbody>
                                   </table>
                                 </div>
