@@ -699,14 +699,17 @@ class productController extends Controller
             }
 
         }else{
-            if(count($request->customqty) > 0){
-            foreach($request->customqty as $data){
-                $custom_qty = new custom_qty;
-                $custom_qty->product_id = $request->product_page_id;
-                $custom_qty->customqty = $data;
-                $custom_qty->save();
+            if(isset($request->customqty)){
+
+                if(count($request->customqty) > 0){
+                foreach($request->customqty as $data){
+                    $custom_qty = new custom_qty;
+                    $custom_qty->product_id = $request->product_page_id;
+                    $custom_qty->customqty = $data;
+                    $custom_qty->save();
+                }
             }
-        }
+            }
         }
 
           if(isset($request->price_distance)){
