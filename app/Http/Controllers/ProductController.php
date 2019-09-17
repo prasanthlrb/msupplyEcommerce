@@ -699,7 +699,7 @@ class productController extends Controller
             }
 
         }else{
-            if(isset($request->customqty)){
+            if(has($request->customqty)){
 
                 if(count($request->customqty) > 0){
                 foreach($request->customqty as $data){
