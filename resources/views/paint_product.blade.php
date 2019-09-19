@@ -92,7 +92,7 @@ p.productdesc{
 									<div class="single_product_description">
 
 									<h3 class="offset_title"><a href="#">{{$product1->product_name}}</a></h3>
-
+										<input type="hidden" id="product_name" value="{{$product1->product_name}}">
 									
 
 										<div class="description_section v_centered">
@@ -127,7 +127,21 @@ p.productdesc{
 
                         </div>
 
-                    </div>
+					</div>
+					<br>
+					  <div class="description_section_2 v_centered">
+
+                                <span class="title">Qty:</span>
+                              
+
+                                <div class="qty min clearfix">
+                                    <button class="theme_button" type="button" data-direction="minus">-</button>
+                                    <input type="text" name="button_qty" id="button_qty" value="1">
+                                    <button class="theme_button" type="button" data-direction="plus">+</button>
+
+                                </div>
+
+                            </div>
 
 										<!-- - - - - - - - - - - - - - Product actions - - - - - - - - - - - - - - - - -->
 
@@ -401,6 +415,7 @@ p.productdesc{
     <script>
 		var lit=0;
 		var colors_id =0;
+		var total_price=0;
 function setLitre(lits){
 lit = lits;
 $('.litBtn').each(function(index){
@@ -526,6 +541,7 @@ if(lit !=0 && colors_id !=0){
                     $(".product_price .theme_color").text("Not Available");
 					$('#addToCardPaint').prop('disabled',true);
 					}else{
+						total_price = Math.ceil(result.price);
                     $(".product_price .theme_color").text("Rs : "+ Math.ceil(result.price));
 					$('#addToCardPaint').prop('disabled',false);
 					}
@@ -558,6 +574,19 @@ if(lit !=0 && colors_id !=0){
 				toastr.error("Height and Length", "Field is required")
 			}
 			//alert(Math.ceil(avg));
+		})
+		$('#addToCardPaint').on('click', function(){
+			let product_id = $('#product_id').val();
+			let button_qty = $('#button_qty').val();
+			let product_name = $('#product_name').val();
+			var data = {
+				"product_id":product_id,
+				"lit":lit,
+				"colors_id":colors_id,
+				"total_price":total_price,
+				"button_qty":button_qty
+			}
+			console.log(data);
 		})
     </script>
 @endsection

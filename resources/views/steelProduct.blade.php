@@ -48,7 +48,7 @@
         <ul class="breadcrumbs">
 
             <li><a href="/">Home</a></li>
-            <li><a href="/category/14">Steels</a></li>
+        <li><a href="/category/14">{{$category->category_name}}</a></li>
             <li>{{$brands->brand}}</li>
 
 
@@ -110,10 +110,12 @@
                             <div class="buttons_row buy_now_btn">
                                 <div id="total_price_place"></div>
                                 <button type="button" class="button_blue middle_btn">Buy Now</button>
+                                @if($category->id == 14)
                                 <a href="javascript:void(null)" data-modal-url="/calculator/steel/{{$brands->id}}">
                                     <img src="{{asset('/images/calculator.png')}}" alt="" class="calculator_btn">
                                     
                                 </a>
+                                @endif
                             </div>
                             <!-- - - - - - - - - - - - - - End of share - - - - - - - - - - - - - - - - -->
 

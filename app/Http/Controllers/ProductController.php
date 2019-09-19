@@ -699,7 +699,7 @@ class productController extends Controller
             }
 
         }else{
-            if(has($request->customqty)){
+            if(isset($request->customqty)){
 
                 if(count($request->customqty) > 0){
                 foreach($request->customqty as $data){
@@ -1225,9 +1225,10 @@ public function getProduct(){
     }
 
     public function updateTilesSubCategory(Request $request){
-        $product = product::find($request->subcategoryProduct_id);
-        $product->second_sub_category = $request->subcategory;
-        $product->save();
+         $product = product::find($request->product_id);
+         $product->second_sub_category = $request->data;
+         $product->save();
+        //return response()->json($request);
         return response()->json(['message'=>'SubCategory Update Successfully'],200);
     }
 
@@ -1250,12 +1251,16 @@ public function getProduct(){
 
         })
         ->addColumn('category', function($product){
-
-        if($product->sub_category ==  3){
-            return '<td class="text-success"><a href="javascript:void(null)" onclick="applySecondCategory('.$product->id.')">Floor Tiles</a></td>';
-        }else{
-            return '<td class="text-success"><a href="javascript:void(null)" onclick="applySecondCategory('.$product->id.')">Wall Tiles</a></td>';
-        }
+            if($product->second_sub_category != null){
+                $secondSubCat = category::find($product->second_sub_category);
+                return '<td class="text-success">'.$secondSubCat->category_name.'</td>';
+            }else{
+                if($product->sub_category ==  3){
+                    return '<td class="text-success">Floor Tiles</td>';
+                }else{
+                    return '<td class="text-success">Wall Tiles</td>';
+                }
+            }
 
         })
 
@@ -1275,11 +1280,11 @@ public function getProduct(){
         $product = product::find($id);
         $stock = tiles_stock_location::where('product_id',$product->id)->get();
         $output ='';
-        $subcategory = 'Null';
+        $subcategory = null;
         if($product->second_sub_category !=0){
             $category = category::find($product->second_sub_category);
             if(isset($category)){
-                $subcategory = $category->category_name;
+                $subcategory = $category->id;
             }
         }
         if(count($stock) >0){

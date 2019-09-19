@@ -235,7 +235,7 @@ Route::post('/update_faq','settingController@faqUpdate');
 Route::get('/tiles-upload','settingController@tilesUpload');
 Route::get('/tiles','productController@viewTitle');
 Route::get('/get-tiles-product','productController@getTilesProduct');
-Route::post('/update-secondSubcategory','productController@updateTilesSubCategory');
+Route::get('/update-secondSubcategory','productController@updateTilesSubCategory');
 
 
 

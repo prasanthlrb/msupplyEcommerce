@@ -84,6 +84,7 @@ class pageController extends Controller
             }else{
                 $product_today = product::where('featured', 'on')->where('category','!=',7)->orderBy('id', 'DESC')->take(10)->get();
             }
+               
             $output = '';
             foreach ($layouts as $layout) {
                 if ($layout->type == 'category') {
@@ -110,14 +111,42 @@ class pageController extends Controller
                     foreach ($category as $cat) {
                         if (in_array($cat->id, $layout_collection)) {
                             $output .= '<div id="tab-' . $ycount . '" class="tab_container">
-			<div class="owl_carousel carousel_in_tabs">';
-                            $product_data = product::where('category', 'LIKE', "%{$cat->id}%")->get();
-                            foreach ($product_data as $row) {
+            <div class="owl_carousel carousel_in_tabs">';
+                            if($cat->id == 1){
+                                $product_data = $this->tilesLocationBasedData()->where('category',$cat->id)->take(20);
+                            }else{
+
+                                $product_data = product::where('category',$cat->id)->get();
+                            }
+                            if(count($product_data) == 0){
+                                $pro_data = product::where('sub_category',$cat->id)->get();
+                               // return response()->json($pro_data);
+                                
+                                if(count($pro_data) < 0){
+                                    if($pro_data[0]->catgory == 1){
+                                        
+                                        $pro_data = $this->tilesLocationBasedData()->where('sub_category',$cat->id)->take(20); 
+                                    }
+                                }
+                                if(count($pro_data) < 0){
+                                    $pro_data = $this->tilesLocationBasedData()->where('second_sub_category',$cat->id)->take(20);
+                                }
+                                $product_data = $pro_data;
+                            }
+             
+            //$product_data = product::where('category', 'LIKE', "%{$cat->id}%")->take(20);
+
+                          
+                            foreach ($product_data->take(20) as $row) {
                                 $output .= '
             <div class="product_item type_2">
-            <div class="image_wrap">
-            <img src="' . asset('product_img/' . $row->product_image . '') . '" alt="">
-            <div class="actions_wrap">
+            <div class="image_wrap">';
+            if($row->category == 1){
+                $output .='<img src="http://www.kagtech.net/KAGAPP/Partsupload/'. $row->product_image .'" alt="">';
+            }else{
+                $output .='<img src="' . asset('product_img/' . $row->product_image . '') . '" alt="">';
+            }
+            $output .=' <div class="actions_wrap">
             <div class="centered_buttons">
             <a href="#" class="button_dark_grey middle_btn quick_view" data-modal-url="/quick-view/' . $row->id . '">Quick View</a>
             </div>
@@ -174,13 +203,14 @@ class pageController extends Controller
 
             }
                         $output .= '<p class="product_price alignleft">';
-
+                                if($row->category != 7 && $row->category != 21){
                                 if ($row->sales_price != null) {
                                     $output .= ' <s>₹ ' . $row->regular_price . '</s>
                         <b>₹ ' . $row->sales_price . '</b></p>';
                                 } else {
                                     $output .= '<b>₹ ' . $row->regular_price . '</b></p>';
                                 }
+                            }
                                 $output .= '
             </div>
             </div>
@@ -272,7 +302,7 @@ class pageController extends Controller
 
             }
                        $output.=' <p class="product_price alignleft">';
-
+                             if($row->category != 7 && $row->category != 21){
                         if ($row->sales_price != null) {
                             $output .= ' <s>₹ ' . $row->regular_price . '</s>
                                     <b>₹ ' . $row->sales_price . '</b></p>';
@@ -280,7 +310,7 @@ class pageController extends Controller
                             $output .= '<b>₹ ' . $row->regular_price . '</b></p>';
                         }
 
-
+                    }
 
                         $output .= ' </div>
                     </div>
@@ -320,6 +350,28 @@ class pageController extends Controller
             $wall = $this->tilesLocationBasedData()->where('sub_category',2)->take(20);
             //return response()->json($datas);
             $paint = product::where('category',21)->get();
+            if(count($product_today) > 0){
+               foreach($product_today as $row){
+                       if($row->amount != null){
+                if($row->price_type == "discount"){
+                    if($row->value_type == "percentage"){
+                        $discount = $row->sales_price / $row->amount;
+                        $row->sales_price = $row->sales_price - $discount;
+                    }else{
+                        $row->sales_price = $row->sales_price - $row->amount;;
+                    }
+                }else{
+                     if($row->value_type == "percentage"){
+                         $discount = $row->sales_price / $row->amount;
+                        $row->sales_price = $row->sales_price + $discount; 
+                    }else{
+                        $row->sales_price = $row->sales_price + $row->amount; 
+                    }
+                }
+            }
+            }
+        }
+        
             return view('home', compact('slider', 'layouts', 'output', 'product_today', 'adModel','floor','wall','paint'));
 
             //  foreach($product_today as $row){
@@ -1093,12 +1145,34 @@ class pageController extends Controller
         );
       
             $stock = DB::table('tiles_stock_locations as tsl')
-                    ->select(DB::raw('sum(tsl.stock) as stocks, tsl.product_id,p.product_name,p.product_image,p.sub_category,p.sales_price'))
+                    ->select(DB::raw('sum(tsl.stock) as stocks, tsl.product_id,p.product_name,p.product_image,p.sub_category,p.sales_price,p.amount,p.price_type,p.value_type'))
                     ->whereIn('tsl.location', $data[$location])
+                    ->where('p.sales_price','!=',null)
                     ->join('products as p','p.id','=','tsl.product_id')
                     ->groupBy('tsl.product_id')
                     ->orderBy('stocks','desc')
                     ->get();
+                     if(count($stock)>0){
+                 foreach($stock as $row){
+                       if($row->amount != null){
+                if($row->price_type == "discount"){
+                    if($row->value_type == "percentage"){
+                        $discount = $row->sales_price / $row->amount;
+                        $row->sales_price = $row->sales_price - $discount;
+                    }else{
+                        $row->sales_price = $row->sales_price - $row->amount;;
+                    }
+                }else{
+                     if($row->value_type == "percentage"){
+                         $discount = $row->sales_price / $row->amount;
+                        $row->sales_price = $row->sales_price + $discount; 
+                    }else{
+                        $row->sales_price = $row->sales_price + $row->amount; 
+                    }
+                }
+            }
+            }
+        }
             //$stock = tiles_stock_location::whereIn('location',$data[$location])->get();
         
         return $stock;

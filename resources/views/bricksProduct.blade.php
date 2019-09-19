@@ -192,9 +192,12 @@ p.productdesc{
                              
                                 <div class="aterSubmitShow" id="afterpickQty">
                                     <p class="product_price">Total Rs : <b class="theme_color" id="fixedTotal"></b></p>
-                                               <div class="buttons_row">
-                                                   <button class="button_blue middle_btn">Buy Now</button>
-                                               </div>
+                                    <form id="brickForm" method="POST">
+                                            {{ csrf_field() }}
+                                        <div class="buttons_row">
+                                            <button class="button_blue middle_btn" onclick="buyIt()">Buy Now</button>
+                                        </div>
+                                    </form>
    
                                        </div>
                                 </div>
@@ -385,6 +388,7 @@ p.productdesc{
     }
     document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
     var brick_price;
+    var quantity;
     function getDistanceData(disc){
         var id = $('#product_id').val();
         $.ajax({
@@ -411,11 +415,17 @@ p.productdesc{
         if(brick_price !=0){
             let total = parseFloat(brick_price) * parseInt(qty);
             $('.mapBox').addClass('aterSubmitShow');
-            $('#afterpickQty').removeClass('aterSubmitShow')
-            $('#fixedTotal').text(total)
+            $('#afterpickQty').removeClass('aterSubmitShow');
+            $('#fixedTotal').text(total);
+            quantity = qty;
         }
       
-    })
+    });
+
+    function buyIt(){
+        let product_id = $('#product_id').val();
+        console.log(parseFloat(brick_price) * parseInt(quantity));
+    }
     
 </script>
 @endsection

@@ -520,7 +520,7 @@
                                         <label for="switchery5" class="card-title ml-1">Enable as a product review</label>
                                     </div>
                                     <div class="dropdown-item">
-                                        <input <?php echo $product_find->group_product == 'on' ? 'checked' : '' ?> type="checkbox" name="colors" id="colors" class="switchery-xs" />
+                                        <input <?php echo $product_find->group_product == 'on' ? 'checked' : '' ?> type="checkbox" name="group_product" id="group_product" class="switchery-xs" />
                                         <label for="switchery5" class="card-title ml-1">Enable The Group Product Option</label>
                                     </div>
                                 </div>

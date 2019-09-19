@@ -37,6 +37,7 @@ class categoryController extends Controller
            }
        }else if($id == 1 || $id == 2 || $id == 3){
         $product = $this->tilesLocationBasedData($id);
+
         return view('categoryTiles',compact('product','brand','adModel','category'));
        }
        else if($id == 14){
@@ -55,7 +56,44 @@ class categoryController extends Controller
              $product = product::where('category',$id)->paginate(9);
        
        }
-        return view('category',compact('product','brand','adModel','category'));
+       if(count($product) > 0){
+          // return response()->json($product);
+           if($product[0]->group_product != null){
+               $getBrandId = product::select('brand_name')->where('category',$id)->groupBy('brand_name')->get();
+            if(count($getBrandId) >0){
+                foreach($getBrandId as $row){
+                    $brandId[]=$row->brand_name;
+                }
+                $brands = brand::whereIn('id',$brandId)->get();
+            }else{
+                $brands =[];
+            }
+            return view('groupCategory',compact('brands','brand','adModel','category'));
+        }
+
+      
+    foreach($product as $row){
+                       if($row->amount != null){
+                if($row->price_type == "discount"){
+                    if($row->value_type == "percentage"){
+                        $discount = $row->sales_price / $row->amount;
+                        $row->sales_price = $row->sales_price - $discount;
+                    }else{
+                        $row->sales_price = $row->sales_price - $row->amount;;
+                    }
+                }else{
+                     if($row->value_type == "percentage"){
+                         $discount = $row->sales_price / $row->amount;
+                        $row->sales_price = $row->sales_price + $discount; 
+                    }else{
+                        $row->sales_price = $row->sales_price + $row->amount; 
+                    }
+                }
+            }
+            }
+        }
+
+    return view('category',compact('product','brand','adModel','category'));
     }
     public function categorySortProduct($id,$sort){
         $category  = category::find($id);
@@ -99,7 +137,26 @@ class categoryController extends Controller
 
     public function getProduct($id){
         $product1 = product::find($id);
-        $Upload = Upload::where('product_id','=',$id)->get();
+        $Upload = upload::where('product_id','=',$id)->get();
+        if(isset($product1)){
+                       if($product1->amount != null){
+                if($product1->price_type == "discount"){
+                    if($product1->value_type == "percentage"){
+                        $discount = $product1->sales_price / $product1->amount;
+                        $product1->sales_price = $product1->sales_price - $discount;
+                    }else{
+                        $product1->sales_price = $product1->sales_price - $product1->amount;;
+                    }
+                }else{
+                     if($product1->value_type == "percentage"){
+                         $discount = $product1->sales_price / $product1->amount;
+                        $product1->sales_price = $product1->sales_price + $discount; 
+                    }else{
+                        $product1->sales_price = $product1->sales_price + $product1->amount; 
+                    }
+                }
+            }
+        }
         if($product1->category == 21){
         $subCategoty = category::find($product1->sub_category);
         $guide = painting_guide::where('product_id',$product1->id)->first();
@@ -184,14 +241,16 @@ class categoryController extends Controller
 
     public function steelProduct($id){
         $brands = brand::find($id);
+
         $product = product::where('brand_name',$id)->get();
+        $category = category::find($product[0]->category);
         foreach($product as $pro){
             $product_id[] = $pro->id;
             $unit[] = product_unit::where('product_id',$pro->id)->get();
         }
         $unit_title = product_unit::select('unit_name')->whereIn('product_id',$product_id)->groupBy('unit_name')->get();
         //return response()->json($unit_title);
-        return view('steelProduct',compact('product','brands','unit','unit_title'));
+        return view('steelProduct',compact('product','brands','unit','unit_title','category'));
     }
 
     public function advanceFilter($product_id,$attr,$terms){
@@ -243,7 +302,7 @@ class categoryController extends Controller
         $data = $this->locationValues();
             if($id ==1){
                 $stock = DB::table('tiles_stock_locations as tsl')
-                        ->select(DB::raw('sum(tsl.stock) as stocks, tsl.product_id,p.product_name,p.product_image,p.sub_category,p.sales_price,p.product_description,p.category'))
+                        ->select(DB::raw('sum(tsl.stock) as stocks, tsl.product_id,p.product_name,p.product_image,p.sub_category,p.sales_price,p.product_description,p.category,p.amount,p.price_type,p.value_type'))
                         ->whereIn('tsl.location', $data[$location])
                          ->where('stock','>',25)
                         ->join('products as p','p.id','=','tsl.product_id')
@@ -252,7 +311,7 @@ class categoryController extends Controller
                        ->paginate(9);
             }else{
                 $stock = DB::table('tiles_stock_locations as tsl')
-                        ->select(DB::raw('sum(tsl.stock) as stocks, tsl.product_id,p.product_name,p.product_image,p.sub_category,p.sales_price,p.product_description,p.category'))
+                        ->select(DB::raw('sum(tsl.stock) as stocks, tsl.product_id,p.product_name,p.product_image,p.sub_category,p.sales_price,p.product_description,p.category,p.amount,p.price_type,p.value_type'))
                         ->whereIn('tsl.location', $data[$location])
                         ->where('stock','>',25)
                         ->where('p.sub_category',$id)
@@ -261,6 +320,27 @@ class categoryController extends Controller
                         ->orderBy('stocks','desc')
                        ->paginate(9);
             }
+             if(count($stock)>0){
+            foreach($stock as $row){
+                       if($row->amount != null){
+                if($row->price_type == "discount"){
+                    if($row->value_type == "percentage"){
+                        $discount = $row->sales_price / $row->amount;
+                        $row->sales_price = $row->sales_price - $discount;
+                    }else{
+                        $row->sales_price = $row->sales_price - $row->amount;;
+                    }
+                }else{
+                     if($row->value_type == "percentage"){
+                         $discount = $row->sales_price / $row->amount;
+                        $row->sales_price = $row->sales_price + $discount; 
+                    }else{
+                        $row->sales_price = $row->sales_price + $row->amount; 
+                    }
+                }
+            }
+            }
+        }
             //$stock = tiles_stock_location::whereIn('location',$data[$location])->get();
         
         return $stock;
@@ -272,7 +352,7 @@ class categoryController extends Controller
         $data = $this->locationValues();
             if($id ==1){
                 $stock = DB::table('tiles_stock_locations as tsl')
-                        ->select(DB::raw('sum(tsl.stock) as stocks , sum(p.sales_price + 2000) as sales_price, tsl.product_id,p.product_name,p.product_image,p.sub_category,p.product_description,p.category'))
+                        ->select(DB::raw('sum(tsl.stock) as stocks , p.sales_price, tsl.product_id,p.product_name,p.product_image,p.sub_category,p.product_description,p.category,p.amount,p.price_type,p.value_type'))
                         ->whereIn('tsl.location', $data[$location])
                         ->where('stock','>',25)
                         ->join('products as p','p.id','=','tsl.product_id')
@@ -281,7 +361,7 @@ class categoryController extends Controller
                        ->paginate(9);
             }else{
                 $stock = DB::table('tiles_stock_locations as tsl')
-                        ->select(DB::raw('sum(tsl.stock) as stocks, tsl.product_id,p.product_name,p.product_image,p.sub_category,p.sales_price,p.product_description,p.category'))
+                        ->select(DB::raw('sum(tsl.stock) as stocks, tsl.product_id,p.product_name,p.product_image,p.sub_category,p.sales_price,p.product_description,p.category,p.amount,p.price_type,p.value_type'))
                         ->whereIn('tsl.location', $data[$location])
                         ->where('p.sub_category',$id)
                         ->where('stock','>',25)
@@ -290,6 +370,27 @@ class categoryController extends Controller
                         ->orderBy('sales_price',$sort)
                        ->paginate(9);
             }
+                if(count($stock)>0){
+                 foreach($stock as $row){
+                       if($row->amount != null){
+                if($row->price_type == "discount"){
+                    if($row->value_type == "percentage"){
+                        $discount = $row->sales_price / $row->amount;
+                        $row->sales_price = $row->sales_price - $discount;
+                    }else{
+                        $row->sales_price = $row->sales_price - $row->amount;;
+                    }
+                }else{
+                     if($row->value_type == "percentage"){
+                         $discount = $row->sales_price / $row->amount;
+                        $row->sales_price = $row->sales_price + $discount; 
+                    }else{
+                        $row->sales_price = $row->sales_price + $row->amount; 
+                    }
+                }
+            }
+            }
+        }
             //$stock = tiles_stock_location::whereIn('location',$data[$location])->get();
         
         return $stock;

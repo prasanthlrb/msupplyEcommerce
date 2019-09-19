@@ -77,4 +77,21 @@ class cartController extends Controller
     public function getCartItem(Request $request){
         return response()->json($request);
     }
+
+    public function paintProductAddtoCart(Request $request){
+        $optionName = $request->product_id.'#'.$request->lit.'#'.$request->colors_id;
+        $attribute = array(
+                            'color'=>true,
+                            'poduct_id'=>$request->product_id,
+                            'lit'=>$request->lit,
+                            'color_code'=>$request->colors_id
+                            );
+         Cart::add(array(
+                'id' => $optionName,
+                'name' => $product->product_name,
+                'price' => $total_price,
+                'quantity' => $request->qty,
+                'attributes' =>$attribute,
+            ));
+    }
 }

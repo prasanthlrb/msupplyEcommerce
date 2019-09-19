@@ -67,7 +67,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <form id="update_tiles_subcategory" method="post">
+        {{-- <form id="update_tiles_subcategory" method="post">
             {{ csrf_field() }}
             <input type="hidden" name="subcategoryProduct_id">
         <div class="modal-body">
@@ -85,7 +85,7 @@
               </div>
 
         </div>
-        </form>
+        </form> --}}
         <div class="modal-footer">
           <button type="button" class="btn grey btn-outline-secondary" data-dismiss="modal">Close</button>
           <button type="button" class="btn btn-outline-primary" id="update_tiles_category">Update</button>
@@ -184,7 +184,16 @@
                                 </tr>
                                 <tr>
                                     <td>Subcategory</td>
-                                    <td class="font-weight-bold" id="second_sub_category"></td>
+                                    <td>
+                                
+                                      <select name="second_sub_category" id="second_sub_category" class="form-control">
+                                        <option value="" selected="" disabled="">Select </option>
+                                         @foreach($subcategory as $cat)
+                                            <option value="{{$cat->id}}">{{$cat->category_name}}</option>
+                                           @endforeach
+                                        </select>
+                               
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>No of Pieces</td>
@@ -198,7 +207,8 @@
                                         <option value="" selected="" disabled="">Select </option>
                                           <option value="discount">Discount </option>
                                           <option value="high">High </option>
-                                        </select></td>
+                                        </select>
+                                      </td>
                               </tr>
                               <tr>
                                 <td>Value Type</td>
@@ -283,6 +293,7 @@ var product_id;
 function getProduct(id){
   $('select[name=price_type]').val("");
   $('select[name=value_type]').val("");
+  $('select[name=second_sub_category]').val("");
   $('#amount').val('');
        $.ajax({
         url : '/admin/get-single-tiles-product/'+id,
@@ -308,31 +319,31 @@ function getProduct(id){
             $('#product_name').text(data[0].product_name);
             $('#length').text(data[0].length);
             $('#updated_at').text(data[0].updated_at);
-            $('#second_sub_category').text(data[2]);
+            if(data[2] != null){
+            $('select[name=second_sub_category]').val(data[2]);
+            }
             $('#sales_price').text(data[0].sales_price ? "Rs : "+data[0].sales_price : data[0].sales_price);
             $('#location-stock').html(data[1]);
             $('#tilesProductShow').modal('show');
         }
       });
 }
-function applySecondCategory(id){
-   $('input[name=subcategoryProduct_id]').val(id);
-$('#updateTile2Cat').modal('show');
-}
-$('#update_tiles_category').on('click',function(){
-    var formData = new FormData($('#update_tiles_subcategory')[0]);
+// function applySecondCategory(id){
+//    $('input[name=subcategoryProduct_id]').val(id);
+// $('#updateTile2Cat').modal('show');
+// }
+$('#second_sub_category').on('change',function(){
+    let subcategory = $('#second_sub_category').val();
   $.ajax({
           url : '/admin/update-secondSubcategory',
-          type: "POST",
-          data: formData,
-          contentType: false,
-          processData: false,
+          type: "GET",
+          data: {product_id:product_id,data:subcategory},
           dataType: "JSON",
           success: function(data)
           {
-            //console.log(data);
+            console.log(data);
               // $("#brand_form")[0].reset();
-                $('#updateTile2Cat').modal('hide');
+                // $('#updateTile2Cat').modal('hide');
               //  $('.zero-configuration').load(location.href+' .zero-configuration');
                 toastr.success(data.message);
           },error: function (data) {
