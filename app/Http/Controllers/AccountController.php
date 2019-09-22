@@ -533,7 +533,7 @@ class accountController extends Controller
             "send_email" => true,
             "email" => Auth::user()->email,
             "phone" => Auth::user()->phone,
-            "redirect_url" => "http://127.0.0.1:8000/account/orders"
+            "redirect_url" => "https://msupply.net/account/orders"
             ));
 
             header('Location: ' . $response['longurl']);
