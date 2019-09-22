@@ -137,51 +137,51 @@ p.productdesc{
 													   
                                                        <li>
 														   <div class="row">
-															   <div class="col-md-6">
+															   <div class="col-md-6 col-sm-6">
 																   Brand 
 															   </div>
-															   <div class="col-md-6">
+															   <div class="col-md-6 col-sm-6">
 																: KAG
 															   </div>
 														   </div>
 														  </li>
                                                        <li>
 														   <div class="row">
-															   <div class="col-md-6">
+															   <div class="col-md-6 col-sm-6">
 																   Size 
 															   </div>
-															   <div class="col-md-6">
+															   <div class="col-md-6 col-sm-6">
 																: {{$product1->width}}
 															   </div>
 														   </div>
 														  </li>
                                                        <li>
 														   <div class="row">
-															   <div class="col-md-6">
+															   <div class="col-md-6 col-sm-6">
 																   Weight 
 															   </div>
-															   <div class="col-md-6">
+															   <div class="col-md-6 col-sm-6">
 																: {{$product1->weight}}
 															   </div>
 														   </div>
 														  </li>
                                                        <li>
 														   <div class="row">
-															   <div class="col-md-6">
+															   <div class="col-md-6 col-sm-6">
 																   Total Coverage in Sqft 
 															   </div>
 															   <input type="hidden" id="sqft" value="{{$product1->length}}">
-															   <div class="col-md-6">
+															   <div class="col-md-6 col-sm-6">
 																: {{$product1->length}}
 															   </div>
 														   </div>
 														  </li>
                                                        <li>
 														   <div class="row">
-															   <div class="col-md-6">
+															   <div class="col-md-6 col-sm-6">
 																   No of Pieces 
 															   </div>
-															   <div class="col-md-6">
+															   <div class="col-md-6 col-sm-6">
 																: {{$product1->items}}
 																<input type="hidden" id="noitem" value=" {{$product1->items}}">
 															   </div>
@@ -189,10 +189,10 @@ p.productdesc{
 														  </li>
                                                        <li>
 														   <div class="row">
-															   <div class="col-md-6">
+															   <div class="col-md-6 col-sm-6">
 																   Description 
 															   </div>
-															   <div class="col-md-6">
+															   <div class="col-md-6 col-sm-6">
 																: {{$product1->product_description}}
 															   </div>
 														   </div>
@@ -204,17 +204,36 @@ p.productdesc{
 		
 
 										<!-- - - - - - - - - - - - - - Product actions - - - - - - - - - - - - - - - - -->
+							<br>
+							<form id="tilesFormProduct" method="post">
+							{{ csrf_field() }}
+								<input type="hidden" name="product_name" id="product_name" value="{{$product1->product_name}}">
+								<input type="hidden" name="product_id" id="product_id" value="{{$product1->id}}">
+								<input type="hidden" name="stocks" id="stocks" value="{{$stock->stocks}}">
+								<input type="hidden" name="sales_price" id="sales_price" value="{{$product1->sales_price}}">
+					  <div class="description_section_2 v_centered">
 
-										<div class="buttons_row">
+                                <span class="title">Qty:</span>
+                              
 
-											<button class="button_blue middle_btn">Add to Cart</button>
+                                <div class="qty min clearfix">
+                                    <button type="button"  class="theme_button" type="button" data-direction="minus">-</button>
+                                    <input type="text" name="button_qty" id="button_qty" value="1">
+                                    <button type="button"  class="theme_button" type="button" data-direction="plus">+</button>
 
-											<button class="button_dark_grey def_icon_btn middle_btn add_to_wishlist tooltip_container"><span class="tooltip top">Add to Wishlist</span></button>
+                                </div>
 
-											<button class="button_dark_grey def_icon_btn middle_btn add_to_compare tooltip_container"><span class="tooltip top">Add to Compare</span></button>
+							</div>
+								<div class="buttons_row">
+
+											<button type="button" onclick="tileAddtoCart()" class="button_blue middle_btn">Add to Cart</button>
+
+											<button type="button" class="button_dark_grey def_icon_btn middle_btn add_to_wishlist tooltip_container"><span class="tooltip top">Add to Wishlist</span></button>
+
+											<button type="button" class="button_dark_grey def_icon_btn middle_btn add_to_compare tooltip_container"><span class="tooltip top">Add to Compare</span></button>
 
 										</div>
-
+									</form>
 										<!-- - - - - - - - - - - - - - End of product actions - - - - - - - - - - - - - - - - -->
 
 									</div>
@@ -375,6 +394,7 @@ p.productdesc{
 											<!-- - - - - - - - - - - - - - Product actions - - - - - - - - - - - - - - - - -->
 
 											<div class="actions_wrap">
+												
 
 												<div class="centered_buttons">
 
@@ -603,6 +623,32 @@ if(lit !=0 && colors_id !=0){
 				toastr.error("breadth and Length", "Field is required")
 			}
 			// alert(total);
-		})
+		});
+		function tileAddtoCart(){
+			var formData = new FormData($('#tilesFormProduct')[0]);
+			let stock = parseFloat($('#stocks').val());
+			let qty =  parseFloat($('#button_qty').val());
+			if(stock > qty){
+        		$.ajax({
+                url : '/tilesAddtoCart',
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                dataType: "JSON",
+                success: function(data)
+                {                
+                    //$("#form")[0].reset();
+					console.log(data)
+					CartMenuUpdate();
+                },error: function (data) {
+                toastr.error("Not Available");
+                
+              }
+            });
+			}else{
+				 toastr.error(" Available Stock","Please Enter Less Rather than");
+			}
+		}
     </script>
 @endsection

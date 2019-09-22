@@ -16,6 +16,7 @@ use DB;
 use Auth;
 use App\role;
 use App\order_log;
+use App\paintOrderDetails;
 class orderController extends Controller
 {
     // public function __construct()
@@ -46,7 +47,7 @@ class orderController extends Controller
         ->join('users as u', 'o.user_id', '=', 'u.id')
         ->join('order_items as i', 'o.id', '=', 'i.order_id')
         ->select('o.id','o.created_at','o.order_status','o.payment_type','o.total_amount','o.transport_type','u.name','u.email','u.phone','u.user_type',
-        'i.product_name','i.qty','i.order_id')
+        'i.product_name','i.qty','i.order_id','i.unit_type')
         ->orderBy('o.id','desc')->get();
     }
         return Datatables::of($order)
@@ -66,6 +67,7 @@ class orderController extends Controller
     <p>order Date : '.$order->created_at.'</p>
     <p>Item Name : '.$order->product_name.'</p>
     <p>quantity : '.$order->qty.'</p>
+    <p>Unit Type : '.$order->unit_type.'</p>
     <p>Total : '.$order->total_amount.'</p>
     </td>';
    })
@@ -188,7 +190,27 @@ class orderController extends Controller
         $shipping = shipping::find($order->shipping);
         $billing = billing::find($order->billing);
         $user = User::find($order->user_id);
-        $output ='<tr>
+        $paint_details = paintOrderDetails::where('order_id',$order->id)->get();
+        if($paint_details->count()>0){
+            $paint_title = '<th class="text-right">Color Code</th><th class="text-right">Litreage</th>';
+            $paint_body = '<td class="text-right">'.$paint_details[0]->color_id.'</td><td class="text-right">'.$paint_details[0]->lit.'</td>';
+        }else{
+            $paint_title = '';
+            $paint_body = '';
+        }
+        $output ='
+              <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>Item & Attributes</th>
+                            <th class="text-right">Rate</th>
+                            <th class="text-right">quantity</th>
+                            '.$paint_title.'
+                            <th class="text-right">Amount</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+        <tr>
         <th scope="row">1</th>';
 
         $output .='
@@ -203,6 +225,7 @@ class orderController extends Controller
            $output .='
            <td class="text-right">₹ '.$item->sales_price.'</td>
            <td class="text-right">'.$item->qty.'</td>
+           '.$paint_body.'
            <td class="text-right">₹ '.$item->sales_price * $item->qty.'</td>
          ';
           $subTotal = $item->total_price - $item->tax;

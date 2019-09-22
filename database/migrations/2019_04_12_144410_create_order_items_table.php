@@ -27,6 +27,7 @@ class CreateOrderItemsTable extends Migration
             $table->string('user_id');
             $table->string('commands')->nullable();
             $table->string('rating')->nullable();
+            $table->string('unit_type')->nullable();
             $table->timestamps();
         });
     }

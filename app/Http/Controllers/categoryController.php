@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\category;
 use App\brand;
-use App\Upload;
+use App\upload;
 use App\product;
 use App\adModel;
 use App\product_attribute;
@@ -446,4 +446,6 @@ class categoryController extends Controller
             'Viluppuram'=>['Pondicherry'],
         );
     }
+
+    
 }

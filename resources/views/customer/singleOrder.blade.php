@@ -322,6 +322,10 @@
                                         <th class="product_title_col">Product Name</th>
                                         <th class="product_price_col">Price</th>
                                         <th class="product_qty_col">Quantity</th>
+                                        @if(count($ifPaint)>0)
+                                        <th class="product_qty_col">Color Code	</th>
+                                        <th class="product_qty_col">Litreage	</th>
+                                        @endif
                                         <th class="product_total_col">Total</th>
 
                                     </tr>
@@ -333,6 +337,7 @@
                                 $sub = 0;
                                 $total = 0;
                                 $shipping = 0;
+                                $table_pos =3;
                                 ?>
                                 @foreach($order_items as $order_item)
                                 <input type="hidden" name="order_item_id" id="order_item_id" value="{{$order_item->id}}">
@@ -350,6 +355,11 @@
                                         </td>
                                         <td data-title="Price" class="subtotal">₹ {{$order_item->sales_price}}</td>
                                         <td data-title="Quantity">{{$order_item->qty}}</td>
+                                         @if(count($ifPaint)>0)
+                                        <td>{{$ifPaint[0]->color_id}}	</td>
+                                        <td>{{$ifPaint[0]->lit}}	</td>
+                                        <?php $table_pos=5?>
+                                        @endif
                                         <td data-title="Total" class="total">₹ {{$order_item->sales_price * $order_item->qty}}</td>
                                     </tr>
                                    
@@ -359,7 +369,7 @@
                                 <tfoot>
                                         <tr>
                                         
-                                                <td colspan="3" class="bold">Tax ({{$order_item->tax_type}}) </td>
+                                        <td colspan="{{$table_pos}}" class="bold">Tax ({{$order_item->tax_type}}) </td>
                                                 <td class="total">₹ {{$order_item->tax}}</td>
         
                                             </tr>
@@ -370,7 +380,7 @@
 
                                     <tr>
                                         
-                                        <td colspan="3" class="grandtotal">Grand Total</td>
+                                    <td colspan="{{$table_pos}}" class="grandtotal">Grand Total</td>
                                         <td class="grandtotal">₹ {{$order_item->total_price}}</td>
 
                                     </tr>

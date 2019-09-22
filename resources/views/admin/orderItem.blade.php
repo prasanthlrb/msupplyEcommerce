@@ -111,16 +111,7 @@
                   <div class="row">
                     <div class="table-responsive col-sm-12">
                       <table class="table">
-                        <thead>
-                          <tr>
-                            <th>#</th>
-                            <th>Item & Attributes</th>
-                            <th class="text-right">Rate</th>
-                            <th class="text-right">quantity</th>
-                            <th class="text-right">Amount</th>
-                          </tr>
-                        </thead>
-                        <tbody>
+                  
                          <?php echo $output; ?>
                        
                         </tbody>

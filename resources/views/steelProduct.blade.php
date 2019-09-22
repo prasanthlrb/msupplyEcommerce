@@ -106,10 +106,11 @@
                                 </div>
 
                             </div>
-
+                             <form id="steelFormProduct" method="post">
+							{{ csrf_field() }}
                             <div class="buttons_row buy_now_btn">
                                 <div id="total_price_place"></div>
-                                <button type="button" class="button_blue middle_btn">Buy Now</button>
+                                <button type="button" id="steelAddtoCart" class="button_blue middle_btn">Buy Now</button>
                                 @if($category->id == 14)
                                 <a href="javascript:void(null)" data-modal-url="/calculator/steel/{{$brands->id}}">
                                     <img src="{{asset('/images/calculator.png')}}" alt="" class="calculator_btn">
@@ -120,6 +121,7 @@
                             <!-- - - - - - - - - - - - - - End of share - - - - - - - - - - - - - - - - -->
 
                         </div>
+                    </form>
 
                         <!-- - - - - - - - - - - - - - End of product image column - - - - - - - - - - - - - - - - -->
 
@@ -241,13 +243,14 @@
     <script>
         var bulkItems = [];
         function setUnit(pro,data){
-            console.log(pro)
-            console.log(data)
+            // console.log(pro)
+            // console.log(data)
             let ifAvailable =0;
             if(bulkItems.length > 0){
             for(let i =0;i<bulkItems.length;i++){
                 if(bulkItems[i].product_id == pro.id){
                     bulkItems[i].unit_id = data.unit_id;
+                    bulkItems[i].product_name = pro.product_name;
                     bulkItems[i].unit_price = data.unit_price;
                     bulkItems[i].unit_name = data.unit_name;
                     ifAvailable =1;
@@ -256,21 +259,25 @@
             if(ifAvailable == 0){
                 let arrayData = {
                     product_id:data.product_id,
+                    product_name:data.product_name,
                     unit_id:data.unit_id,
                     unit_name:data.unit_name,
                     unit_price:data.unit_price,
                     qty:''
                 }
+               
                  bulkItems.push(arrayData)
             }
             }else{
                 let arrayData = {
                     product_id:data.product_id,
+                    product_name:data.product_name,
                     unit_id:data.unit_id,
                     unit_name:data.unit_name,
                     unit_price:data.unit_price,
                     qty:''
                 }
+              
                  bulkItems.push(arrayData)
             }
             // $('.unit_class'+pro.id).each( function(){
@@ -278,18 +285,23 @@
             // });
 
           //  $('#unit_'+data.id).addClass('select_unit_type');
-            
+              qtyBox(pro.id)
         }
         function qtyBox(id){
             var qty = $('#qtybox'+id).val();
-            console.log(qty)
             var totalAmount=0;
              for(let i =0;i<bulkItems.length;i++){
               if(bulkItems[i].product_id == id){
                   bulkItems[i]['qty'] = qty;
-                  let total = parseInt(bulkItems[i]['unit_price']) * parseInt(qty);
+                  let total = parseInt(bulkItems[i]['unit_price']) * parseInt(qty)
+                  if(qty == ''){
+                      total=0;
                   $('#total_price'+id).html('<p style="color:#ed4154">Rs : '+total+'</p>')
+                  }else{
+                  $('#total_price'+id).html('<p style="color:#ed4154">Rs : '+total+'</p>')
+
                   totalAmount = parseInt(totalAmount) + parseInt(total);
+                  }
                   break;
               }else{
                   let dummytotal = bulkItems[i]['unit_price'] * bulkItems[i]['qty'];
@@ -299,38 +311,65 @@
              }
               $('#total_price_place').html('<h3 style="color:#ed4154">Rs : '+totalAmount+'</h3>')
             // console.log(id)
-             console.log(bulkItems)
+             //console.log(bulkItems)
         }
 
-        function noofkg(data){
-            let kg = $('#noofkg'+data.id).val();
-            $('#noofrods'+data.id).val('');
-            $('#noofbundle'+data.id).val('');
-            let rods = Math.ceil(kg / data.weight);
-            $('#noofrods'+data.id).val(rods);
-            let bundle = Math.ceil(rods / data.items);
-            $('#noofbundle'+data.id).val(bundle);
-        }
+        // function noofkg(data){
+        //     let kg = $('#noofkg'+data.id).val();
+        //     $('#noofrods'+data.id).val('');
+        //     $('#noofbundle'+data.id).val('');
+        //     let rods = Math.ceil(kg / data.weight);
+        //     $('#noofrods'+data.id).val(rods);
+        //     let bundle = Math.ceil(rods / data.items);
+        //     $('#noofbundle'+data.id).val(bundle);
+        // }
 
-        function noofrods(data){
-            let rods = $('#noofrods'+data.id).val();
-            $('#noofkg'+data.id).val('');
-            $('#noofbundle'+data.id).val('');
-            let kg = Math.ceil(rods * data.weight);
-            $('#noofkg'+data.id).val(kg);
-            let bundle = Math.ceil(rods / data.items);
-            $('#noofbundle'+data.id).val(bundle);
-        }
-        function noofbundle(data){
-            let bundle = $('#noofbundle'+data.id).val();
-            $('#noofkg'+data.id).val('');
-            $('#noofrods'+data.id).val('');
-             let rods = Math.ceil(bundle * data.items);
-            $('#noofrods'+data.id).val(rods);
-            let kg = Math.ceil(rods * data.weight);
-            $('#noofkg'+data.id).val(kg);
-        }
-
+        // function noofrods(data){
+        //     let rods = $('#noofrods'+data.id).val();
+        //     $('#noofkg'+data.id).val('');
+        //     $('#noofbundle'+data.id).val('');
+        //     let kg = Math.ceil(rods * data.weight);
+        //     $('#noofkg'+data.id).val(kg);
+        //     let bundle = Math.ceil(rods / data.items);
+        //     $('#noofbundle'+data.id).val(bundle);
+        // }
+        // function noofbundle(data){
+        //     let bundle = $('#noofbundle'+data.id).val();
+        //     $('#noofkg'+data.id).val('');
+        //     $('#noofrods'+data.id).val('');
+        //      let rods = Math.ceil(bundle * data.items);
+        //     $('#noofrods'+data.id).val(rods);
+        //     let kg = Math.ceil(rods * data.weight);
+        //     $('#noofkg'+data.id).val(kg);
+        // }
+            $('#steelAddtoCart').on('click', function(){
+                 bulkItems = jQuery.grep(bulkItems, function(value) {
+      return value.qty != '';
+    });
+              if(bulkItems.length > 0){
+                  let _token = $('input[name=_token]');
+            //    // var formData = new FormData($('#steelFormProduct')[0]);
+			//    bulkItems.push("_token", _token);
+        		$.ajax({
+                url : '/steelAddtoCart',
+                type: "GET",
+                data: {data:bulkItems},
+                dataType: "JSON",
+                success: function(data)
+                {                
+                    //$("#form")[0].reset();
+					//console.log(data)
+					CartMenuUpdate();
+                    //  $('#category_model').modal('hide');
+                    //  $('.zero-configuration').load(location.href+' .zero-configuration');
+                    //  toastr.success('Group Store Successfully', 'Successfully Save');
+                },error: function (data) {
+                toastr.error(data);
+                //toastr.error(data.responseJSON.errors.cat_name);
+              }
+            });
+              }
+            })
 
     </script>
 @endsection

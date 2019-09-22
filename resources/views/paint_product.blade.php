@@ -28,7 +28,7 @@ p.productdesc{
 					<li><a href="/category/{{$subCategoty->id}}">{{$subCategoty->category_name}}</a></li>
 	
 						<li>{{$product1->product_name}}</li>
-					<input type="hidden" id="product_id" value="{{$product1->id}}">
+					
 					</ul>
 
 					<!-- - - - - - - - - - - - - - End of breadcrumbs - - - - - - - - - - - - - - - - -->
@@ -92,7 +92,7 @@ p.productdesc{
 									<div class="single_product_description">
 
 									<h3 class="offset_title"><a href="#">{{$product1->product_name}}</a></h3>
-										<input type="hidden" id="product_name" value="{{$product1->product_name}}">
+									
 									
 
 										<div class="description_section v_centered">
@@ -129,15 +129,19 @@ p.productdesc{
 
 					</div>
 					<br>
+					    <form id="paintFormProduct" method="post">
+							{{ csrf_field() }}
+								<input type="hidden" name="product_name" id="product_name" value="{{$product1->product_name}}">
+								<input type="hidden" name="product_id" id="product_id" value="{{$product1->id}}">
 					  <div class="description_section_2 v_centered">
 
                                 <span class="title">Qty:</span>
                               
 
                                 <div class="qty min clearfix">
-                                    <button class="theme_button" type="button" data-direction="minus">-</button>
+                                    <button type="button"  class="theme_button" type="button" data-direction="minus">-</button>
                                     <input type="text" name="button_qty" id="button_qty" value="1">
-                                    <button class="theme_button" type="button" data-direction="plus">+</button>
+                                    <button type="button"  class="theme_button" type="button" data-direction="plus">+</button>
 
                                 </div>
 
@@ -147,16 +151,16 @@ p.productdesc{
 
 										<div class="buttons_row">
 
-											<button class="button_blue middle_btn" id="addToCardPaint" disabled="true">Add to Cart</button>
+											<button type="button" class="button_blue middle_btn" id="addToCardPaint" disabled="true">Add to Cart</button>
 
-											<button class="button_dark_grey def_icon_btn middle_btn add_to_wishlist tooltip_container"><span class="tooltip top">Add to Wishlist</span></button>
+											<button type="button"  class="button_dark_grey def_icon_btn middle_btn add_to_wishlist tooltip_container"><span class="tooltip top">Add to Wishlist</span></button>
 
-											<button class="button_dark_grey def_icon_btn middle_btn add_to_compare tooltip_container"><span class="tooltip top">Add to Compare</span></button>
+											<button type="button"  class="button_dark_grey def_icon_btn middle_btn add_to_compare tooltip_container"><span class="tooltip top">Add to Compare</span></button>
 
 										</div>
 
 										<!-- - - - - - - - - - - - - - End of product actions - - - - - - - - - - - - - - - - -->
-
+					    </form>
 									</div>
 
 									<!-- - - - - - - - - - - - - - End of product description column - - - - - - - - - - - - - - - - -->
@@ -415,7 +419,8 @@ p.productdesc{
     <script>
 		var lit=0;
 		var colors_id =0;
-		var total_price=0;
+		var paint_price=0;
+		var code_name;
 function setLitre(lits){
 lit = lits;
 $('.litBtn').each(function(index){
@@ -521,6 +526,7 @@ function addCart(id){
             $('#colorButtonModule').text(data.code_name)
 			//console.log(data);
 			colors_id = data.id;
+			code_name = data.code_name;
 			getPrice();
         }
 		function getPrice(){
@@ -541,7 +547,7 @@ if(lit !=0 && colors_id !=0){
                     $(".product_price .theme_color").text("Not Available");
 					$('#addToCardPaint').prop('disabled',true);
 					}else{
-						total_price = Math.ceil(result.price);
+						paint_price = Math.ceil(result.price);
                     $(".product_price .theme_color").text("Rs : "+ Math.ceil(result.price));
 					$('#addToCardPaint').prop('disabled',false);
 					}
@@ -576,17 +582,31 @@ if(lit !=0 && colors_id !=0){
 			//alert(Math.ceil(avg));
 		})
 		$('#addToCardPaint').on('click', function(){
-			let product_id = $('#product_id').val();
-			let button_qty = $('#button_qty').val();
-			let product_name = $('#product_name').val();
-			var data = {
-				"product_id":product_id,
-				"lit":lit,
-				"colors_id":colors_id,
-				"total_price":total_price,
-				"button_qty":button_qty
-			}
-			console.log(data);
+		
+			var formData = new FormData($('#paintFormProduct')[0]);
+			   formData.append("colors_id", code_name);
+			   formData.append("lit", lit);
+			   formData.append("paint_price", paint_price);
+        		$.ajax({
+                url : '/paintAddtoCart',
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                dataType: "JSON",
+                success: function(data)
+                {                
+                    //$("#form")[0].reset();
+					console.log(data)
+					CartMenuUpdate();
+                    //  $('#category_model').modal('hide');
+                    //  $('.zero-configuration').load(location.href+' .zero-configuration');
+                    //  toastr.success('Group Store Successfully', 'Successfully Save');
+                },error: function (data) {
+                toastr.error(data);
+                //toastr.error(data.responseJSON.errors.cat_name);
+              }
+            });
 		})
     </script>
 @endsection

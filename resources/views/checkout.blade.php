@@ -294,21 +294,21 @@
 			});
             var otpValue = 666333;
 		$('#order_button').click(function(){
-            if($('input[name=payment_type]:checked').val() == 'cod'){
-                $.ajax({
-                    url:'/account/verify-order-sms',
-                    method:'GET',
-                    success:function(data){
-                        $.arcticmodal({
-                        url : 'modals/otp.html'
-                    });
-                    }
-                })
-            }else{
+            // if($('input[name=payment_type]:checked').val() == 'cod'){
+            //     $.ajax({
+            //         url:'/account/verify-order-sms',
+            //         method:'GET',
+            //         success:function(data){
+            //             $.arcticmodal({
+            //             url : 'modals/otp.html'
+            //         });
+            //         }
+            //     })
+            // }else{
                 var shipping = $('input[name=ship]:checked').val();
 			var billing = $('input[name=billing]:checked').val();
       window.location.href = '/order-placed/'+pay_type+'/'+shipping+'/'+billing;
-            }
+            // }
 
 
             })
